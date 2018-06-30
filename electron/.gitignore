@@ -2,3 +2,4 @@ app/react/**
 app/appData/**
 dist/
 package-lock.json
+.idea

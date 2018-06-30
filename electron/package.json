@@ -2,9 +2,10 @@
   "name": "dalmatian-ics-electron",
   "version": "0.0.1",
   "description": "ICS form editor",
-  "main": "src/main.ts",
+  "main": "src/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,11 @@
   },
   "homepage": "https://github.com/dalmation-ics/dalmatian-ics#readme",
   "dependencies": {
+    "electron-store": "^2.0.0",
     "fs-extra": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/es6-promise": "^3.3.0",
+    "electron": "^2.0.3"
   }
 }
