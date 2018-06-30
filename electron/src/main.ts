@@ -11,6 +11,16 @@ app.on('ready', () => {
     StorageManager.initialize(app.getPath('userData')).then(() => {
 
         console.log('Storage ready');
+        StorageManager.write('bacon', 'hello.txt', 'Bacon').then(() => {
+            console.log('Written');
+
+            StorageManager.read('bacono', 'helloeee.txt').then(content => {
+                console.log(`GOT ${content}`);
+            }).catch(e => {
+                console.log(e)
+            });
+
+        });
 
     });
 

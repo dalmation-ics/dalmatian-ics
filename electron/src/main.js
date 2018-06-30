@@ -8,6 +8,14 @@ electron_1.app.on('ready', function () {
     // Initialize storage
     StorageManager_1.default.initialize(electron_1.app.getPath('userData')).then(function () {
         console.log('Storage ready');
+        StorageManager_1.default.write('bacon', 'hello.txt', 'Bacon').then(function () {
+            console.log('Written');
+            StorageManager_1.default.read('bacono', 'helloeee.txt').then(function (content) {
+                console.log("GOT " + content);
+            }).catch(function (e) {
+                console.log(e);
+            });
+        });
     });
 });
 exports.default = electron_1.app;

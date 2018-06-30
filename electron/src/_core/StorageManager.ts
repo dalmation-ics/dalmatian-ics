@@ -4,12 +4,14 @@
  * Any read or write methods will return promises.
  */
 import * as fs from 'fs-extra'; // https://www.npmjs.com/package/fs-extra
+import * as aes256 from 'aes256'; // https://www.npmjs.com/package/aes256
 import {Promise} from 'es6-promise';
 import * as _path from 'path';
 
 const BASE_STORAGE_DIRECTORY = 'storage'; // Name of directory where all files will be written
+const ENCRYPTION_KEY = 'dalmatian'; // Encrypt files to deter end user modification of files
 
-const operational_directory: string = null; // The directory StorageManager was initialized with
+let operational_directory: string = null; // The directory StorageManager was initialized with
 
 /**
  *
@@ -43,7 +45,12 @@ function initialize(path: string): Promise<void> {
 
             }
 
-        }).then(() => resolve());
+        }).then(() => {
+
+            operational_directory = _path.join(path, BASE_STORAGE_DIRECTORY); // Assign variable operational_directory now that it is initialized
+            resolve();
+
+        }).catch(e => reject(e)); // Reject errors
 
     });
 
@@ -63,7 +70,43 @@ function initialize(path: string): Promise<void> {
  */
 function read(directory: string, fileName: string): Promise<string> {
 
+    console.log(`Read request ${directory}/${fileName}`);
+
     return new Promise<string>((resolve, reject) => {
+
+        if (!operational_directory)
+            reject('StorageManager has not been initialized');
+
+        const directory_path = _path.join(operational_directory, directory);
+        const file_path = _path.join(directory_path, fileName);
+
+        checkDirectoryIsValid(directory_path).then(valid => { // Check if directory is valid
+
+            if (!valid) {
+                reject(`Directory ${directory} is not valid`);
+            }
+
+        }).then(() => { // Check if file exists
+
+            return fs.exists(file_path);
+
+        }).then(exists => { // Return null if the file does not exist
+
+            if (!exists) {
+                resolve(null);
+            }
+
+        }).then(() => { // Read the file
+
+            return fs.readFile(file_path);
+
+        }).then(content => { // Resolve the decrypted content
+
+            const decrypted = aes256.decrypt(ENCRYPTION_KEY, content.toString());
+
+            resolve(decrypted);
+
+        }).catch(e => reject(e)); // Reject errors
 
     });
 
@@ -82,7 +125,47 @@ function read(directory: string, fileName: string): Promise<string> {
  */
 function write(directory: string, fileName: string, content: string): Promise<void> {
 
+    console.log(`Write request ${directory}/${fileName}`);
+
     return new Promise<void>((resolve, reject) => {
+
+        if (!operational_directory)
+            reject('StorageManager has not been initialized');
+
+        const directory_path = _path.join(operational_directory, directory);
+        const file_path = _path.join(directory_path, fileName);
+
+        fs.exists(directory_path).then(exists => { // Check if directory exists
+
+            if (!exists) {
+
+                console.log(`Creating directory ${directory}`);
+
+                return fs.mkdir(directory_path);
+
+            } else {
+
+                return fs.stat(directory_path).then(stat => {
+
+                    if (!stat.isDirectory()) {
+                        console.log(`${directory} is not a directory`);
+                    }
+
+                });
+
+            }
+
+        }).then(() => { // Write file
+
+            const encrypted = aes256.encrypt(ENCRYPTION_KEY, content);
+
+            return fs.writeFile(file_path, encrypted);
+
+        }).then(() => {
+
+            resolve();
+
+        }).catch(e => reject(e));
 
     });
 
@@ -100,15 +183,11 @@ function checkDirectoryIsValid(path: string): Promise<boolean> {
 
             if (!exists) {
                 resolve(false);
+            } else {
+                return fs.stat(path).then(stat => {
+                    resolve(stat.isDirectory());
+                });
             }
-
-        }).then(() => { // Stat the path to check if it is a directory
-
-            return fs.stat(path);
-
-        }).then(stat => { // Check if provided path is a directory
-
-            resolve(stat.isDirectory());
 
         });
 
