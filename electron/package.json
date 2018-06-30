@@ -1,0 +1,22 @@
+{
+  "name": "dalmatian-ics-electron",
+  "version": "0.0.1",
+  "description": "ICS form editor",
+  "main": "src/main.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/dalmation-ics/dalmatian-ics.git"
+  },
+  "author": "Connor Sinnott, Jefferson Eagley",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/dalmation-ics/dalmatian-ics/issues"
+  },
+  "homepage": "https://github.com/dalmation-ics/dalmatian-ics#readme",
+  "dependencies": {
+    "fs-extra": "^6.0.1"
+  }
+}
