@@ -1,7 +1,7 @@
-import * as sinon from 'sinon';
+import * as sinon from 'sinon'; // http://sinonjs.org/releases/v2.0.0/
+import * as aes256 from 'aes256'; // https://www.npmjs.com/package/aes256
 import * as fs from 'fs-extra';
 import * as _path from 'path';
-import * as aes256 from 'aes256';
 import SUT from './StorageManager';
 
 let sandbox;
@@ -228,7 +228,7 @@ describe('StorageManager should ', () => {
             stub_exists.withArgs(directory_path).resolves(true);
             stub_exists.withArgs(file_path).rejects('oh no');
 
-            // Act
+            // Act Assert
             await expect(SUT.read('foo', 'bar')).rejects.toBeDefined();
 
         });
@@ -248,7 +248,7 @@ describe('StorageManager should ', () => {
             const stub_readFile = sandbox.stub(fs, 'readFile');
             stub_readFile.withArgs(file_path).rejects('oh no');
 
-            // Act
+            // Act Assert
             await expect(SUT.read('foo', 'bar')).rejects.toBeDefined();
 
         });
@@ -271,7 +271,7 @@ describe('StorageManager should ', () => {
             const stub_decrypt = sandbox.stub(aes256, 'decrypt');
             stub_decrypt.withArgs(sinon.match.any, 'hello').rejects('oh no');
 
-            // Act
+            // Act Assert
             await expect(SUT.read('foo', 'bar')).rejects.toBeDefined();
 
         });

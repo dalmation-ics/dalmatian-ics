@@ -36,10 +36,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 exports.__esModule = true;
-var sinon = require("sinon");
+var sinon = require("sinon"); // http://sinonjs.org/releases/v2.0.0/
+var aes256 = require("aes256"); // https://www.npmjs.com/package/aes256
 var fs = require("fs-extra");
 var _path = require("path");
-var aes256 = require("aes256");
 var StorageManager_1 = require("./StorageManager");
 var sandbox;
 var path = '../../__TestArea__';
@@ -251,10 +251,10 @@ describe('StorageManager should ', function () {
                         stub_exists = sandbox.stub(fs, 'exists');
                         stub_exists.withArgs(directory_path).resolves(true);
                         stub_exists.withArgs(file_path).rejects('oh no');
-                        // Act
+                        // Act Assert
                         return [4 /*yield*/, expect(StorageManager_1["default"].read('foo', 'bar')).rejects.toBeDefined()];
                     case 1:
-                        // Act
+                        // Act Assert
                         _a.sent();
                         return [2 /*return*/];
                 }
@@ -273,10 +273,10 @@ describe('StorageManager should ', function () {
                         stub_exists.withArgs(file_path).resolves(true);
                         stub_readFile = sandbox.stub(fs, 'readFile');
                         stub_readFile.withArgs(file_path).rejects('oh no');
-                        // Act
+                        // Act Assert
                         return [4 /*yield*/, expect(StorageManager_1["default"].read('foo', 'bar')).rejects.toBeDefined()];
                     case 1:
-                        // Act
+                        // Act Assert
                         _a.sent();
                         return [2 /*return*/];
                 }
@@ -297,10 +297,10 @@ describe('StorageManager should ', function () {
                         stub_readFile.withArgs(file_path).resolves('hello');
                         stub_decrypt = sandbox.stub(aes256, 'decrypt');
                         stub_decrypt.withArgs(sinon.match.any, 'hello').rejects('oh no');
-                        // Act
+                        // Act Assert
                         return [4 /*yield*/, expect(StorageManager_1["default"].read('foo', 'bar')).rejects.toBeDefined()];
                     case 1:
-                        // Act
+                        // Act Assert
                         _a.sent();
                         return [2 /*return*/];
                 }
