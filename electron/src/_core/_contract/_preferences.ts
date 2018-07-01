@@ -1,0 +1,2 @@
+export const WINDOW_WIDTH = 'WINDOW_WIDTH';
+export const WINDOW_HEIGHT = 'WINDOW_HEIGHT';
