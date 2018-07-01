@@ -55,26 +55,28 @@ function initialize(path) {
 function read(directory, fileName) {
     console.log("Read request " + directory + "/" + fileName);
     return new Promise(function (resolve, reject) {
-        if (!operational_directory)
+        if (!getOperationalDirectory())
             reject('StorageManager has not been initialized');
-        var directory_path = _path.join(operational_directory, directory);
+        var directory_path = _path.join(getOperationalDirectory(), directory);
         var file_path = _path.join(directory_path, fileName);
-        checkDirectoryIsValid(directory_path).then(function (valid) {
-            if (!valid) {
-                reject("Directory " + directory + " is not valid");
-            }
-        }).then(function () {
-            return fs.exists(file_path);
-        }).then(function (exists) {
+        fs.exists(directory_path).then(function (exists) {
             if (!exists) {
-                resolve(null);
+                resolve(null); // Resolve null if it does not
             }
-        }).then(function () {
-            return fs.readFile(file_path);
-        }).then(function (content) {
-            var decrypted = aes256.decrypt(ENCRYPTION_KEY, content.toString());
-            resolve(decrypted);
-        })["catch"](function (e) { return reject(e); }); // Reject errors
+            else {
+                return fs.exists(file_path).then(function (exists) {
+                    if (!exists) {
+                        resolve(null); // Resolve null if it does not
+                    }
+                    else {
+                        return fs.readFile(file_path).then(function (content) {
+                            var decrypted = aes256.decrypt(ENCRYPTION_KEY, content.toString()); // Decrypt file
+                            resolve(decrypted); // Resolve contents
+                        });
+                    }
+                });
+            }
+        })["catch"](function (e) { return reject(e); }); // Handle errors
     });
 }
 /**
@@ -93,9 +95,9 @@ function read(directory, fileName) {
 function write(directory, fileName, content) {
     console.log("Write request " + directory + "/" + fileName);
     return new Promise(function (resolve, reject) {
-        if (!operational_directory)
+        if (!getOperationalDirectory())
             reject('StorageManager has not been initialized');
-        var directory_path = _path.join(operational_directory, directory);
+        var directory_path = _path.join(getOperationalDirectory(), directory);
         var file_path = _path.join(directory_path, fileName);
         fs.exists(directory_path).then(function (exists) {
             if (!exists) {
@@ -135,8 +137,23 @@ function checkDirectoryIsValid(path) {
         })["catch"](function (e) { return reject(e); });
     });
 }
-exports["default"] = {
-    initialize: initialize,
-    read: read,
-    write: write
-};
+function getOperationalDirectory() {
+    return operational_directory;
+}
+var _exports;
+if (process.env.NODE_ENV === 'test') {
+    _exports = {
+        read: read,
+        write: write,
+        initialize: initialize,
+        getOperationalDirectory: getOperationalDirectory
+    };
+}
+else {
+    _exports = {
+        read: read,
+        write: write,
+        initialize: initialize
+    };
+}
+exports["default"] = _exports;

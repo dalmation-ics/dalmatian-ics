@@ -38,10 +38,19 @@ var _this = this;
 exports.__esModule = true;
 var sinon = require("sinon");
 var fs = require("fs-extra");
-var path = require("path");
+var _path = require("path");
+var aes256 = require("aes256");
 var StorageManager_1 = require("./StorageManager");
-var operational_directory = '../../__TestArea__';
+var sandbox;
+var path = '../../__TestArea__';
+var operational_directory = _path.join(path, 'storage');
 describe('StorageManager should ', function () {
+    beforeEach(function () {
+        sandbox = sinon.createSandbox();
+    });
+    afterEach(function () {
+        sandbox.restore();
+    });
     it('resolves true to be true ', function () {
         expect(true).toBe(true);
     });
@@ -49,120 +58,250 @@ describe('StorageManager should ', function () {
         it('exists', function () {
             expect(StorageManager_1["default"].initialize).toBeDefined();
         });
-        it('Check operational_directory validity and create storage folder', function () { return __awaiter(_this, void 0, void 0, function () {
+        it('Check path validity and create storage folder', function () { return __awaiter(_this, void 0, void 0, function () {
             var stub_exists, stub_stat, stub_mkdir;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        stub_exists = sinon.stub(fs, 'exists');
-                        stub_exists.withArgs(operational_directory).resolves(true);
-                        stub_exists.withArgs(path.join(operational_directory, 'storage')).resolves(false);
-                        stub_stat = sinon.stub(fs, 'stat');
-                        stub_stat.withArgs(operational_directory).resolves({
+                        stub_exists = sandbox.stub(fs, 'exists');
+                        stub_exists.withArgs(path).resolves(true);
+                        stub_exists.withArgs(operational_directory).resolves(false);
+                        stub_stat = sandbox.stub(fs, 'stat');
+                        stub_stat.withArgs(path).resolves({
                             isDirectory: function () {
                                 return true;
                             }
                         });
-                        stub_mkdir = sinon.stub(fs, 'mkdir');
-                        stub_mkdir.withArgs(path.join(operational_directory, 'storage')).resolves();
+                        stub_mkdir = sandbox.stub(fs, 'mkdir');
+                        stub_mkdir.withArgs(operational_directory).resolves();
                         // Act
-                        return [4 /*yield*/, StorageManager_1["default"].initialize(operational_directory)];
+                        return [4 /*yield*/, StorageManager_1["default"].initialize(path)];
                     case 1:
                         // Act
                         _a.sent();
                         // Assert
                         // - operational_directory should be checked to see if it exists
-                        expect(stub_exists.getCall(0).args[0]).toBe(operational_directory);
+                        expect(stub_exists.getCall(0).args[0]).toBe(path);
                         // - operational_directory should be checked to see if it is a directory
-                        expect(stub_stat.getCall(0).args[0]).toBe(operational_directory);
+                        expect(stub_stat.getCall(0).args[0]).toBe(path);
                         // - storage folder should be checked to see if it exists
-                        expect(stub_exists.getCall(1).args[0]).toBe(path.join(operational_directory, 'storage'));
+                        expect(stub_exists.getCall(1).args[0]).toBe(operational_directory);
                         // - storage folder should be created because it does not exist
-                        expect(stub_mkdir.getCall(0).args[0]).toBe(path.join(operational_directory, 'storage'));
-                        // Restore
-                        stub_mkdir.restore();
-                        stub_stat.restore();
-                        stub_exists.restore();
+                        expect(stub_mkdir.getCall(0).args[0]).toBe(operational_directory);
                         return [2 /*return*/];
                 }
             });
         }); });
-        it('Check operational_directory validity and not create storage folder as it already exists', function () { return __awaiter(_this, void 0, void 0, function () {
+        it('Check path validity and not create storage folder as it already exists', function () { return __awaiter(_this, void 0, void 0, function () {
             var stub_exists, stub_stat, stub_mkdir;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        stub_exists = sinon.stub(fs, 'exists');
+                        stub_exists = sandbox.stub(fs, 'exists');
+                        stub_exists.withArgs(path).resolves(true);
                         stub_exists.withArgs(operational_directory).resolves(true);
-                        stub_exists.withArgs(path.join(operational_directory, 'storage')).resolves(true);
-                        stub_stat = sinon.stub(fs, 'stat');
-                        stub_stat.withArgs(operational_directory).resolves({
+                        stub_stat = sandbox.stub(fs, 'stat');
+                        stub_stat.withArgs(path).resolves({
                             isDirectory: function () {
                                 return true;
                             }
                         });
-                        stub_mkdir = sinon.stub(fs, 'mkdir');
-                        stub_mkdir.withArgs(path.join(operational_directory, 'storage')).resolves();
+                        stub_mkdir = sandbox.stub(fs, 'mkdir');
+                        stub_mkdir.withArgs(_path.join(path, 'storage')).resolves();
                         // Act
-                        return [4 /*yield*/, StorageManager_1["default"].initialize(operational_directory)];
+                        return [4 /*yield*/, StorageManager_1["default"].initialize(path)];
                     case 1:
                         // Act
                         _a.sent();
                         // Assert
                         // - operational_directory should be checked to see if it exists
-                        expect(stub_exists.getCall(0).args[0]).toBe(operational_directory);
+                        expect(stub_exists.getCall(0).args[0]).toBe(path);
                         // - operational_directory should be checked to see if it is a directory
-                        expect(stub_stat.getCall(0).args[0]).toBe(operational_directory);
+                        expect(stub_stat.getCall(0).args[0]).toBe(path);
                         // - storage folder should be checked to see if it exists
-                        expect(stub_exists.getCall(1).args[0]).toBe(path.join(operational_directory, 'storage'));
+                        expect(stub_exists.getCall(1).args[0]).toBe(operational_directory);
                         // - storage folder should not be created because it already exists
                         expect(stub_mkdir.calledOnce).toBe(false);
-                        // Restore
-                        stub_mkdir.restore();
-                        stub_stat.restore();
-                        stub_exists.restore();
                         return [2 /*return*/];
                 }
             });
         }); });
-        it('Rejects if operational_directory does not exist', function () { return __awaiter(_this, void 0, void 0, function () {
+        it('Rejects if path does not exist', function () { return __awaiter(_this, void 0, void 0, function () {
             var stub_exists;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        stub_exists = sinon.stub(fs, 'exists');
-                        stub_exists.withArgs(operational_directory).resolves(false);
+                        stub_exists = sandbox.stub(fs, 'exists');
+                        stub_exists.withArgs(path).resolves(false);
                         // Act Assert
-                        return [4 /*yield*/, expect(StorageManager_1["default"].initialize(operational_directory)).rejects.toBeTruthy()];
+                        return [4 /*yield*/, expect(StorageManager_1["default"].initialize(path)).rejects.toBeTruthy()];
                     case 1:
                         // Act Assert
                         _a.sent();
-                        // Restore
-                        stub_exists.restore();
                         return [2 /*return*/];
                 }
             });
         }); });
-        it('Rejects if operational_directory is not a directory', function () { return __awaiter(_this, void 0, void 0, function () {
+        it('Rejects if path is not a directory', function () { return __awaiter(_this, void 0, void 0, function () {
             var stub_exists, stub_stat;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        stub_exists = sinon.stub(fs, 'exists');
-                        stub_exists.withArgs(operational_directory).resolves(false);
-                        stub_stat = sinon.stub(fs, 'stat');
-                        stub_stat.withArgs(operational_directory).resolves({
+                        stub_exists = sandbox.stub(fs, 'exists');
+                        stub_exists.withArgs(path).resolves(false);
+                        stub_stat = sandbox.stub(fs, 'stat');
+                        stub_stat.withArgs(path).resolves({
                             isDirectory: function () {
                                 return false;
                             }
                         });
                         // Act Assert
-                        return [4 /*yield*/, expect(StorageManager_1["default"].initialize(operational_directory)).rejects.toBeTruthy()];
+                        return [4 /*yield*/, expect(StorageManager_1["default"].initialize(path)).rejects.toBeTruthy()];
                     case 1:
                         // Act Assert
                         _a.sent();
-                        // Restore
-                        stub_exists.restore();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    });
+    describe('have method read that ', function () {
+        it('exists', function () {
+            expect(StorageManager_1["default"].read).toBeDefined();
+        });
+        it('resolves null if directory does not exist', function () { return __awaiter(_this, void 0, void 0, function () {
+            var directory_path, stub_exists, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        directory_path = _path.join(operational_directory, 'foo');
+                        sandbox.stub(StorageManager_1["default"], 'getOperationalDirectory').returns(operational_directory);
+                        stub_exists = sandbox.stub(fs, 'exists');
+                        stub_exists.withArgs(directory_path).resolves(false);
+                        return [4 /*yield*/, StorageManager_1["default"].read('foo', 'bar')];
+                    case 1:
+                        result = _a.sent();
+                        // Assert
+                        expect(result).toBeNull();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('resolves null if the files does not exist', function () { return __awaiter(_this, void 0, void 0, function () {
+            var directory_path, file_path, stub_exists, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        directory_path = _path.join(operational_directory, 'foo');
+                        file_path = _path.join(operational_directory, 'foo', 'bar');
+                        sandbox.stub(StorageManager_1["default"], 'getOperationalDirectory').returns(operational_directory);
+                        stub_exists = sandbox.stub(fs, 'exists');
+                        stub_exists.withArgs(directory_path).resolves(true);
+                        stub_exists.withArgs(file_path).resolves(false);
+                        return [4 /*yield*/, StorageManager_1["default"].read('foo', 'bar')];
+                    case 1:
+                        result = _a.sent();
+                        // Assert
+                        expect(result).toBeNull();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('reads file and returns decrypted value', function () { return __awaiter(_this, void 0, void 0, function () {
+            var directory_path, file_path, stub_exists, stub_readFile, stub_decrypt, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        directory_path = _path.join(operational_directory, 'foo');
+                        file_path = _path.join(operational_directory, 'foo', 'bar');
+                        sandbox.stub(StorageManager_1["default"], 'getOperationalDirectory').returns(operational_directory);
+                        stub_exists = sandbox.stub(fs, 'exists');
+                        stub_exists.withArgs(directory_path).resolves(true);
+                        stub_exists.withArgs(file_path).resolves(true);
+                        stub_readFile = sandbox.stub(fs, 'readFile');
+                        stub_readFile.withArgs(file_path).resolves('hello');
+                        stub_decrypt = sandbox.stub(aes256, 'decrypt');
+                        stub_decrypt.withArgs(sinon.match.any, 'hello').resolves('world');
+                        return [4 /*yield*/, StorageManager_1["default"].read('foo', 'bar')];
+                    case 1:
+                        result = _a.sent();
+                        // Assert
+                        // - Directory foo should be checked for existence
+                        expect(stub_exists.getCall(0).args[0]).toBe(directory_path);
+                        // - File bar should be checked for existence
+                        expect(stub_exists.getCall(1).args[0]).toBe(file_path);
+                        // - readFile should be called on file_path
+                        expect(stub_readFile.getCall(0).args[0]).toBe(file_path);
+                        // - decrypt should be called on contents ('hello')
+                        expect(stub_decrypt.getCall(0).args[1]).toBe('hello');
+                        // - expect decrypted contents ('world') to be returned
+                        expect(result).toBe('world');
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('Handles exists error appropriately', function () { return __awaiter(_this, void 0, void 0, function () {
+            var directory_path, file_path, stub_exists;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        directory_path = _path.join(operational_directory, 'foo');
+                        file_path = _path.join(operational_directory, 'foo', 'bar');
+                        sandbox.stub(StorageManager_1["default"], 'getOperationalDirectory').returns(operational_directory);
+                        stub_exists = sandbox.stub(fs, 'exists');
+                        stub_exists.withArgs(directory_path).resolves(true);
+                        stub_exists.withArgs(file_path).rejects('oh no');
+                        // Act
+                        return [4 /*yield*/, expect(StorageManager_1["default"].read('foo', 'bar')).rejects.toBeDefined()];
+                    case 1:
+                        // Act
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('Handles readFile error appropriately', function () { return __awaiter(_this, void 0, void 0, function () {
+            var directory_path, file_path, stub_exists, stub_readFile;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        directory_path = _path.join(operational_directory, 'foo');
+                        file_path = _path.join(operational_directory, 'foo', 'bar');
+                        sandbox.stub(StorageManager_1["default"], 'getOperationalDirectory').returns(operational_directory);
+                        stub_exists = sandbox.stub(fs, 'exists');
+                        stub_exists.withArgs(directory_path).resolves(true);
+                        stub_exists.withArgs(file_path).resolves(true);
+                        stub_readFile = sandbox.stub(fs, 'readFile');
+                        stub_readFile.withArgs(file_path).rejects('oh no');
+                        // Act
+                        return [4 /*yield*/, expect(StorageManager_1["default"].read('foo', 'bar')).rejects.toBeDefined()];
+                    case 1:
+                        // Act
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('Handles decrypt error appropriately', function () { return __awaiter(_this, void 0, void 0, function () {
+            var directory_path, file_path, stub_exists, stub_readFile, stub_decrypt;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        directory_path = _path.join(operational_directory, 'foo');
+                        file_path = _path.join(operational_directory, 'foo', 'bar');
+                        sandbox.stub(StorageManager_1["default"], 'getOperationalDirectory').returns(operational_directory);
+                        stub_exists = sandbox.stub(fs, 'exists');
+                        stub_exists.withArgs(directory_path).resolves(true);
+                        stub_exists.withArgs(file_path).resolves(true);
+                        stub_readFile = sandbox.stub(fs, 'readFile');
+                        stub_readFile.withArgs(file_path).resolves('hello');
+                        stub_decrypt = sandbox.stub(aes256, 'decrypt');
+                        stub_decrypt.withArgs(sinon.match.any, 'hello').rejects('oh no');
+                        // Act
+                        return [4 /*yield*/, expect(StorageManager_1["default"].read('foo', 'bar')).rejects.toBeDefined()];
+                    case 1:
+                        // Act
+                        _a.sent();
                         return [2 /*return*/];
                 }
             });

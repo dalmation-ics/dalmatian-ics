@@ -77,39 +77,37 @@ function read(directory: string, fileName: string): Promise<string> {
 
     return new Promise<string>((resolve, reject) => {
 
-        if (!operational_directory)
+        if (!getOperationalDirectory())
             reject('StorageManager has not been initialized');
 
-        const directory_path = _path.join(operational_directory, directory);
+        const directory_path = _path.join(getOperationalDirectory(), directory);
         const file_path = _path.join(directory_path, fileName);
 
-        checkDirectoryIsValid(directory_path).then(valid => { // Check if directory is valid
-
-            if (!valid) {
-                reject(`Directory ${directory} is not valid`);
-            }
-
-        }).then(() => { // Check if file exists
-
-            return fs.exists(file_path);
-
-        }).then(exists => { // Return null if the file does not exist
+        fs.exists(directory_path).then(exists => { // Check if directory exists
 
             if (!exists) {
-                resolve(null);
+                resolve(null); // Resolve null if it does not
+            } else {
+
+                return fs.exists(file_path).then(exists => { // Check if file exists
+
+                    if (!exists) {
+                        resolve(null); // Resolve null if it does not
+                    } else {
+
+                        return fs.readFile(file_path).then(content => { // Read file
+
+                            const decrypted = aes256.decrypt(ENCRYPTION_KEY, content.toString()); // Decrypt file
+                            resolve(decrypted); // Resolve contents
+
+                        });
+                    }
+
+                });
+
             }
 
-        }).then(() => { // Read the file
-
-            return fs.readFile(file_path);
-
-        }).then(content => { // Resolve the decrypted content
-
-            const decrypted = aes256.decrypt(ENCRYPTION_KEY, content.toString());
-
-            resolve(decrypted);
-
-        }).catch(e => reject(e)); // Reject errors
+        }).catch(e => reject(e)); // Handle errors
 
     });
 
@@ -134,10 +132,10 @@ function write(directory: string, fileName: string, content: string): Promise<vo
 
     return new Promise<void>((resolve, reject) => {
 
-        if (!operational_directory)
+        if (!getOperationalDirectory())
             reject('StorageManager has not been initialized');
 
-        const directory_path = _path.join(operational_directory, directory);
+        const directory_path = _path.join(getOperationalDirectory(), directory);
         const file_path = _path.join(directory_path, fileName);
 
         fs.exists(directory_path).then(exists => { // Check if directory exists
@@ -200,10 +198,25 @@ function checkDirectoryIsValid(path: string): Promise<boolean> {
 
 }
 
-export default {
-    initialize,
-    read,
-    write
-};
+function getOperationalDirectory() {
+    return operational_directory;
+}
 
+let _exports;
+if (process.env.NODE_ENV === 'test') {
+    _exports = {
+        read,
+        write,
+        initialize,
+        getOperationalDirectory
+    };
+} else {
+    _exports = {
+        read,
+        write,
+        initialize
+    };
+}
+
+export default _exports;
 
