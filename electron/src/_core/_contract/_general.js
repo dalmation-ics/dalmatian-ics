@@ -1,3 +1,3 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.RESPONSE_POSTFIX = '_RESPONSE';

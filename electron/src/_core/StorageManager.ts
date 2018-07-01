@@ -5,7 +5,6 @@
  */
 import * as fs from 'fs-extra'; // https://www.npmjs.com/package/fs-extra
 import * as aes256 from 'aes256'; // https://www.npmjs.com/package/aes256
-import {Promise} from 'es6-promise';
 import * as _path from 'path';
 
 const BASE_STORAGE_DIRECTORY = 'storage'; // Name of directory where all files will be written
@@ -14,6 +13,10 @@ const ENCRYPTION_KEY = 'dalmatian'; // Encrypt files to deter end user modificat
 let operational_directory: string = null; // The directory StorageManager was initialized with
 
 /**
+ *
+ * Ensures that the operational directory exists and is valid before further use
+ *
+ * Creates the operational directory if it does not exist
  *
  * @returns {Promise<void>}
  */
@@ -116,6 +119,8 @@ function read(directory: string, fileName: string): Promise<string> {
  *
  * The write function will write content to a stored file of fileName under directory
  *
+ * If the directory does not exist it will be created
+ *
  * Returns a promise that is resolved when the content is written
  *
  * @param {String} directory
@@ -137,7 +142,7 @@ function write(directory: string, fileName: string, content: string): Promise<vo
 
         fs.exists(directory_path).then(exists => { // Check if directory exists
 
-            if (!exists) {
+            if (!exists) { // Create the directory if it does not exist
 
                 console.log(`Creating directory ${directory}`);
 
@@ -145,7 +150,7 @@ function write(directory: string, fileName: string, content: string): Promise<vo
 
             } else {
 
-                return fs.stat(directory_path).then(stat => {
+                return fs.stat(directory_path).then(stat => { // Stat the existing directory to ensure it is, in fact, a directory
 
                     if (!stat.isDirectory()) {
                         console.log(`${directory} is not a directory`);
@@ -189,7 +194,7 @@ function checkDirectoryIsValid(path: string): Promise<boolean> {
                 });
             }
 
-        });
+        }).catch(e => reject(e));
 
     });
 

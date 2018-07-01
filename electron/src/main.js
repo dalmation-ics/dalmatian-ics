@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var electron_1 = require("electron");
 var StorageManager_1 = require("./_core/StorageManager");
 var PreferenceManager_1 = require("./_core/PreferenceManager");
@@ -12,13 +12,13 @@ var window;
 electron_1.app.on('ready', function () {
     console.log('Application is running');
     // Initialize storage
-    StorageManager_1.default.initialize(electron_1.app.getPath('userData')).then(function () {
+    StorageManager_1["default"].initialize(electron_1.app.getPath('userData')).then(function () {
         console.log('Storage initialized');
         // Create a new window
         window = new electron_1.BrowserWindow({
             title: strings.APP_TITLE,
-            width: PreferenceManager_1.default.get(PREFERENCE.WINDOW_WIDTH) || 800,
-            height: PreferenceManager_1.default.get(PREFERENCE.WINDOW_HEIGHT) || 600,
+            width: PreferenceManager_1["default"].get(PREFERENCE.WINDOW_WIDTH) || 800,
+            height: PreferenceManager_1["default"].get(PREFERENCE.WINDOW_HEIGHT) || 600,
             show: false
         });
         // Determine what to load. React development server or production static files
@@ -40,8 +40,8 @@ electron_1.app.on('ready', function () {
             if (window) {
                 // Persist width and height so they can be restored next time
                 var bounds = window.getBounds();
-                PreferenceManager_1.default.set(PREFERENCE.WINDOW_HEIGHT, bounds.height);
-                PreferenceManager_1.default.set(PREFERENCE.WINDOW_WIDTH, bounds.width);
+                PreferenceManager_1["default"].set(PREFERENCE.WINDOW_HEIGHT, bounds.height);
+                PreferenceManager_1["default"].set(PREFERENCE.WINDOW_WIDTH, bounds.width);
             }
         });
     });

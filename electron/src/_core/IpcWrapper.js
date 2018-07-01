@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var _general_1 = require("./_contract/_general");
 var IpcWrapper = /** @class */ (function () {
     function IpcWrapper(ipcMain, window) {
@@ -29,7 +29,7 @@ var IpcWrapper = /** @class */ (function () {
                     console.log(err);
                 var out = {
                     err: err ? err.message : null,
-                    result: result,
+                    result: result
                 };
                 console.log("Sending Sync " + name + _general_1.RESPONSE_POSTFIX);
                 event.returnValue = out;
@@ -47,4 +47,4 @@ var IpcWrapper = /** @class */ (function () {
     };
     return IpcWrapper;
 }());
-exports.default = IpcWrapper;
+exports["default"] = IpcWrapper;

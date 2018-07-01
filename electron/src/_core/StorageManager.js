@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 /**
  * StorageManager is intended for large storage operations.
  *
@@ -7,17 +7,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 var fs = require("fs-extra"); // https://www.npmjs.com/package/fs-extra
 var aes256 = require("aes256"); // https://www.npmjs.com/package/aes256
-var es6_promise_1 = require("es6-promise");
 var _path = require("path");
 var BASE_STORAGE_DIRECTORY = 'storage'; // Name of directory where all files will be written
 var ENCRYPTION_KEY = 'dalmatian'; // Encrypt files to deter end user modification of files
 var operational_directory = null; // The directory StorageManager was initialized with
 /**
  *
+ * Ensures that the operational directory exists and is valid before further use
+ *
+ * Creates the operational directory if it does not exist
+ *
  * @returns {Promise<void>}
  */
 function initialize(path) {
-    return new es6_promise_1.Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         checkDirectoryIsValid(path).then(function (valid) {
             if (!valid) {
                 reject('StorageManager initialization path is invalid');
@@ -34,7 +37,7 @@ function initialize(path) {
         }).then(function () {
             operational_directory = _path.join(path, BASE_STORAGE_DIRECTORY); // Assign variable operational_directory now that it is initialized
             resolve();
-        }).catch(function (e) { return reject(e); }); // Reject errors
+        })["catch"](function (e) { return reject(e); }); // Reject errors
     });
 }
 /**
@@ -51,7 +54,7 @@ function initialize(path) {
  */
 function read(directory, fileName) {
     console.log("Read request " + directory + "/" + fileName);
-    return new es6_promise_1.Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         if (!operational_directory)
             reject('StorageManager has not been initialized');
         var directory_path = _path.join(operational_directory, directory);
@@ -71,12 +74,14 @@ function read(directory, fileName) {
         }).then(function (content) {
             var decrypted = aes256.decrypt(ENCRYPTION_KEY, content.toString());
             resolve(decrypted);
-        }).catch(function (e) { return reject(e); }); // Reject errors
+        })["catch"](function (e) { return reject(e); }); // Reject errors
     });
 }
 /**
  *
  * The write function will write content to a stored file of fileName under directory
+ *
+ * If the directory does not exist it will be created
  *
  * Returns a promise that is resolved when the content is written
  *
@@ -87,7 +92,7 @@ function read(directory, fileName) {
  */
 function write(directory, fileName, content) {
     console.log("Write request " + directory + "/" + fileName);
-    return new es6_promise_1.Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         if (!operational_directory)
             reject('StorageManager has not been initialized');
         var directory_path = _path.join(operational_directory, directory);
@@ -109,7 +114,7 @@ function write(directory, fileName, content) {
             return fs.writeFile(file_path, encrypted);
         }).then(function () {
             resolve();
-        }).catch(function (e) { return reject(e); });
+        })["catch"](function (e) { return reject(e); });
     });
 }
 /**
@@ -117,7 +122,7 @@ function write(directory, fileName, content) {
  * @returns {Promise<boolean>}
  */
 function checkDirectoryIsValid(path) {
-    return new es6_promise_1.Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         fs.exists(path).then(function (exists) {
             if (!exists) {
                 resolve(false);
@@ -127,10 +132,10 @@ function checkDirectoryIsValid(path) {
                     resolve(stat.isDirectory());
                 });
             }
-        });
+        })["catch"](function (e) { return reject(e); });
     });
 }
-exports.default = {
+exports["default"] = {
     initialize: initialize,
     read: read,
     write: write
