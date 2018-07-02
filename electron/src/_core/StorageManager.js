@@ -208,6 +208,19 @@ function checkDirectoryIsValid(path) {
 function getOperationalDirectory() {
     return operational_directory;
 }
+var StorageClass = /** @class */ (function () {
+    function StorageClass(directory) {
+        this.directory = directory;
+    }
+    StorageClass.prototype.read = function (fileName) {
+        return read(this.directory, fileName);
+    };
+    StorageClass.prototype.write = function (fileName, content) {
+        return write(this.directory, fileName, content);
+    };
+    return StorageClass;
+}());
+exports.StorageClass = StorageClass;
 var _exports;
 if (process.env.NODE_ENV === 'test') {
     _exports = {

@@ -258,6 +258,24 @@ function getOperationalDirectory() {
     return operational_directory;
 }
 
+export class StorageClass {
+
+    directory: string;
+
+    constructor(directory: string) {
+        this.directory = directory;
+    }
+
+    read(fileName: string) {
+        return read(this.directory, fileName);
+    }
+
+    write(fileName: string, content: string) {
+        return write(this.directory, fileName, content);
+    }
+
+}
+
 let _exports;
 if (process.env.NODE_ENV === 'test') {
     _exports = {
