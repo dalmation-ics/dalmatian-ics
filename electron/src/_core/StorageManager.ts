@@ -97,10 +97,11 @@ function read(directory: string, fileName: string): Promise<string> {
 
     return new Promise<string>((resolve, reject) => {
 
-        if (!getOperationalDirectory())
+        if (operational_directory == null) {
             reject('StorageManager has not been initialized');
+        }
 
-        const directory_path = _path.join(getOperationalDirectory(), directory);
+        const directory_path = _path.join(operational_directory, directory);
         const file_path = _path.join(directory_path, fileName);
 
         /*
@@ -113,7 +114,7 @@ function read(directory: string, fileName: string): Promise<string> {
             if (exists) {
                 return p_check_exist_file_path();
             } else {
-                resolve(null); //
+                resolve(null);
             }
 
         });
@@ -168,10 +169,11 @@ function write(directory: string, fileName: string, content: string): Promise<vo
 
     return new Promise<void>((resolve, reject) => {
 
-        if (!getOperationalDirectory())
+        if (operational_directory == null) {
             reject('StorageManager has not been initialized');
+        }
 
-        const directory_path = _path.join(getOperationalDirectory(), directory);
+        const directory_path = _path.join(operational_directory, directory);
         const file_path = _path.join(directory_path, fileName);
 
         /*
@@ -202,8 +204,14 @@ function write(directory: string, fileName: string, content: string): Promise<vo
          */
         const p_write_file = () => {
 
-            const encrypted = aes256.encrypt(ENCRYPTION_KEY, content);
-            return fs.writeFile(file_path, encrypted);
+            try {
+                const encrypted = aes256.encrypt(ENCRYPTION_KEY, content);
+                return fs.writeFile(file_path, encrypted).then(() => {
+                    resolve();
+                })
+            } catch (e) {
+                reject(e);
+            }
 
         };
 
@@ -254,10 +262,6 @@ function checkDirectoryIsValid(path: string): Promise<boolean> {
 
 }
 
-function getOperationalDirectory() {
-    return operational_directory;
-}
-
 export class StorageClass {
 
     directory: string;
@@ -276,13 +280,17 @@ export class StorageClass {
 
 }
 
+function setOperationalDirectory(path: string) {
+    operational_directory = path;
+}
+
 let _exports;
 if (process.env.NODE_ENV === 'test') {
     _exports = {
         read,
         write,
         initialize,
-        getOperationalDirectory
+        setOperationalDirectory,
     };
 } else {
     _exports = {

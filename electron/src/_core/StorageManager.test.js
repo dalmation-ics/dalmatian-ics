@@ -169,13 +169,25 @@ describe('StorageManager should ', function () {
         it('exists', function () {
             expect(StorageManager_1["default"].read).toBeDefined();
         });
+        it('rejects if storage manager has not been initialized', function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        StorageManager_1["default"].setOperationalDirectory(null);
+                        return [4 /*yield*/, expect(StorageManager_1["default"].read('foo', 'bar')).rejects.toBeDefined()];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
         it('resolves null if directory does not exist', function () { return __awaiter(_this, void 0, void 0, function () {
             var directory_path, stub_exists, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         directory_path = _path.join(operational_directory, 'foo');
-                        sandbox.stub(StorageManager_1["default"], 'getOperationalDirectory').returns(operational_directory);
+                        StorageManager_1["default"].setOperationalDirectory(operational_directory);
                         stub_exists = sandbox.stub(fs, 'exists');
                         stub_exists.withArgs(directory_path).resolves(false);
                         return [4 /*yield*/, StorageManager_1["default"].read('foo', 'bar')];
@@ -194,7 +206,7 @@ describe('StorageManager should ', function () {
                     case 0:
                         directory_path = _path.join(operational_directory, 'foo');
                         file_path = _path.join(operational_directory, 'foo', 'bar');
-                        sandbox.stub(StorageManager_1["default"], 'getOperationalDirectory').returns(operational_directory);
+                        StorageManager_1["default"].setOperationalDirectory(operational_directory);
                         stub_exists = sandbox.stub(fs, 'exists');
                         stub_exists.withArgs(directory_path).resolves(true);
                         stub_exists.withArgs(file_path).resolves(false);
@@ -214,7 +226,7 @@ describe('StorageManager should ', function () {
                     case 0:
                         directory_path = _path.join(operational_directory, 'foo');
                         file_path = _path.join(operational_directory, 'foo', 'bar');
-                        sandbox.stub(StorageManager_1["default"], 'getOperationalDirectory').returns(operational_directory);
+                        StorageManager_1["default"].setOperationalDirectory(operational_directory);
                         stub_exists = sandbox.stub(fs, 'exists');
                         stub_exists.withArgs(directory_path).resolves(true);
                         stub_exists.withArgs(file_path).resolves(true);
@@ -247,7 +259,7 @@ describe('StorageManager should ', function () {
                     case 0:
                         directory_path = _path.join(operational_directory, 'foo');
                         file_path = _path.join(operational_directory, 'foo', 'bar');
-                        sandbox.stub(StorageManager_1["default"], 'getOperationalDirectory').returns(operational_directory);
+                        StorageManager_1["default"].setOperationalDirectory(operational_directory);
                         stub_exists = sandbox.stub(fs, 'exists');
                         stub_exists.withArgs(directory_path).resolves(true);
                         stub_exists.withArgs(file_path).rejects('oh no');
@@ -267,7 +279,7 @@ describe('StorageManager should ', function () {
                     case 0:
                         directory_path = _path.join(operational_directory, 'foo');
                         file_path = _path.join(operational_directory, 'foo', 'bar');
-                        sandbox.stub(StorageManager_1["default"], 'getOperationalDirectory').returns(operational_directory);
+                        StorageManager_1["default"].setOperationalDirectory(operational_directory);
                         stub_exists = sandbox.stub(fs, 'exists');
                         stub_exists.withArgs(directory_path).resolves(true);
                         stub_exists.withArgs(file_path).resolves(true);
@@ -289,7 +301,7 @@ describe('StorageManager should ', function () {
                     case 0:
                         directory_path = _path.join(operational_directory, 'foo');
                         file_path = _path.join(operational_directory, 'foo', 'bar');
-                        sandbox.stub(StorageManager_1["default"], 'getOperationalDirectory').returns(operational_directory);
+                        StorageManager_1["default"].setOperationalDirectory(operational_directory);
                         stub_exists = sandbox.stub(fs, 'exists');
                         stub_exists.withArgs(directory_path).resolves(true);
                         stub_exists.withArgs(file_path).resolves(true);
@@ -301,6 +313,187 @@ describe('StorageManager should ', function () {
                         return [4 /*yield*/, expect(StorageManager_1["default"].read('foo', 'bar')).rejects.toBeDefined()];
                     case 1:
                         // Act Assert
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    });
+    describe('have method write that ', function () {
+        it('exists', function () {
+            expect(StorageManager_1["default"].write).toBeDefined();
+        });
+        it('rejects if storage manager has not been initialized', function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        StorageManager_1["default"].setOperationalDirectory(null);
+                        return [4 /*yield*/, expect(StorageManager_1["default"].read('foo', 'bar')).rejects.toBeDefined()];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('writes to file, creating a directory if it does not exist', function () { return __awaiter(_this, void 0, void 0, function () {
+            var directory_path, file_path, stub_exist, stub_mkdir, stub_encrypt, stub_write;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        // Arrange
+                        StorageManager_1["default"].setOperationalDirectory(operational_directory);
+                        directory_path = _path.join(operational_directory, 'foo');
+                        file_path = _path.join(directory_path, 'bar');
+                        stub_exist = sandbox.stub(fs, 'exists');
+                        stub_exist.withArgs(directory_path).resolves(false);
+                        stub_mkdir = sandbox.stub(fs, 'mkdir');
+                        stub_mkdir.withArgs(directory_path).resolves();
+                        stub_encrypt = sandbox.stub(aes256, 'encrypt');
+                        stub_encrypt.withArgs(sinon.match.any, 'Hello').returns('World');
+                        stub_write = sandbox.stub(fs, 'writeFile');
+                        stub_write.withArgs(file_path, sinon.match.any).resolves();
+                        // Act
+                        return [4 /*yield*/, StorageManager_1["default"].write('foo', 'bar', 'Hello')];
+                    case 1:
+                        // Act
+                        _a.sent();
+                        // Assert
+                        // - Check to see if directory exists
+                        expect(stub_exist.getCall(0).args[0]).toBe(directory_path);
+                        // - When directory does not exist, create it
+                        expect(stub_mkdir.getCall(0).args[0]).toBe(directory_path);
+                        // - Then prepare for writing by encrypting contents
+                        expect(stub_encrypt.getCall(0).args[1]).toBe('Hello');
+                        // - Write content to disk
+                        expect(stub_write.getCall(0).args[0]).toBe(file_path);
+                        expect(stub_write.getCall(0).args[1]).toBe('World');
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('writes to file, not creating a directory that already exists', function () { return __awaiter(_this, void 0, void 0, function () {
+            var directory_path, file_path, stub_exist, stub_mkdir, stub_encrypt, stub_write;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        // Arrange
+                        StorageManager_1["default"].setOperationalDirectory(operational_directory);
+                        directory_path = _path.join(operational_directory, 'foo');
+                        file_path = _path.join(directory_path, 'bar');
+                        stub_exist = sandbox.stub(fs, 'exists');
+                        stub_exist.withArgs(directory_path).resolves(true);
+                        stub_mkdir = sandbox.stub(fs, 'mkdir');
+                        stub_mkdir.withArgs(directory_path).resolves();
+                        stub_encrypt = sandbox.stub(aes256, 'encrypt');
+                        stub_encrypt.withArgs(sinon.match.any, 'Hello').returns('World');
+                        stub_write = sandbox.stub(fs, 'writeFile');
+                        stub_write.withArgs(file_path, sinon.match.any).resolves();
+                        // Act
+                        return [4 /*yield*/, StorageManager_1["default"].write('foo', 'bar', 'Hello')];
+                    case 1:
+                        // Act
+                        _a.sent();
+                        // Assert
+                        // - Check to see if directory exists
+                        expect(stub_exist.getCall(0).args[0]).toBe(directory_path);
+                        // - When directory exists, do not create it
+                        expect(stub_mkdir.callCount).toBe(0);
+                        // - Then prepare for writing by encrypting contents
+                        expect(stub_encrypt.getCall(0).args[1]).toBe('Hello');
+                        // - Write content to disk
+                        expect(stub_write.getCall(0).args[0]).toBe(file_path);
+                        expect(stub_write.getCall(0).args[1]).toBe('World');
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('handles exists errors appropriately', function () { return __awaiter(_this, void 0, void 0, function () {
+            var directory_path, file_path, stub_exist;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        // Arrange
+                        StorageManager_1["default"].setOperationalDirectory(operational_directory);
+                        directory_path = _path.join(operational_directory, 'foo');
+                        file_path = _path.join(directory_path, 'bar');
+                        stub_exist = sandbox.stub(fs, 'exists');
+                        stub_exist.withArgs(directory_path).rejects('oh no');
+                        // Act Assert
+                        return [4 /*yield*/, expect(StorageManager_1["default"].write('foo', 'bar', 'Hello')).rejects.toBeDefined()];
+                    case 1:
+                        // Act Assert
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('handles mkdir errors appropriately', function () { return __awaiter(_this, void 0, void 0, function () {
+            var directory_path, file_path, stub_exist, stub_mkdir;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        // Arrange
+                        StorageManager_1["default"].setOperationalDirectory(operational_directory);
+                        directory_path = _path.join(operational_directory, 'foo');
+                        file_path = _path.join(directory_path, 'bar');
+                        stub_exist = sandbox.stub(fs, 'exists');
+                        stub_exist.withArgs(directory_path).resolves(false);
+                        stub_mkdir = sandbox.stub(fs, 'mkdir');
+                        stub_mkdir.withArgs(directory_path).rejects('oh no');
+                        // Act
+                        return [4 /*yield*/, expect(StorageManager_1["default"].write('foo', 'bar', 'Hello')).rejects.toBeDefined()];
+                    case 1:
+                        // Act
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('handles encrypt errors appropriately', function () { return __awaiter(_this, void 0, void 0, function () {
+            var directory_path, file_path, stub_exist, stub_mkdir, stub_encrypt;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        // Arrange
+                        StorageManager_1["default"].setOperationalDirectory(operational_directory);
+                        directory_path = _path.join(operational_directory, 'foo');
+                        file_path = _path.join(directory_path, 'bar');
+                        stub_exist = sandbox.stub(fs, 'exists');
+                        stub_exist.withArgs(directory_path).resolves(false);
+                        stub_mkdir = sandbox.stub(fs, 'mkdir');
+                        stub_mkdir.withArgs(directory_path).resolves();
+                        stub_encrypt = sandbox.stub(aes256, 'encrypt');
+                        stub_encrypt.withArgs(sinon.match.any, 'Hello').throws('oh no');
+                        // Act
+                        return [4 /*yield*/, expect(StorageManager_1["default"].write('foo', 'bar', 'Hello')).rejects.toBeDefined()];
+                    case 1:
+                        // Act
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('handles write errors appropriately', function () { return __awaiter(_this, void 0, void 0, function () {
+            var directory_path, file_path, stub_exist, stub_mkdir, stub_encrypt, stub_write;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        // Arrange
+                        StorageManager_1["default"].setOperationalDirectory(operational_directory);
+                        directory_path = _path.join(operational_directory, 'foo');
+                        file_path = _path.join(directory_path, 'bar');
+                        stub_exist = sandbox.stub(fs, 'exists');
+                        stub_exist.withArgs(directory_path).resolves(false);
+                        stub_mkdir = sandbox.stub(fs, 'mkdir');
+                        stub_mkdir.withArgs(directory_path).resolves();
+                        stub_encrypt = sandbox.stub(aes256, 'encrypt');
+                        stub_encrypt.withArgs(sinon.match.any, 'Hello').returns('World');
+                        stub_write = sandbox.stub(fs, 'writeFile');
+                        stub_write.withArgs(file_path, sinon.match.any).rejects('oh no');
+                        // Act
+                        return [4 /*yield*/, expect(StorageManager_1["default"].write('foo', 'bar', 'Hello')).rejects.toBeDefined()];
+                    case 1:
+                        // Act
                         _a.sent();
                         return [2 /*return*/];
                 }

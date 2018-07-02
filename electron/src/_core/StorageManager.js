@@ -83,9 +83,10 @@ function initialize(path) {
  */
 function read(directory, fileName) {
     return new Promise(function (resolve, reject) {
-        if (!getOperationalDirectory())
+        if (operational_directory == null) {
             reject('StorageManager has not been initialized');
-        var directory_path = _path.join(getOperationalDirectory(), directory);
+        }
+        var directory_path = _path.join(operational_directory, directory);
         var file_path = _path.join(directory_path, fileName);
         /*
         Check if directory exists
@@ -97,7 +98,7 @@ function read(directory, fileName) {
                 return p_check_exist_file_path();
             }
             else {
-                resolve(null); //
+                resolve(null);
             }
         }); };
         /*
@@ -140,9 +141,10 @@ function read(directory, fileName) {
  */
 function write(directory, fileName, content) {
     return new Promise(function (resolve, reject) {
-        if (!getOperationalDirectory())
+        if (operational_directory == null) {
             reject('StorageManager has not been initialized');
-        var directory_path = _path.join(getOperationalDirectory(), directory);
+        }
+        var directory_path = _path.join(operational_directory, directory);
         var file_path = _path.join(directory_path, fileName);
         /*
         Check if directory exists
@@ -168,8 +170,15 @@ function write(directory, fileName, content) {
         Encrypt contents then write to file
          */
         var p_write_file = function () {
-            var encrypted = aes256.encrypt(ENCRYPTION_KEY, content);
-            return fs.writeFile(file_path, encrypted);
+            try {
+                var encrypted = aes256.encrypt(ENCRYPTION_KEY, content);
+                return fs.writeFile(file_path, encrypted).then(function () {
+                    resolve();
+                });
+            }
+            catch (e) {
+                reject(e);
+            }
         };
         // Begin
         p_check_exist_directory_path()["catch"](function (e) { return reject(e); });
@@ -205,9 +214,6 @@ function checkDirectoryIsValid(path) {
         p_check_path_exists()["catch"](function (e) { return reject(e); });
     });
 }
-function getOperationalDirectory() {
-    return operational_directory;
-}
 var StorageClass = /** @class */ (function () {
     function StorageClass(directory) {
         this.directory = directory;
@@ -221,13 +227,16 @@ var StorageClass = /** @class */ (function () {
     return StorageClass;
 }());
 exports.StorageClass = StorageClass;
+function setOperationalDirectory(path) {
+    operational_directory = path;
+}
 var _exports;
 if (process.env.NODE_ENV === 'test') {
     _exports = {
         read: read,
         write: write,
         initialize: initialize,
-        getOperationalDirectory: getOperationalDirectory
+        setOperationalDirectory: setOperationalDirectory
     };
 }
 else {
