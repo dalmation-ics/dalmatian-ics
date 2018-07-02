@@ -27,6 +27,20 @@ function initialize(path: string): Promise<void> {
         const storage_dir = _path.join(path, BASE_STORAGE_DIRECTORY);
 
         /*
+        Check if the provided path is valid (exists and is directory)
+        Reject if not
+        Continue on to check if storage folder exists
+         */
+        const p_check_path_valid = () => checkDirectoryIsValid(path).then(valid => {
+
+            if (!valid) {
+                reject('StorageManager initialization path not valid');
+            } else {
+                return p_check_storage_exists();
+            }
+        });
+
+        /*
         Check storage folder exists at path
         Finish if it does
         Create it if it does not
@@ -59,15 +73,7 @@ function initialize(path: string): Promise<void> {
         });
 
         // Begin
-        checkDirectoryIsValid(path).then(valid => {
-
-            if (!valid) {
-                reject('StorageManager initialization path not valid');
-            } else {
-                return p_check_storage_exists();
-            }
-
-        }).catch(e => reject(e));
+        p_check_path_valid().catch(e => reject(e));
 
     });
 

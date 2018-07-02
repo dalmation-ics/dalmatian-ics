@@ -23,6 +23,19 @@ function initialize(path) {
     return new Promise(function (resolve, reject) {
         var storage_dir = _path.join(path, BASE_STORAGE_DIRECTORY);
         /*
+        Check if the provided path is valid (exists and is directory)
+        Reject if not
+        Continue on to check if storage folder exists
+         */
+        var p_check_path_valid = function () { return checkDirectoryIsValid(path).then(function (valid) {
+            if (!valid) {
+                reject('StorageManager initialization path not valid');
+            }
+            else {
+                return p_check_storage_exists();
+            }
+        }); };
+        /*
         Check storage folder exists at path
         Finish if it does
         Create it if it does not
@@ -51,14 +64,7 @@ function initialize(path) {
             resolve();
         }); };
         // Begin
-        checkDirectoryIsValid(path).then(function (valid) {
-            if (!valid) {
-                reject('StorageManager initialization path not valid');
-            }
-            else {
-                return p_check_storage_exists();
-            }
-        })["catch"](function (e) { return reject(e); });
+        p_check_path_valid()["catch"](function (e) { return reject(e); });
     });
 }
 /**
