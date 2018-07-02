@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import {AppContainer} from 'react-hot-loader';
-import AppReduxProvider from './component/App/AppReduxProvider';
+import AppReduxProvider from './component/AppRedux/AppReduxProvider';
 import registerServiceWorker from './registerServiceWorker';
 
 const root: ?Element = document.getElementById('root');
