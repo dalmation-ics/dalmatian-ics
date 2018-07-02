@@ -1,14 +1,23 @@
+// @flow
 import _ from 'lodash';
 import * as action_UI_ToggleSettingsMenu
-  from '../../actions/action_UI/action_UI_ToggleSettingsMenu';
+  from '../../action/action_UI/action_UI_ToggleSettingsMenu';
 import * as action_UI_ToggleUpdatePanel
-  from '../../actions/action_UI/action_UI_ToggleUpdatePanel';
+  from '../../action/action_UI/action_UI_ToggleUpdatePanel';
 import * as action_UI_AcceptLegal
-  from '../../actions/action_UI/action_UI_AcceptLegal';
+  from '../../action/action_UI/action_UI_AcceptLegal';
 import * as action_UI_SelectTheme
-  from 'src/_redux/actions/action_UI/action_UI_SelectTheme';
+  from '../../action/action_UI/action_UI_SelectTheme';
+import type {Action, State} from '../../types';
 
-const DEFAULT_STATE = {
+type STATE = STATE & {
+  settingsMenuOpen: ?boolean,
+  updatePanelOpen: ?boolean,
+  acceptedLegal: ?Date | ?boolean,
+  themeName: ?action_UI_SelectTheme.ThemeName
+}
+
+const DEFAULT_STATE: STATE = {
 
   /**
    * SettingsMenu
@@ -40,10 +49,10 @@ const DEFAULT_STATE = {
    * Affected by:
    * action_UI_SelectTheme
    */
-  themeName: 'standard',
+  themeName: 'normal',
 };
 
-export default (previousState = DEFAULT_STATE, action) => {
+export default (previousState: STATE = DEFAULT_STATE, action: Action) => {
 
   let newState = _.cloneDeep(previousState);
 
@@ -80,7 +89,7 @@ export default (previousState = DEFAULT_STATE, action) => {
     case action_UI_SelectTheme.TYPE: {
       newState.themeName = payload;
     }
-
+      break;
     default:
       break;
   }
