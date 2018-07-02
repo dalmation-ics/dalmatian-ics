@@ -18,6 +18,8 @@ let operational_directory: string = null; // The directory StorageManager was in
  *
  * Creates the operational directory if it does not exist
  *
+ * Rejects if it is not valid
+ *
  * @returns {Promise<void>}
  */
 function initialize(path: string): Promise<void> {
