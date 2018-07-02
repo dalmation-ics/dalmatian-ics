@@ -24,36 +24,50 @@ function initialize(path: string): Promise<void> {
 
     return new Promise<void>((resolve, reject) => {
 
-        checkDirectoryIsValid(path).then(valid => { // Check if provided path exists and is a directory
+        const storage_dir = _path.join(path, BASE_STORAGE_DIRECTORY);
+
+        /*
+        Check storage folder exists at path
+        Finish if it does
+        Create it if it does not
+         */
+        const p_check_storage_exists = () => fs.exists(storage_dir).then(exists => {
+
+            if (exists) {
+                return p_finish();
+            } else {
+                return p_create_storage_directory();
+            }
+
+        });
+
+        /*
+        Create storage directory in path
+        Then finish
+         */
+        const p_create_storage_directory = () => fs.mkdir(storage_dir).then(() => {
+            return p_finish();
+        });
+
+        /*
+        Assign global operational_directory variable
+        Resolve
+         */
+        const p_finish = () => new Promise(() => {
+            operational_directory = storage_dir;
+            resolve();
+        });
+
+        // Begin
+        checkDirectoryIsValid(path).then(valid => {
 
             if (!valid) {
-                reject('StorageManager initialization path is invalid');
+                reject('StorageManager initialization path not valid');
+            } else {
+                return p_check_storage_exists();
             }
 
-        }).then(() => { // Check if path/BASE_STORAGE_DIRECTORY exists
-
-            return fs.exists(_path.join(path, BASE_STORAGE_DIRECTORY));
-
-        }).then(exists => { // Create path/BASE_STORAGE_DIRECTORY if it does not exist
-
-            if (!exists) {
-
-                console.log('Base storage directory does not exist');
-
-                return fs.mkdir(_path.join(path, BASE_STORAGE_DIRECTORY)).then(() => {
-
-                    console.log('Base storage directory created');
-
-                });
-
-            }
-
-        }).then(() => {
-
-            operational_directory = _path.join(path, BASE_STORAGE_DIRECTORY); // Assign variable operational_directory now that it is initialized
-            resolve();
-
-        }).catch(e => reject(e)); // Reject errors
+        }).catch(e => reject(e));
 
     });
 
@@ -73,8 +87,6 @@ function initialize(path: string): Promise<void> {
  */
 function read(directory: string, fileName: string): Promise<string> {
 
-    console.log(`Read request ${directory}/${fileName}`);
-
     return new Promise<string>((resolve, reject) => {
 
         if (!getOperationalDirectory())
@@ -83,31 +95,49 @@ function read(directory: string, fileName: string): Promise<string> {
         const directory_path = _path.join(getOperationalDirectory(), directory);
         const file_path = _path.join(directory_path, fileName);
 
-        fs.exists(directory_path).then(exists => { // Check if directory exists
+        /*
+        Check if directory exists
+        Continue down chain if exists
+        Resolve null if it does not
+         */
+        const p_check_exist_directory_path = () => fs.exists(directory_path).then(exists => {
 
-            if (!exists) {
-                resolve(null); // Resolve null if it does not
+            if (exists) {
+                return p_check_exist_file_path();
             } else {
-
-                return fs.exists(file_path).then(exists => { // Check if file exists
-
-                    if (!exists) {
-                        resolve(null); // Resolve null if it does not
-                    } else {
-
-                        return fs.readFile(file_path).then(content => { // Read file
-
-                            const decrypted = aes256.decrypt(ENCRYPTION_KEY, content.toString()); // Decrypt file
-                            resolve(decrypted); // Resolve contents
-
-                        });
-                    }
-
-                });
-
+                resolve(null); //
             }
 
-        }).catch(e => reject(e)); // Handle errors
+        });
+
+        /*
+        Check if the file exists
+        Continue down chain if exists
+        Resolve null if it does not
+         */
+        const p_check_exist_file_path = () => fs.exists(file_path).then(exists => {
+
+            if (exists) {
+                return p_read_file();
+            } else {
+                resolve(null);
+            }
+
+        });
+
+        /*
+        Read the file at directory/fileName
+        Decrypt the contents once completed and resolve the decrypted contents
+         */
+        const p_read_file = () => fs.readFile(file_path).then(content => {
+
+            const decrypted = aes256.decrypt(ENCRYPTION_KEY, content.toString());
+            resolve(decrypted);
+
+        });
+
+        // Begin
+        p_check_exist_directory_path().catch(e => reject(e));
 
     });
 
@@ -128,8 +158,6 @@ function read(directory: string, fileName: string): Promise<string> {
  */
 function write(directory: string, fileName: string, content: string): Promise<void> {
 
-    console.log(`Write request ${directory}/${fileName}`);
-
     return new Promise<void>((resolve, reject) => {
 
         if (!getOperationalDirectory())
@@ -138,37 +166,41 @@ function write(directory: string, fileName: string, content: string): Promise<vo
         const directory_path = _path.join(getOperationalDirectory(), directory);
         const file_path = _path.join(directory_path, fileName);
 
-        fs.exists(directory_path).then(exists => { // Check if directory exists
+        /*
+        Check if directory exists
+        Continue down chain if exists
+        Create the directory if it does not
+         */
+        const p_check_exist_directory_path = () => fs.exists(directory_path).then(exists => {
 
-            if (!exists) { // Create the directory if it does not exist
-
-                console.log(`Creating directory ${directory}`);
-
-                return fs.mkdir(directory_path);
-
+            if (exists) {
+                return p_write_file();
             } else {
-
-                return fs.stat(directory_path).then(stat => { // Stat the existing directory to ensure it is, in fact, a directory
-
-                    if (!stat.isDirectory()) {
-                        console.log(`${directory} is not a directory`);
-                    }
-
-                });
-
+                return p_create_directory();
             }
 
-        }).then(() => { // Write file
+        });
+
+        /*
+        Create the directory path because it does not exist
+        Then continue down chain
+         */
+        const p_create_directory = () => fs.mkdir(directory_path).then(() => {
+            return p_write_file();
+        });
+
+        /*
+        Encrypt contents then write to file
+         */
+        const p_write_file = () => {
 
             const encrypted = aes256.encrypt(ENCRYPTION_KEY, content);
-
             return fs.writeFile(file_path, encrypted);
 
-        }).then(() => {
+        };
 
-            resolve();
-
-        }).catch(e => reject(e));
+        // Begin
+        p_check_exist_directory_path().catch(e => reject(e));
 
     });
 
@@ -182,17 +214,33 @@ function checkDirectoryIsValid(path: string): Promise<boolean> {
 
     return new Promise<boolean>((resolve, reject) => {
 
-        fs.exists(path).then(exists => { // Check if provided path exists
+        /*
+        Check if path exists
+        Continue to stat the path if it does
+        Resolve false if it does not
+         */
+        const p_check_path_exists = () => fs.exists(path).then(exists => {
 
-            if (!exists) {
-                resolve(false);
+            if (exists) {
+                return p_stat_path();
             } else {
-                return fs.stat(path).then(stat => {
-                    resolve(stat.isDirectory());
-                });
+                resolve(false);
             }
 
-        }).catch(e => reject(e));
+        });
+
+        /*
+        Stat the path to determine if it is a directory
+        Resolve the result (true|false)
+         */
+        const p_stat_path = () => fs.stat(path).then(stat => {
+
+            resolve(stat.isDirectory());
+
+        });
+
+        // Begin
+        p_check_path_exists().catch(e => reject(e));
 
     });
 

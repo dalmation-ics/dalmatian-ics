@@ -21,23 +21,44 @@ var operational_directory = null; // The directory StorageManager was initialize
  */
 function initialize(path) {
     return new Promise(function (resolve, reject) {
+        var storage_dir = _path.join(path, BASE_STORAGE_DIRECTORY);
+        /*
+        Check storage folder exists at path
+        Finish if it does
+        Create it if it does not
+         */
+        var p_check_storage_exists = function () { return fs.exists(storage_dir).then(function (exists) {
+            if (exists) {
+                return p_finish();
+            }
+            else {
+                return p_create_storage_directory();
+            }
+        }); };
+        /*
+        Create storage directory in path
+        Then finish
+         */
+        var p_create_storage_directory = function () { return fs.mkdir(storage_dir).then(function () {
+            return p_finish();
+        }); };
+        /*
+        Assign global operational_directory variable
+        Resolve
+         */
+        var p_finish = function () { return new Promise(function () {
+            operational_directory = storage_dir;
+            resolve();
+        }); };
+        // Begin
         checkDirectoryIsValid(path).then(function (valid) {
             if (!valid) {
-                reject('StorageManager initialization path is invalid');
+                reject('StorageManager initialization path not valid');
             }
-        }).then(function () {
-            return fs.exists(_path.join(path, BASE_STORAGE_DIRECTORY));
-        }).then(function (exists) {
-            if (!exists) {
-                console.log('Base storage directory does not exist');
-                return fs.mkdir(_path.join(path, BASE_STORAGE_DIRECTORY)).then(function () {
-                    console.log('Base storage directory created');
-                });
+            else {
+                return p_check_storage_exists();
             }
-        }).then(function () {
-            operational_directory = _path.join(path, BASE_STORAGE_DIRECTORY); // Assign variable operational_directory now that it is initialized
-            resolve();
-        })["catch"](function (e) { return reject(e); }); // Reject errors
+        })["catch"](function (e) { return reject(e); });
     });
 }
 /**
@@ -53,30 +74,47 @@ function initialize(path) {
  * @returns {Promise<string>}
  */
 function read(directory, fileName) {
-    console.log("Read request " + directory + "/" + fileName);
     return new Promise(function (resolve, reject) {
         if (!getOperationalDirectory())
             reject('StorageManager has not been initialized');
         var directory_path = _path.join(getOperationalDirectory(), directory);
         var file_path = _path.join(directory_path, fileName);
-        fs.exists(directory_path).then(function (exists) {
-            if (!exists) {
-                resolve(null); // Resolve null if it does not
+        /*
+        Check if directory exists
+        Continue down chain if exists
+        Resolve null if it does not
+         */
+        var p_check_exist_directory_path = function () { return fs.exists(directory_path).then(function (exists) {
+            if (exists) {
+                return p_check_exist_file_path();
             }
             else {
-                return fs.exists(file_path).then(function (exists) {
-                    if (!exists) {
-                        resolve(null); // Resolve null if it does not
-                    }
-                    else {
-                        return fs.readFile(file_path).then(function (content) {
-                            var decrypted = aes256.decrypt(ENCRYPTION_KEY, content.toString()); // Decrypt file
-                            resolve(decrypted); // Resolve contents
-                        });
-                    }
-                });
+                resolve(null); //
             }
-        })["catch"](function (e) { return reject(e); }); // Handle errors
+        }); };
+        /*
+        Check if the file exists
+        Continue down chain if exists
+        Resolve null if it does not
+         */
+        var p_check_exist_file_path = function () { return fs.exists(file_path).then(function (exists) {
+            if (exists) {
+                return p_read_file();
+            }
+            else {
+                resolve(null);
+            }
+        }); };
+        /*
+        Read the file at directory/fileName
+        Decrypt the contents once completed and resolve the decrypted contents
+         */
+        var p_read_file = function () { return fs.readFile(file_path).then(function (content) {
+            var decrypted = aes256.decrypt(ENCRYPTION_KEY, content.toString());
+            resolve(decrypted);
+        }); };
+        // Begin
+        p_check_exist_directory_path()["catch"](function (e) { return reject(e); });
     });
 }
 /**
@@ -93,30 +131,40 @@ function read(directory, fileName) {
  * @returns {Promise<void>}
  */
 function write(directory, fileName, content) {
-    console.log("Write request " + directory + "/" + fileName);
     return new Promise(function (resolve, reject) {
         if (!getOperationalDirectory())
             reject('StorageManager has not been initialized');
         var directory_path = _path.join(getOperationalDirectory(), directory);
         var file_path = _path.join(directory_path, fileName);
-        fs.exists(directory_path).then(function (exists) {
-            if (!exists) {
-                console.log("Creating directory " + directory);
-                return fs.mkdir(directory_path);
+        /*
+        Check if directory exists
+        Continue down chain if exists
+        Create the directory if it does not
+         */
+        var p_check_exist_directory_path = function () { return fs.exists(directory_path).then(function (exists) {
+            if (exists) {
+                return p_write_file();
             }
             else {
-                return fs.stat(directory_path).then(function (stat) {
-                    if (!stat.isDirectory()) {
-                        console.log(directory + " is not a directory");
-                    }
-                });
+                return p_create_directory();
             }
-        }).then(function () {
+        }); };
+        /*
+        Create the directory path because it does not exist
+        Then continue down chain
+         */
+        var p_create_directory = function () { return fs.mkdir(directory_path).then(function () {
+            return p_write_file();
+        }); };
+        /*
+        Encrypt contents then write to file
+         */
+        var p_write_file = function () {
             var encrypted = aes256.encrypt(ENCRYPTION_KEY, content);
             return fs.writeFile(file_path, encrypted);
-        }).then(function () {
-            resolve();
-        })["catch"](function (e) { return reject(e); });
+        };
+        // Begin
+        p_check_exist_directory_path()["catch"](function (e) { return reject(e); });
     });
 }
 /**
@@ -125,16 +173,28 @@ function write(directory, fileName, content) {
  */
 function checkDirectoryIsValid(path) {
     return new Promise(function (resolve, reject) {
-        fs.exists(path).then(function (exists) {
-            if (!exists) {
-                resolve(false);
+        /*
+        Check if path exists
+        Continue to stat the path if it does
+        Resolve false if it does not
+         */
+        var p_check_path_exists = function () { return fs.exists(path).then(function (exists) {
+            if (exists) {
+                return p_stat_path();
             }
             else {
-                return fs.stat(path).then(function (stat) {
-                    resolve(stat.isDirectory());
-                });
+                resolve(false);
             }
-        })["catch"](function (e) { return reject(e); });
+        }); };
+        /*
+        Stat the path to determine if it is a directory
+        Resolve the result (true|false)
+         */
+        var p_stat_path = function () { return fs.stat(path).then(function (stat) {
+            resolve(stat.isDirectory());
+        }); };
+        // Begin
+        p_check_path_exists()["catch"](function (e) { return reject(e); });
     });
 }
 function getOperationalDirectory() {
