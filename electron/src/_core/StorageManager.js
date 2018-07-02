@@ -214,19 +214,6 @@ function checkDirectoryIsValid(path) {
         p_check_path_exists()["catch"](function (e) { return reject(e); });
     });
 }
-var StorageClass = /** @class */ (function () {
-    function StorageClass(directory) {
-        this.directory = directory;
-    }
-    StorageClass.prototype.read = function (fileName) {
-        return read(this.directory, fileName);
-    };
-    StorageClass.prototype.write = function (fileName, content) {
-        return write(this.directory, fileName, content);
-    };
-    return StorageClass;
-}());
-exports.StorageClass = StorageClass;
 function setOperationalDirectory(path) {
     operational_directory = path;
 }

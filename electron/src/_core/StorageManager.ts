@@ -262,24 +262,6 @@ function checkDirectoryIsValid(path: string): Promise<boolean> {
 
 }
 
-export class StorageClass {
-
-    directory: string;
-
-    constructor(directory: string) {
-        this.directory = directory;
-    }
-
-    read(fileName: string) {
-        return read(this.directory, fileName);
-    }
-
-    write(fileName: string, content: string) {
-        return write(this.directory, fileName, content);
-    }
-
-}
-
 function setOperationalDirectory(path: string) {
     operational_directory = path;
 }
