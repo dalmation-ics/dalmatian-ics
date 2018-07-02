@@ -33,10 +33,9 @@ export default (mapObject, dispatch) => {
     // name = redirect
     const targetFunction = mapObject[name]; // action_Redirect
 
-    const dispatchWrappedFunction = (arg) => (dispatch(
-        targetFunction(arg))); // Still allows arguments to be passed to action
-
-    out[name] = dispatchWrappedFunction;
+    // Still allows arguments to be passed to action
+    out[name] = (arg) => (dispatch(
+        targetFunction(arg)));
     /**
      *  "out" = {
          *      redirect: function(arg) {
