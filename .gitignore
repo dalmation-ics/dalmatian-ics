@@ -1,3 +1,9 @@
+# Webstorm
+.idea/
+
+# Lockfiles
+*.lock
+
 # Logs
 logs
 *.log
