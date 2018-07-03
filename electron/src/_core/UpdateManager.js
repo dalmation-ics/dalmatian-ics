@@ -13,8 +13,11 @@ var StorageManager_1 = require("./StorageManager");
 var _ = require("lodash");
 var moment = require("moment");
 var DOWNLOAD_DIRECTORY = '/forms';
-var TARGET = 'https://s3-us-west-2.amazonaws.com/dalmatian-ics-forms/';
+var target = 'https://s3-us-west-2.amazonaws.com/dalmatian-ics-forms/';
+var timeout = 20000;
+var process_active = false;
 var active_request = null;
+var isAborting = false;
 /**
  * CheckForUpdates read a local index.json file and compares it to the servers index.json file
  * By comparing the two files the client can determine if there are updates available
@@ -28,23 +31,30 @@ function checkForUpdates() {
         if (active_request != null) {
             reject('A request is already pending');
         }
+        process_active = true; // Set process_active to true
         /*
         Read the local index.json file
         If no index.json file exists, updates are most certainly needed. Resolve true
         Else, continue on to download index.json from the server
          */
         var p_get_local_index = function () { return StorageManager_1["default"].read(DOWNLOAD_DIRECTORY, 'index.json').then(function (contents) {
-            if (!contents) {
-                resolve(true);
+            if (!isAborting) {
+                if (!contents) {
+                    resolve(true);
+                }
+                else {
+                    try {
+                        index_local = JSON.parse(contents);
+                        return p_download_index();
+                    }
+                    catch (e) {
+                        reject(e);
+                    }
+                }
             }
             else {
-                try {
-                    index_local = JSON.parse(contents);
-                    return p_download_index();
-                }
-                catch (e) {
-                    reject(e);
-                }
+                reject(new AbortedError());
+                isAborting = false;
             }
         }); };
         /*
@@ -53,19 +63,26 @@ function checkForUpdates() {
         Else continue on to compare the two files
          */
         var p_download_index = function () {
+            // Assign request promise to active_request so it can be cancelled
             active_request = request.get({
-                uri: TARGET + "index.json"
+                uri: target + "index.json",
+                timeout: timeout
             }).then(function (content) {
-                active_request = null;
-                try {
-                    index_server = JSON.parse(content);
-                    return p_compare_indexes();
+                active_request = null; // On complete, null out active_request
+                if (!content) {
+                    reject('Server response empty');
                 }
-                catch (e) {
-                    reject(e);
+                else {
+                    try {
+                        index_server = JSON.parse(content);
+                        return p_compare_indexes();
+                    }
+                    catch (e) {
+                        reject(e);
+                    }
                 }
             }, function (e) {
-                active_request = null;
+                active_request = null; // On error, null out active_request
                 reject(e);
             });
             return active_request;
@@ -76,6 +93,7 @@ function checkForUpdates() {
          */
         var p_compare_indexes = function () { return new Promise(function () {
             resolve(findNewServerFiles(index_local, index_server).length > 0);
+            process_active = false; // Once the entire process is complete, process_active is false
         }); };
         // Begin
         p_get_local_index()["catch"](function (e) { return reject(e); });
@@ -127,17 +145,32 @@ function findNewServerFiles(index_local, index_server) {
     return needsUpdating;
 }
 function abort() {
+    isAborting = true;
     if (active_request) {
         active_request.cancel();
         active_request = null;
+        isAborting = false;
     }
 }
 function hasActiveRequest() {
     return active_request != null;
 }
+function setTarget(uri) {
+    target = uri;
+}
+function setTimeout(millis) {
+    timeout = millis;
+}
 exports["default"] = {
     checkForUpdates: checkForUpdates,
     downloadNewForms: downloadNewForms,
     abort: abort,
-    hasActiveRequest: hasActiveRequest
+    hasActiveRequest: hasActiveRequest,
+    setTarget: setTarget,
+    setTimeout: setTimeout
 };
+function AbortedError() {
+    this.message = 'User Aborted';
+    this.name = 'AbortedEroor';
+}
+exports.AbortedError = AbortedError;

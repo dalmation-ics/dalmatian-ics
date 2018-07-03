@@ -37,9 +37,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var _this = this;
 exports.__esModule = true;
 var sinon = require("sinon"); // http://sinonjs.org/releases/v2.0.0/
+var ServerMock = require("mock-http-server"); // https://www.npmjs.com/package/mock-http-server
 var UpdateManager_1 = require("./UpdateManager");
 var StorageManager_1 = require("./StorageManager");
 var request = require("request-promise");
+var errors_1 = require("request-promise/errors");
+var server = new ServerMock({ host: 'localhost', port: 30025 });
 var sandbox;
 describe('UpdateManager should ', function () {
     beforeEach(function () {
@@ -52,11 +55,18 @@ describe('UpdateManager should ', function () {
         expect(true).toBe(true);
     });
     describe('has method checkForUpdates that ', function () {
+        beforeEach(function (done) {
+            server.start(done);
+            UpdateManager_1["default"].setTarget('http://localhost:30025/');
+        });
+        afterEach(function (done) {
+            server.stop(done);
+        });
         it('exists', function () {
             expect(UpdateManager_1["default"].checkForUpdates).toBeDefined();
         });
         it('loads local index, downloads server index, and compares the two, resolving no updates needed', function () { return __awaiter(_this, void 0, void 0, function () {
-            var stub_read, stub_request, result;
+            var stub_read, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -72,19 +82,26 @@ describe('UpdateManager should ', function () {
                             bcics_ICS217A: { lastModified: '2018-05-18T12:37:21-07:00' },
                             bcics_ICS309: { lastModified: '2018-05-18T12:37:21-07:00' }
                         }));
-                        stub_request = sandbox.stub(request, 'get');
-                        stub_request.withArgs(sinon.match.any).resolves(JSON.stringify({
-                            bcics_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS210: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS213: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS214: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS214A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS217A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS309: { lastModified: '2018-05-18T12:37:21-07:00' }
-                        }));
-                        return [4 /*yield*/, UpdateManager_1["default"].checkForUpdates()];
+                        server.on({
+                            method: 'GET',
+                            path: '/index.json',
+                            reply: {
+                                status: 200,
+                                headers: { 'content-type': 'application/json' },
+                                body: JSON.stringify({
+                                    bcics_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS210: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS213: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS214: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS214A: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS217A: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS309: { lastModified: '2018-05-18T12:37:21-07:00' }
+                                })
+                            }
+                        });
+                        return [4 /*yield*/, UpdateManager_1["default"].checkForUpdates()["catch"](function (e) { return console.log(e); })];
                     case 1:
                         result = _a.sent();
                         // Assert
@@ -94,7 +111,7 @@ describe('UpdateManager should ', function () {
             });
         }); });
         it('loads local index, downloads server index, and compares the two, resolving updates needed due to new version', function () { return __awaiter(_this, void 0, void 0, function () {
-            var stub_read, stub_request, result;
+            var stub_read, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -110,18 +127,25 @@ describe('UpdateManager should ', function () {
                             bcics_ICS217A: { lastModified: '2018-05-18T12:37:21-07:00' },
                             bcics_ICS309: { lastModified: '2018-05-18T12:37:21-07:00' }
                         }));
-                        stub_request = sandbox.stub(request, 'get');
-                        stub_request.withArgs(sinon.match.any).resolves(JSON.stringify({
-                            bcics_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS210: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS213: { lastModified: '2018-06-18T12:37:21-07:00' },
-                            bcics_ICS214: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS214A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS217A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS309: { lastModified: '2018-05-18T12:37:21-07:00' }
-                        }));
+                        server.on({
+                            method: 'GET',
+                            path: '/index.json',
+                            reply: {
+                                status: 200,
+                                headers: { 'content-type': 'application/json' },
+                                body: JSON.stringify({
+                                    bcics_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS210: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS213: { lastModified: '2018-06-18T12:37:21-07:00' },
+                                    bcics_ICS214: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS214A: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS217A: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS309: { lastModified: '2018-05-18T12:37:21-07:00' }
+                                })
+                            }
+                        });
                         return [4 /*yield*/, UpdateManager_1["default"].checkForUpdates()];
                     case 1:
                         result = _a.sent();
@@ -132,7 +156,7 @@ describe('UpdateManager should ', function () {
             });
         }); });
         it('loads local index, downloads server index, and compares the two, resolving updates needed due to new file', function () { return __awaiter(_this, void 0, void 0, function () {
-            var stub_read, stub_request, result;
+            var stub_read, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -147,18 +171,25 @@ describe('UpdateManager should ', function () {
                             bcics_ICS217A: { lastModified: '2018-05-18T12:37:21-07:00' },
                             bcics_ICS309: { lastModified: '2018-05-18T12:37:21-07:00' }
                         }));
-                        stub_request = sandbox.stub(request, 'get');
-                        stub_request.withArgs(sinon.match.any).resolves(JSON.stringify({
-                            bcics_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS210: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS213: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS214: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS214A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS217A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS309: { lastModified: '2018-05-18T12:37:21-07:00' }
-                        }));
+                        server.on({
+                            method: 'GET',
+                            path: '/index.json',
+                            reply: {
+                                status: 200,
+                                headers: { 'content-type': 'application/json' },
+                                body: JSON.stringify({
+                                    bcics_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS210: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS213: { lastModified: '2018-06-18T12:37:21-07:00' },
+                                    bcics_ICS214: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS214A: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS217A: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS309: { lastModified: '2018-05-18T12:37:21-07:00' }
+                                })
+                            }
+                        });
                         return [4 /*yield*/, UpdateManager_1["default"].checkForUpdates()];
                     case 1:
                         result = _a.sent();
@@ -228,9 +259,38 @@ describe('UpdateManager should ', function () {
                         stub_read = sandbox.stub(StorageManager_1["default"], 'read');
                         stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
                         stub_request = sandbox.stub(request, 'get');
-                        stub_request.resolves("1 0+1");
+                        stub_request.resolves('1 0+1');
                         // Act Assert
                         return [4 /*yield*/, expect(UpdateManager_1["default"].checkForUpdates()).rejects.toBeInstanceOf(SyntaxError)];
+                    case 1:
+                        // Act Assert
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('handles server timeout appropriately', function () { return __awaiter(_this, void 0, void 0, function () {
+            var stub_read;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        stub_read = sandbox.stub(StorageManager_1["default"], 'read');
+                        stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
+                        UpdateManager_1["default"].setTimeout(1000);
+                        server.on({
+                            method: 'GET',
+                            path: '/index.json',
+                            reply: {
+                                status: 200,
+                                headers: { 'content-type': 'application/json' },
+                                body: JSON.stringify({
+                                    hello: 'is it me you\'re looking for?'
+                                })
+                            },
+                            delay: 2000
+                        });
+                        // Act Assert
+                        return [4 /*yield*/, expect(UpdateManager_1["default"].checkForUpdates()).rejects.toBeInstanceOf(errors_1.RequestError)];
                     case 1:
                         // Act Assert
                         _a.sent();

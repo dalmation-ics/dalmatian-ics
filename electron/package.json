@@ -22,6 +22,7 @@
     "electron-store": "^2.0.0",
     "fs-extra": "^6.0.1",
     "lodash": "^4.17.10",
+    "mock-http-server": "^1.0.0",
     "moment": "^2.22.2",
     "request-promise": "^4.2.2"
   },

@@ -1,7 +1,12 @@
 import * as sinon from 'sinon'; // http://sinonjs.org/releases/v2.0.0/
+import * as ServerMock from 'mock-http-server'; // https://www.npmjs.com/package/mock-http-server
 import SUT from './UpdateManager';
 import StorageManager from './StorageManager';
 import * as request from 'request-promise';
+import {RequestError} from 'request-promise/errors';
+import {AbortedError} from './UpdateManager';
+
+const server = new ServerMock({host: 'localhost', port: 30025});
 
 let sandbox;
 
@@ -22,6 +27,15 @@ describe('UpdateManager should ', () => {
     });
 
     describe('has method checkForUpdates that ', () => {
+
+        beforeEach((done) => {
+            server.start(done);
+            SUT.setTarget('http://localhost:30025/');
+        });
+
+        afterEach((done) => {
+            server.stop(done);
+        });
 
         it('exists', () => {
 
@@ -45,21 +59,28 @@ describe('UpdateManager should ', () => {
                 bcics_ICS309: {lastModified: '2018-05-18T12:37:21-07:00'}
             }));
 
-            const stub_request = sandbox.stub(request, 'get');
-            stub_request.withArgs(sinon.match.any).resolves(JSON.stringify({
-                bcics_ICS205: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS206: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS205A: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS210: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS213: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS214: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS214A: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS217A: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS309: {lastModified: '2018-05-18T12:37:21-07:00'}
+            server.on({
+                method: 'GET',
+                path: '/index.json',
+                reply: {
+                    status: 200,
+                    headers: {'content-type': 'application/json'},
+                    body: JSON.stringify({
+                        bcics_ICS205: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS206: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS205A: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS210: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS213: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS214: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS214A: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS217A: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS309: {lastModified: '2018-05-18T12:37:21-07:00'}
+                    })
+                }
             });
 
             // Act
-            const result = await SUT.checkForUpdates();
+            const result = await SUT.checkForUpdates().catch(e => console.log(e));
 
             // Assert
             expect(result).toBe(false);
@@ -82,17 +103,24 @@ describe('UpdateManager should ', () => {
                 bcics_ICS309: {lastModified: '2018-05-18T12:37:21-07:00'}
             }));
 
-            const stub_request = sandbox.stub(request, 'get');
-            stub_request.withArgs(sinon.match.any).resolves(JSON.stringify({
-                bcics_ICS205: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS206: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS205A: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS210: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS213: {lastModified: '2018-06-18T12:37:21-07:00'}, // New Version
-                bcics_ICS214: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS214A: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS217A: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS309: {lastModified: '2018-05-18T12:37:21-07:00'}
+            server.on({
+                method: 'GET',
+                path: '/index.json',
+                reply: {
+                    status: 200,
+                    headers: {'content-type': 'application/json'},
+                    body: JSON.stringify({
+                        bcics_ICS205: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS206: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS205A: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS210: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS213: {lastModified: '2018-06-18T12:37:21-07:00'}, // New version
+                        bcics_ICS214: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS214A: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS217A: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS309: {lastModified: '2018-05-18T12:37:21-07:00'}
+                    })
+                }
             });
 
             // Act
@@ -118,17 +146,24 @@ describe('UpdateManager should ', () => {
                 bcics_ICS309: {lastModified: '2018-05-18T12:37:21-07:00'}
             }));
 
-            const stub_request = sandbox.stub(request, 'get');
-            stub_request.withArgs(sinon.match.any).resolves(JSON.stringify({
-                bcics_ICS205: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS206: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS205A: {lastModified: '2018-05-18T12:37:21-07:00'}, // New File
-                bcics_ICS210: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS213: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS214: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS214A: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS217A: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS309: {lastModified: '2018-05-18T12:37:21-07:00'}
+            server.on({
+                method: 'GET',
+                path: '/index.json',
+                reply: {
+                    status: 200,
+                    headers: {'content-type': 'application/json'},
+                    body: JSON.stringify({
+                        bcics_ICS205: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS206: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS205A: {lastModified: '2018-05-18T12:37:21-07:00'}, // New File
+                        bcics_ICS210: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS213: {lastModified: '2018-06-18T12:37:21-07:00'},
+                        bcics_ICS214: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS214A: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS217A: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS309: {lastModified: '2018-05-18T12:37:21-07:00'}
+                    })
+                }
             });
 
             // Act
@@ -186,10 +221,36 @@ describe('UpdateManager should ', () => {
             stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
 
             const stub_request = sandbox.stub(request, 'get');
-            stub_request.resolves("1 0+1");
+            stub_request.resolves('1 0+1');
 
             // Act Assert
             await expect(SUT.checkForUpdates()).rejects.toBeInstanceOf(SyntaxError);
+
+        });
+
+        it('handles server timeout appropriately', async () => {
+
+            // Arrange
+            const stub_read = sandbox.stub(StorageManager, 'read');
+            stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
+
+            SUT.setTimeout(1000);
+
+            server.on({
+                method: 'GET',
+                path: '/index.json',
+                reply: {
+                    status: 200,
+                    headers: {'content-type': 'application/json'},
+                    body: JSON.stringify({
+                        hello: 'is it me you\'re looking for?'
+                    })
+                },
+                delay: 2000
+            });
+
+            // Act Assert
+            await expect(SUT.checkForUpdates()).rejects.toBeInstanceOf(RequestError);
 
         });
 

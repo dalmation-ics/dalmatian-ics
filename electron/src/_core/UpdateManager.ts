@@ -12,9 +12,12 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 
 const DOWNLOAD_DIRECTORY = '/forms';
-const TARGET = 'https://s3-us-west-2.amazonaws.com/dalmatian-ics-forms/';
+let target = 'https://s3-us-west-2.amazonaws.com/dalmatian-ics-forms/';
+let timeout = 20000;
 
+let process_active = false;
 let active_request = null;
+let isAborting = false;
 
 /**
  * CheckForUpdates read a local index.json file and compares it to the servers index.json file
@@ -33,21 +36,28 @@ function checkForUpdates(): Promise<boolean> {
             reject('A request is already pending');
         }
 
+        process_active = true; // Set process_active to true
+
         /*
         Read the local index.json file
         If no index.json file exists, updates are most certainly needed. Resolve true
         Else, continue on to download index.json from the server
          */
         const p_get_local_index = () => StorageManager.read(DOWNLOAD_DIRECTORY, 'index.json').then(contents => {
-            if (!contents) {
-                resolve(true);
-            } else {
-                try {
-                    index_local = JSON.parse(contents);
-                    return p_download_index();
-                } catch (e) {
-                    reject(e);
+            if (!isAborting) {
+                if (!contents) {
+                    resolve(true);
+                } else {
+                    try {
+                        index_local = JSON.parse(contents);
+                        return p_download_index();
+                    } catch (e) {
+                        reject(e);
+                    }
                 }
+            } else {
+                reject(new AbortedError());
+                isAborting = false;
             }
         });
 
@@ -57,21 +67,33 @@ function checkForUpdates(): Promise<boolean> {
         Else continue on to compare the two files
          */
         const p_download_index = () => {
+
+            // Assign request promise to active_request so it can be cancelled
             active_request = request.get({
-                uri: `${TARGET}index.json`
+                uri: `${target}index.json`,
+                timeout
             }).then(content => {
-                active_request = null;
-                try {
-                    index_server = JSON.parse(content);
-                    return p_compare_indexes();
-                } catch (e) {
-                    reject(e);
+
+                active_request = null; // On complete, null out active_request
+
+                if (!content) {
+                    reject('Server response empty');
+                } else {
+                    try {
+                        index_server = JSON.parse(content);
+                        return p_compare_indexes();
+                    } catch (e) {
+                        reject(e);
+                    }
                 }
+
             }, e => {
-                active_request = null;
+                active_request = null; // On error, null out active_request
                 reject(e);
             });
+
             return active_request;
+
         };
 
         /*
@@ -79,7 +101,11 @@ function checkForUpdates(): Promise<boolean> {
         Resolve true if findNewServerFiles returns an array with any new server file
          */
         const p_compare_indexes = () => new Promise(() => {
+
             resolve(findNewServerFiles(index_local, index_server).length > 0);
+
+            process_active = false; // Once the entire process is complete, process_active is false
+
         });
 
         // Begin
@@ -149,9 +175,11 @@ function findNewServerFiles(index_local: object, index_server: object): Array<st
 }
 
 function abort() {
+    isAborting = true;
     if (active_request) {
         active_request.cancel();
         active_request = null;
+        isAborting = false;
     }
 }
 
@@ -159,9 +187,25 @@ function hasActiveRequest() {
     return active_request != null;
 }
 
+function setTarget(uri: string) {
+    target = uri;
+}
+
+function setTimeout(millis: number) {
+    timeout = millis;
+}
+
 export default {
     checkForUpdates,
     downloadNewForms,
     abort,
-    hasActiveRequest
+    hasActiveRequest,
+    setTarget,
+    setTimeout
 };
+
+export function AbortedError() {
+    this.message = 'User Aborted';
+    this.name = 'AbortedEroor';
+}
+
