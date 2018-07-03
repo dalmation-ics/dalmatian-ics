@@ -4,7 +4,6 @@ import SUT from './UpdateManager';
 import StorageManager from './StorageManager';
 import * as request from 'request-promise';
 import {RequestError} from 'request-promise/errors';
-import {AbortedError} from './UpdateManager';
 
 const server = new ServerMock({host: 'localhost', port: 30025});
 
@@ -43,7 +42,7 @@ describe('UpdateManager should ', () => {
 
         });
 
-        it('loads local index, downloads server index, and compares the two, resolving no updates needed', async () => {
+        it('loads local index, downloads server index, and compares the two, resolving empty array', async () => {
 
             // Arrange
             const stub_read = sandbox.stub(StorageManager, 'read');
@@ -83,7 +82,7 @@ describe('UpdateManager should ', () => {
             const result = await SUT.checkForUpdates().catch(e => console.log(e));
 
             // Assert
-            expect(result).toBe(false);
+            expect(result).toEqual([]);
 
         });
 
@@ -111,7 +110,7 @@ describe('UpdateManager should ', () => {
                     headers: {'content-type': 'application/json'},
                     body: JSON.stringify({
                         bcics_ICS205: {lastModified: '2018-05-18T12:37:21-07:00'},
-                        bcics_ICS206: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS206: {lastModified: '2018-06-18T12:37:21-07:00'}, // New Version
                         bcics_ICS205A: {lastModified: '2018-05-18T12:37:21-07:00'},
                         bcics_ICS210: {lastModified: '2018-05-18T12:37:21-07:00'},
                         bcics_ICS213: {lastModified: '2018-06-18T12:37:21-07:00'}, // New version
@@ -127,7 +126,7 @@ describe('UpdateManager should ', () => {
             const result = await SUT.checkForUpdates();
 
             // Assert
-            expect(result).toBe(true);
+            expect(result).toEqual(['bcics_ICS206', 'bcics_ICS213']);
 
         });
 
@@ -142,7 +141,6 @@ describe('UpdateManager should ', () => {
                 bcics_ICS213: {lastModified: '2018-05-18T12:37:21-07:00'},
                 bcics_ICS214: {lastModified: '2018-05-18T12:37:21-07:00'},
                 bcics_ICS214A: {lastModified: '2018-05-18T12:37:21-07:00'},
-                bcics_ICS217A: {lastModified: '2018-05-18T12:37:21-07:00'},
                 bcics_ICS309: {lastModified: '2018-05-18T12:37:21-07:00'}
             }));
 
@@ -157,10 +155,10 @@ describe('UpdateManager should ', () => {
                         bcics_ICS206: {lastModified: '2018-05-18T12:37:21-07:00'},
                         bcics_ICS205A: {lastModified: '2018-05-18T12:37:21-07:00'}, // New File
                         bcics_ICS210: {lastModified: '2018-05-18T12:37:21-07:00'},
-                        bcics_ICS213: {lastModified: '2018-06-18T12:37:21-07:00'},
+                        bcics_ICS213: {lastModified: '2018-05-18T12:37:21-07:00'},
                         bcics_ICS214: {lastModified: '2018-05-18T12:37:21-07:00'},
                         bcics_ICS214A: {lastModified: '2018-05-18T12:37:21-07:00'},
-                        bcics_ICS217A: {lastModified: '2018-05-18T12:37:21-07:00'},
+                        bcics_ICS217A: {lastModified: '2018-05-18T12:37:21-07:00'}, // New File
                         bcics_ICS309: {lastModified: '2018-05-18T12:37:21-07:00'}
                     })
                 }
@@ -170,7 +168,7 @@ describe('UpdateManager should ', () => {
             const result = await SUT.checkForUpdates();
 
             // Assert
-            expect(result).toBe(true);
+            expect(result).toEqual(['bcics_ICS205A', 'bcics_ICS217A']);
 
         });
 
@@ -257,6 +255,15 @@ describe('UpdateManager should ', () => {
     });
 
     describe('has method downloadNewForms that', () => {
+
+        beforeEach((done) => {
+            server.start(done);
+            SUT.setTarget('http://localhost:30025/');
+        });
+
+        afterEach((done) => {
+            server.stop(done);
+        });
 
         it('exists', () => {
 

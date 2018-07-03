@@ -65,7 +65,7 @@ describe('UpdateManager should ', function () {
         it('exists', function () {
             expect(UpdateManager_1["default"].checkForUpdates).toBeDefined();
         });
-        it('loads local index, downloads server index, and compares the two, resolving no updates needed', function () { return __awaiter(_this, void 0, void 0, function () {
+        it('loads local index, downloads server index, and compares the two, resolving empty array', function () { return __awaiter(_this, void 0, void 0, function () {
             var stub_read, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -105,7 +105,7 @@ describe('UpdateManager should ', function () {
                     case 1:
                         result = _a.sent();
                         // Assert
-                        expect(result).toBe(false);
+                        expect(result).toEqual([]);
                         return [2 /*return*/];
                 }
             });
@@ -135,7 +135,7 @@ describe('UpdateManager should ', function () {
                                 headers: { 'content-type': 'application/json' },
                                 body: JSON.stringify({
                                     bcics_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
+                                    bcics_ICS206: { lastModified: '2018-06-18T12:37:21-07:00' },
                                     bcics_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' },
                                     bcics_ICS210: { lastModified: '2018-05-18T12:37:21-07:00' },
                                     bcics_ICS213: { lastModified: '2018-06-18T12:37:21-07:00' },
@@ -150,7 +150,7 @@ describe('UpdateManager should ', function () {
                     case 1:
                         result = _a.sent();
                         // Assert
-                        expect(result).toBe(true);
+                        expect(result).toEqual(['bcics_ICS206', 'bcics_ICS213']);
                         return [2 /*return*/];
                 }
             });
@@ -168,7 +168,6 @@ describe('UpdateManager should ', function () {
                             bcics_ICS213: { lastModified: '2018-05-18T12:37:21-07:00' },
                             bcics_ICS214: { lastModified: '2018-05-18T12:37:21-07:00' },
                             bcics_ICS214A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS217A: { lastModified: '2018-05-18T12:37:21-07:00' },
                             bcics_ICS309: { lastModified: '2018-05-18T12:37:21-07:00' }
                         }));
                         server.on({
@@ -182,7 +181,7 @@ describe('UpdateManager should ', function () {
                                     bcics_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
                                     bcics_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' },
                                     bcics_ICS210: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS213: { lastModified: '2018-06-18T12:37:21-07:00' },
+                                    bcics_ICS213: { lastModified: '2018-05-18T12:37:21-07:00' },
                                     bcics_ICS214: { lastModified: '2018-05-18T12:37:21-07:00' },
                                     bcics_ICS214A: { lastModified: '2018-05-18T12:37:21-07:00' },
                                     bcics_ICS217A: { lastModified: '2018-05-18T12:37:21-07:00' },
@@ -194,7 +193,7 @@ describe('UpdateManager should ', function () {
                     case 1:
                         result = _a.sent();
                         // Assert
-                        expect(result).toBe(true);
+                        expect(result).toEqual(['bcics_ICS205A', 'bcics_ICS217A']);
                         return [2 /*return*/];
                 }
             });
@@ -300,6 +299,13 @@ describe('UpdateManager should ', function () {
         }); });
     });
     describe('has method downloadNewForms that', function () {
+        beforeEach(function (done) {
+            server.start(done);
+            UpdateManager_1["default"].setTarget('http://localhost:30025/');
+        });
+        afterEach(function (done) {
+            server.stop(done);
+        });
         it('exists', function () {
             expect(UpdateManager_1["default"].checkForUpdates).toBeDefined();
         });

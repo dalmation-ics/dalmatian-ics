@@ -21,7 +21,7 @@ var isAborting = false;
 /**
  * CheckForUpdates read a local index.json file and compares it to the servers index.json file
  * By comparing the two files the client can determine if there are updates available
- * This will resolve a boolean referencing if updates are available or not
+ * This will resolve an array containing the names of files which require updating
  * @returns {Promise<boolean>}
  */
 function checkForUpdates() {
@@ -40,7 +40,7 @@ function checkForUpdates() {
         var p_get_local_index = function () { return StorageManager_1["default"].read(DOWNLOAD_DIRECTORY, 'index.json').then(function (contents) {
             if (!isAborting) {
                 if (!contents) {
-                    resolve(true);
+                    index_local = {};
                 }
                 else {
                     try {
@@ -53,7 +53,6 @@ function checkForUpdates() {
                 }
             }
             else {
-                reject(new AbortedError());
                 isAborting = false;
             }
         }); };
@@ -92,18 +91,25 @@ function checkForUpdates() {
         Resolve true if findNewServerFiles returns an array with any new server file
          */
         var p_compare_indexes = function () { return new Promise(function () {
-            resolve(findNewServerFiles(index_local, index_server).length > 0);
+            resolve(findNewServerFiles(index_local, index_server));
             process_active = false; // Once the entire process is complete, process_active is false
         }); };
         // Begin
         p_get_local_index()["catch"](function (e) { return reject(e); });
     });
 }
+/**
+ * DownloadNewForms starts by checking for updates, receiving a list of form updates available
+ * It will then download each of these new forms, as well as the updates index.json file
+ * @returns {Promise<void>}
+ */
 function downloadNewForms() {
     return new Promise(function (resolve, reject) {
-        if (active_request) {
+        if (active_request != null) {
             reject('A request is already pending');
         }
+        var p_get_new_forms = checkForUpdates().then(function (needsUpdating) {
+        });
     });
 }
 /**
@@ -169,8 +175,3 @@ exports["default"] = {
     setTarget: setTarget,
     setTimeout: setTimeout
 };
-function AbortedError() {
-    this.message = 'User Aborted';
-    this.name = 'AbortedEroor';
-}
-exports.AbortedError = AbortedError;

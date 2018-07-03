@@ -22,12 +22,12 @@ let isAborting = false;
 /**
  * CheckForUpdates read a local index.json file and compares it to the servers index.json file
  * By comparing the two files the client can determine if there are updates available
- * This will resolve a boolean referencing if updates are available or not
+ * This will resolve an array containing the names of files which require updating
  * @returns {Promise<boolean>}
  */
-function checkForUpdates(): Promise<boolean> {
+function checkForUpdates(): Promise<Array<string>> {
 
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<Array<string>>((resolve, reject) => {
 
         let index_local = null;
         let index_server = null;
@@ -46,7 +46,7 @@ function checkForUpdates(): Promise<boolean> {
         const p_get_local_index = () => StorageManager.read(DOWNLOAD_DIRECTORY, 'index.json').then(contents => {
             if (!isAborting) {
                 if (!contents) {
-                    resolve(true);
+                    index_local = {};
                 } else {
                     try {
                         index_local = JSON.parse(contents);
@@ -56,7 +56,6 @@ function checkForUpdates(): Promise<boolean> {
                     }
                 }
             } else {
-                reject(new AbortedError());
                 isAborting = false;
             }
         });
@@ -102,7 +101,7 @@ function checkForUpdates(): Promise<boolean> {
          */
         const p_compare_indexes = () => new Promise(() => {
 
-            resolve(findNewServerFiles(index_local, index_server).length > 0);
+            resolve(findNewServerFiles(index_local, index_server));
 
             process_active = false; // Once the entire process is complete, process_active is false
 
@@ -115,13 +114,22 @@ function checkForUpdates(): Promise<boolean> {
 
 }
 
+/**
+ * DownloadNewForms starts by checking for updates, receiving a list of form updates available
+ * It will then download each of these new forms, as well as the updates index.json file
+ * @returns {Promise<void>}
+ */
 function downloadNewForms(): Promise<void> {
 
     return new Promise<void>((resolve, reject) => {
 
-        if (active_request) {
+        if (active_request != null) {
             reject('A request is already pending');
         }
+
+        const p_get_new_forms = checkForUpdates().then(needsUpdating => {
+
+        });
 
     });
 
@@ -203,9 +211,4 @@ export default {
     setTarget,
     setTimeout
 };
-
-export function AbortedError() {
-    this.message = 'User Aborted';
-    this.name = 'AbortedEroor';
-}
 
