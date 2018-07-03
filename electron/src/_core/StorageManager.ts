@@ -208,7 +208,7 @@ function write(directory: string, fileName: string, content: string): Promise<vo
                 const encrypted = aes256.encrypt(ENCRYPTION_KEY, content);
                 return fs.writeFile(file_path, encrypted).then(() => {
                     resolve();
-                })
+                });
             } catch (e) {
                 reject(e);
             }
@@ -266,21 +266,10 @@ function setOperationalDirectory(path: string) {
     operational_directory = path;
 }
 
-let _exports;
-if (process.env.NODE_ENV === 'test') {
-    _exports = {
-        read,
-        write,
-        initialize,
-        setOperationalDirectory,
-    };
-} else {
-    _exports = {
-        read,
-        write,
-        initialize
-    };
-}
-
-export default _exports;
+export default {
+    read,
+    write,
+    initialize,
+    setOperationalDirectory,
+};
 

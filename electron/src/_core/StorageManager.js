@@ -217,20 +217,9 @@ function checkDirectoryIsValid(path) {
 function setOperationalDirectory(path) {
     operational_directory = path;
 }
-var _exports;
-if (process.env.NODE_ENV === 'test') {
-    _exports = {
-        read: read,
-        write: write,
-        initialize: initialize,
-        setOperationalDirectory: setOperationalDirectory
-    };
-}
-else {
-    _exports = {
-        read: read,
-        write: write,
-        initialize: initialize
-    };
-}
-exports["default"] = _exports;
+exports["default"] = {
+    read: read,
+    write: write,
+    initialize: initialize,
+    setOperationalDirectory: setOperationalDirectory
+};

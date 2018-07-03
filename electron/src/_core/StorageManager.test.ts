@@ -227,6 +227,8 @@ describe('StorageManager should ', () => {
         it('Handles exists error appropriately', async () => {
 
             // Arrange
+            const error = new Error('oh no');
+
             const directory_path = _path.join(operational_directory, 'foo');
             const file_path = _path.join(operational_directory, 'foo', 'bar');
 
@@ -234,16 +236,18 @@ describe('StorageManager should ', () => {
 
             const stub_exists = sandbox.stub(fs, 'exists');
             stub_exists.withArgs(directory_path).resolves(true);
-            stub_exists.withArgs(file_path).rejects('oh no');
+            stub_exists.withArgs(file_path).rejects(error);
 
             // Act Assert
-            await expect(SUT.read('foo', 'bar')).rejects.toBeDefined();
+            await expect(SUT.read('foo', 'bar')).rejects.toBe(error);
 
         });
 
         it('Handles readFile error appropriately', async () => {
 
             // Arrange
+            const error = new Error('oh no');
+
             const directory_path = _path.join(operational_directory, 'foo');
             const file_path = _path.join(operational_directory, 'foo', 'bar');
 
@@ -254,16 +258,18 @@ describe('StorageManager should ', () => {
             stub_exists.withArgs(file_path).resolves(true);
 
             const stub_readFile = sandbox.stub(fs, 'readFile');
-            stub_readFile.withArgs(file_path).rejects('oh no');
+            stub_readFile.withArgs(file_path).rejects(error);
 
             // Act Assert
-            await expect(SUT.read('foo', 'bar')).rejects.toBeDefined();
+            await expect(SUT.read('foo', 'bar')).rejects.toBe(error);
 
         });
 
         it('Handles decrypt error appropriately', async () => {
 
             // Arrange
+            const error = new Error('oh no');
+
             const directory_path = _path.join(operational_directory, 'foo');
             const file_path = _path.join(operational_directory, 'foo', 'bar');
 
@@ -277,10 +283,10 @@ describe('StorageManager should ', () => {
             stub_readFile.withArgs(file_path).resolves('hello');
 
             const stub_decrypt = sandbox.stub(aes256, 'decrypt');
-            stub_decrypt.withArgs(sinon.match.any, 'hello').rejects('oh no');
+            stub_decrypt.withArgs(sinon.match.any, 'hello').rejects(error);
 
             // Act Assert
-            await expect(SUT.read('foo', 'bar')).rejects.toBeDefined();
+            await expect(SUT.read('foo', 'bar')).rejects.toBe(error);
 
         });
 
@@ -383,22 +389,26 @@ describe('StorageManager should ', () => {
         it('handles exists errors appropriately', async () => {
 
             // Arrange
+            const error = new Error('oh no');
+
             SUT.setOperationalDirectory(operational_directory);
 
             const directory_path = _path.join(operational_directory, 'foo');
             const file_path = _path.join(directory_path, 'bar');
 
             const stub_exist = sandbox.stub(fs, 'exists');
-            stub_exist.withArgs(directory_path).rejects('oh no');
+            stub_exist.withArgs(directory_path).rejects(error);
 
             // Act Assert
-            await expect(SUT.write('foo', 'bar', 'Hello')).rejects.toBeDefined();
+            await expect(SUT.write('foo', 'bar', 'Hello')).rejects.toBe(error);
 
         });
 
         it('handles mkdir errors appropriately', async () => {
 
             // Arrange
+            const error = new Error('oh no');
+
             SUT.setOperationalDirectory(operational_directory);
 
             const directory_path = _path.join(operational_directory, 'foo');
@@ -408,16 +418,18 @@ describe('StorageManager should ', () => {
             stub_exist.withArgs(directory_path).resolves(false);
 
             const stub_mkdir = sandbox.stub(fs, 'mkdir');
-            stub_mkdir.withArgs(directory_path).rejects('oh no');
+            stub_mkdir.withArgs(directory_path).rejects(error);
 
             // Act
-            await expect(SUT.write('foo', 'bar', 'Hello')).rejects.toBeDefined();
+            await expect(SUT.write('foo', 'bar', 'Hello')).rejects.toBe(error);
 
         });
 
         it('handles encrypt errors appropriately', async () => {
 
             // Arrange
+            const error = new Error('oh no');
+
             SUT.setOperationalDirectory(operational_directory);
 
             const directory_path = _path.join(operational_directory, 'foo');
@@ -430,16 +442,18 @@ describe('StorageManager should ', () => {
             stub_mkdir.withArgs(directory_path).resolves();
 
             const stub_encrypt = sandbox.stub(aes256, 'encrypt');
-            stub_encrypt.withArgs(sinon.match.any, 'Hello').throws('oh no');
+            stub_encrypt.withArgs(sinon.match.any, 'Hello').throws(error);
 
             // Act
-            await expect(SUT.write('foo', 'bar', 'Hello')).rejects.toBeDefined();
+            await expect(SUT.write('foo', 'bar', 'Hello')).rejects.toBe(error);
 
         });
 
         it('handles write errors appropriately', async () => {
 
             // Arrange
+            const error = new Error('oh no');
+
             SUT.setOperationalDirectory(operational_directory);
 
             const directory_path = _path.join(operational_directory, 'foo');
@@ -455,10 +469,10 @@ describe('StorageManager should ', () => {
             stub_encrypt.withArgs(sinon.match.any, 'Hello').returns('World');
 
             const stub_write = sandbox.stub(fs, 'writeFile');
-            stub_write.withArgs(file_path, sinon.match.any).rejects('oh no');
+            stub_write.withArgs(file_path, sinon.match.any).rejects(error);
 
             // Act
-            await expect(SUT.write('foo', 'bar', 'Hello')).rejects.toBeDefined();
+            await expect(SUT.write('foo', 'bar', 'Hello')).rejects.toBe(error);
 
         });
 
