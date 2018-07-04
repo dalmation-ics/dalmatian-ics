@@ -20,6 +20,7 @@ export default () => (dispatch: Dispatch, getState: GetState) => new Promise(
           // this needs done to support image files
           delete f.uuid;
           f.fileName += '.html';
+          return f.fileName;
         });
 
         // Dispatch START
