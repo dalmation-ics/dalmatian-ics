@@ -6,7 +6,7 @@ export type ThemeName = $Keys<typeof nameList>;
 
 export const TYPE = 'ACTION_UI_SELECT_THEME';
 
-export default (themeName?: ThemeName = 'normal') => (dispatch: Dispatch) => {
+export default (themeName?: ThemeName = nameList[0]) => (dispatch: Dispatch) => {
   return new Promise((resolve, reject) => {
     try {
       dispatch(({
