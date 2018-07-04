@@ -6,6 +6,7 @@ import {Provider} from 'react-redux';
 import {applyMiddleware, createStore} from 'redux';
 import {createLogger} from 'redux-logger';
 import App from './App';
+import allReducers from 'src/_redux/reducer';
 
 //redux middleware
 const middleware = applyMiddleware(
