@@ -1,8 +1,8 @@
 import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
 import {ACT_IMPORT_FORM} from 'src/_core/contract/exportBridge';
 import uuid from 'uuid';
-import * as actionStatus from '../../../../_core/redux/actionStatus';
-import type {Action, Dispatch} from '../../../types';
+import * as actionStatus from 'src/_core/redux/types/actionStatus';
+import type {Action, Dispatch} from 'src/_core/redux/types';
 
 export const TYPE = 'TYPE_ARCHIVE_ITEM_IMPORT_XML';
 

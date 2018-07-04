@@ -1,4 +1,4 @@
-import type {Dispatch, Action} from '../../../types';
+import type {Dispatch, Action} from 'src/_core/redux/types';
 
 let nameList = Object.freeze(['normal', 'dark', 'contrast']);
 

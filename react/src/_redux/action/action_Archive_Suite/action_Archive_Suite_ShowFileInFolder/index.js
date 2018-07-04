@@ -1,5 +1,5 @@
 // @flow
-import type {Action, Dispatch, GetState} from '../../../types';
+import type {Action, Dispatch, GetState} from 'src/_core/redux/types';
 
 import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
 import {ACT_SHOW_PATH_IN_FOLDER} from 'src/_core/contract/exportBridge';

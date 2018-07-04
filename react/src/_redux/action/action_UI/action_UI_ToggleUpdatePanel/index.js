@@ -1,4 +1,4 @@
-import type {Action, Dispatch} from '../../../types';
+import type {Action, Dispatch} from 'src/_core/redux/types';
 
 export const TYPE = 'TYPE_UI_TOGGLEUPDATEMENU';
 export default () => (dispatch: Dispatch) => new Promise((resolve, reject) => {

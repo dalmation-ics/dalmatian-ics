@@ -8,7 +8,7 @@ import * as action_UI_AcceptLegal
   from '../../action/action_UI/action_UI_AcceptLegal';
 import * as action_UI_SelectTheme
   from '../../action/action_UI/action_UI_SelectTheme';
-import type {Action, State} from '../../types';
+import type {Action, State} from '../../../_core/redux/types/index';
 
 type STATE = State & {
   settingsMenuOpen: boolean | null,

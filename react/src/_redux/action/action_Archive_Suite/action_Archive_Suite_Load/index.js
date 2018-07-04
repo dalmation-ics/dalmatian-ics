@@ -1,9 +1,9 @@
 // @flow
-import type {Action, Dispatch} from '../../../types';
+import type {Action, Dispatch} from 'src/_core/redux/types';
 
 import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
 import React from 'react';
-import * as actionStatus from 'src/_core/redux/actionStatus';
+import * as actionStatus from 'src/_core/redux/types/actionStatus/index';
 import action_Navigation_RedirectUser
   from 'src/_redux/actions/action_Navigation/action_Navigation_RedirectUser';
 import {ACT_OPEN_ARCHIVE} from 'src/_core/contract/exportBridge';

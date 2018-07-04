@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
 import sinon from 'sinon';
 import {ACT_CHECK_FOR_UPDATES} from 'src/_core/contract/formsBridge';
-import * as actionStatus from 'src/_core/redux/actionStatus';
+import * as actionStatus from 'src/_core/redux/types/actionStatus/index';
 
 describe('action_FormTemplate_CheckForUpdates should ', () => {
 

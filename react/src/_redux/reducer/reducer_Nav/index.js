@@ -6,7 +6,7 @@ import * as action_Navigation_RedirectUser
   from '../../action/action_Nav/action_Nav_RedirectUser';
 import * as action_Navigation_SelectForm
   from '../../action/action_Nav/action_Nav_SelectForm';
-import type {Action, State} from '../../types';
+import type {Action, State} from '../../../_core/redux/types/index';
 
 type STATE = State & {
   redirectTarget: string | null,

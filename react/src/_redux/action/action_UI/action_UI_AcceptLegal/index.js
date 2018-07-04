@@ -1,5 +1,5 @@
 // @flow
-import type {Dispatch, Action} from '../../../types';
+import type {Dispatch, Action} from 'src/_core/redux/types';
 
 export const TYPE = 'TYPE_UI_ACCEPTLEGAL';
 export default () => (dispatch: Dispatch) => new Promise((resolve, reject) => {

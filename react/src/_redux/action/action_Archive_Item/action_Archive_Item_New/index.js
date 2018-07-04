@@ -1,13 +1,13 @@
 // @flow
-import type {Action, Dispatch, GetState} from '../../../types';
+import type {Action, Dispatch, GetState} from 'src/_core/redux/types';
 import ipcRWrapper from '../../../../_core/electron/IpcRWrapper';
 import {ACT_GET_FORM} from '../../../../_core/contract/formsBridge';
-import * as actionStatus from '../../../../_core/redux/actionStatus';
+import actionStatus from 'src/_core/redux/types/actionStatus';
 import uuidv4 from 'uuid/v4';
 import _ from 'lodash';
 
 export const TYPE = 'TYPE_ARCHIVE_ITEM_NEW';
-export default (formId: uuidv4) => (
+export default (formId: string) => (
     dispatch: Dispatch, getState: GetState) => new Promise(
     (resolve, reject) => {
       try {
@@ -23,7 +23,7 @@ export default (formId: uuidv4) => (
           if (!err) {
             // Dispatch COMPLETE
             let archiveObject = _.cloneDeep(formDetails);
-            archiveObject.uuid = uuidv4();
+            archiveObject.uuid = uuidv4.v4();
             archiveObject.content = result;
 
             dispatch(({

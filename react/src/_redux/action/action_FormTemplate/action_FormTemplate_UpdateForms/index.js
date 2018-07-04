@@ -1,6 +1,6 @@
 // @flow
-import type {Action, Dispatch} from '../../../types';
-import * as actionStatus from 'src/_core/redux/actionStatus';
+import type {Action, Dispatch} from 'src/_core/redux/types';
+import * as actionStatus from 'src/_core/redux/types/actionStatus/index';
 import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
 import {ACT_UPDATE_FORMS} from 'src/_core/contract/formsBridge';
 import action_GetFormsIndex from '../action_FormTemplate_GetFormsIndex';

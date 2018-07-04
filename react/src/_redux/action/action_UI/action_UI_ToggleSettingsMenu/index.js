@@ -1,7 +1,7 @@
 import type {
   Action,
   Dispatch,
-} from '../../../types';
+} from 'src/_core/redux/types';
 
 export const TYPE = 'TYPE_UI_TOGGLESETTINGSMENU';
 export default (show?: boolean) => (dispatch: Dispatch) => new Promise(

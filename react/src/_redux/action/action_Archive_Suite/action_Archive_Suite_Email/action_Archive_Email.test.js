@@ -8,7 +8,7 @@ import {
     ACT_ARCHIVE_SEND_EMAIL,
     ACT_SAVE_ARCHIVE,
 } from 'src/_core/contract/exportBridge';
-import {COMPLETE, STARTED} from 'src/_core/redux/actionStatus';
+import {COMPLETE, STARTED} from 'src/_core/redux/types/actionStatus/index';
 
 describe('Action archive email should ', () => {
 

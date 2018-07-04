@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
 import sinon from 'sinon';
 import {ACT_GET_FORM} from 'src/_core/contract/formsBridge';
-import * as actionStatus from '../../../../_core/redux/actionStatus';
+import * as actionStatus from 'src/_core/redux/types';
 import mock_formIndexResponse from 'src/_core/test/mock/mock_formIndexIPCResponse';
 import uuid from 'uuid';
 import _ from 'lodash';

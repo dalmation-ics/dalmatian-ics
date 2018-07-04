@@ -1,5 +1,5 @@
 // @flow
-import type {Action, Dispatch} from '../../../types';
+import type {Action, Dispatch} from 'src/_core/redux/types';
 
 export const TYPE = 'TYPE_NAV_REDIRECTUSER';
 export default (targetPath: string) => (dispatch: Dispatch) => new Promise(

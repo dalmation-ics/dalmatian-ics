@@ -1,7 +1,7 @@
 // @flow
-import type {Action, Dispatch, GetState} from '../../../types';
+import type {Action, Dispatch, GetState} from 'src/_core/redux/types';
 
-import * as actionStatus from 'src/_core/redux/actionStatus';
+import * as actionStatus from 'src/_core/redux/types/actionStatus/index';
 import {ACT_SAVE_ARCHIVE} from 'src/_core/contract/exportBridge';
 import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
 import _ from 'lodash';

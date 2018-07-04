@@ -1,5 +1,5 @@
 import SUT from '.';
-import * as actionStatus from 'src/_core/redux/actionStatus';
+import * as actionStatus from 'src/_core/redux/types/actionStatus/index';
 import * as action_Archive_Load
     from '../../actions/action_Archive/action_Archive_Suite_Load';
 import * as action_Archive_Save

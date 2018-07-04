@@ -1,5 +1,5 @@
 // @flow
-import type {Action, Dispatch} from '../../../types';
+import type {Action, Dispatch} from 'src/_core/redux/types';
 import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
 import {ACT_CANCEL_CHECK_FOR_UPDATES} from 'src/_core/contract/formsBridge';
 
