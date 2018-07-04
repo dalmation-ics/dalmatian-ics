@@ -1,4 +1,4 @@
-import action_Archive_ShowFileInFolder, {TYPE} from '.';
+import action_Archive_Suite_ShowFileInFolder, {TYPE} from '.';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
@@ -39,7 +39,7 @@ describe('Action archive suite update should ', () => {
                 callsFake(fakePrompt);
 
             // Act
-            store.dispatch(action_Archive_ShowFileInFolder()).
+            store.dispatch(action_Archive_Suite_ShowFileInFolder()).
                 then((err, res) => {
                     // Assert
                     expect(stub.called).toBeTruthy();
@@ -62,7 +62,7 @@ describe('Action archive suite update should ', () => {
             sandbox.stub(ipcRWrapper, 'prompt').callsFake(fakePrompt);
 
             // Act
-            store.dispatch(action_Archive_ShowFileInFolder());
+            store.dispatch(action_Archive_Suite_ShowFileInFolder());
         });
 
         it('resolves with correct name', async () => {
@@ -84,7 +84,7 @@ describe('Action archive suite update should ', () => {
             sandbox.stub(ipcRWrapper, 'prompt').callsFake(fakePrompt);
 
             // Act
-            store.dispatch(action_Archive_ShowFileInFolder()).
+            store.dispatch(action_Archive_Suite_ShowFileInFolder()).
                 then(() => {
                     const actual = store.getActions();
                     // Assert
@@ -115,7 +115,7 @@ describe('Action archive suite update should ', () => {
             sandbox.stub(ipcRWrapper, 'prompt').callsFake(fakePrompt);
 
             // Act
-            store.dispatch(action_Archive_ShowFileInFolder(expected.FILEPATH)).
+            store.dispatch(action_Archive_Suite_ShowFileInFolder(expected.FILEPATH)).
                 then(() => {
                     const actual = store.getActions();
                     // Assert

@@ -4,8 +4,8 @@ import type {Action, Dispatch} from '../../../types';
 import * as actionStatus from 'src/_core/redux/actionStatus';
 import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
 import {ACT_CHECK_PASSED_FILE} from 'src/_core/contract/exportBridge';
-import action_Archive_Load
-  from 'src/_redux/actions/action_Archive_Suite/action_Archive_Load';
+import action_Archive_Suite_Load
+  from 'src/_redux/actions/action_Archive_Suite_Suite/action_Archive_Suite_Suite_Load';
 import path from 'path';
 
 export const TYPE = 'TYPE_ARCHIVE_CHECK_PASSED_FILE';
@@ -28,7 +28,7 @@ export default () => (dispatch: Dispatch) => new Promise((resolve, reject) => {
               status: actionStatus.COMPLETE,
               payload: filePath,
             }: Action));
-            dispatch(action_Archive_Load(filePath)).
+            dispatch(action_Archive_Suite_Load(filePath)).
                 then((err, response) => {
                   resolve(err, response);
                 });

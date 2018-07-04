@@ -1,4 +1,4 @@
-import action_Archive_Blank, {TYPE} from '.';
+import action_Archive_Suite_Blank, {TYPE} from '.';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
@@ -25,7 +25,7 @@ describe('Action archive suite Delete should ', () => {
             const store = mockStore({});
 
             // Act
-            store.dispatch(action_Archive_Blank()).then(() => {
+            store.dispatch(action_Archive_Suite_Blank()).then(() => {
                 const actual = store.getActions();
                 // Assert
                 expect(actual.length).toBe(1);

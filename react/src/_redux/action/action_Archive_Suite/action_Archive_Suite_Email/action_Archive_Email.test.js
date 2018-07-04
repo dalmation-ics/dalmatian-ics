@@ -1,5 +1,5 @@
-import action_Archive_Email, {TYPE} from '.';
-import * as actionCreator_Archive_Save from '../action_Archive_Save';
+import action_Archive_Suite_Email, {TYPE} from '.';
+import * as actionCreator_Archive_Save from '../action_Archive_Suite_Save';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
@@ -45,7 +45,7 @@ describe('Action archive email should ', () => {
                 callsFake(fakePrompt);
 
             // Act
-            store.dispatch(action_Archive_Email()).
+            store.dispatch(action_Archive_Suite_Email()).
                 then((err, res) => {
                     // Assert
                     sinon.assert.calledWith(stub, ACT_ARCHIVE_SEND_EMAIL);
@@ -71,7 +71,7 @@ describe('Action archive email should ', () => {
             sandbox.stub(ipcRWrapper, 'prompt').callsFake(fakePrompt);
 
             // Act
-            store.dispatch(action_Archive_Email());
+            store.dispatch(action_Archive_Suite_Email());
         });
 
         it('resolves with correct name', async () => {
@@ -106,7 +106,7 @@ describe('Action archive email should ', () => {
             sandbox.stub(ipcRWrapper, 'prompt').callsFake(fakePrompt);
 
             // Act
-            store.dispatch(action_Archive_Email()).
+            store.dispatch(action_Archive_Suite_Email()).
                 then(() => {
                     const actual = store.getActions();
                     // Assert

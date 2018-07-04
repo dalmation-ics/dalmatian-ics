@@ -3,7 +3,7 @@ import type {Action, Dispatch, GetState} from '../../../types';
 
 import * as actionStatus from 'src/_core/redux/actionStatus';
 import {ACT_ARCHIVE_SEND_EMAIL} from 'src/_core/contract/exportBridge';
-import * as action_Archive_Save from '../action_Archive_Save';
+import * as action_Archive_Suite_Save from '../action_Archive_Suite_Save';
 import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
 
 export const TYPE = 'TYPE_ARCHIVE_SUITE_EMAIL';
@@ -14,7 +14,7 @@ export default () => (dispatch: Dispatch, getState: GetState) => new Promise(
       dispatch(({type: TYPE, status: actionStatus.STARTED}: Action));
 
       // First let's prompt the user to save the file
-      dispatch(action_Archive_Save.default()).then(() => {
+      dispatch(action_Archive_Suite_Save.default()).then(() => {
         try {
           const NL = '\n';
           const {
