@@ -33,6 +33,7 @@ export default (selectedFilePath?: string | null = null) => (dispatch: Dispatch)
               f.uuid = uuidv4();
               if (f.fileName.endsWith('.html'))
                 f.fileName = f.fileName.slice(0, -5);
+              return f;
             });
 
             // Dispatch COMPLETE

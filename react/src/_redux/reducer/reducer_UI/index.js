@@ -90,8 +90,8 @@ export default (previousState: STATE = DEFAULT_STATE, action: Action) => {
        */
     case action_UI_SelectTheme.TYPE: {
       newState.themeName = payload;
-    }
       break;
+    }
     default:
       break;
   }

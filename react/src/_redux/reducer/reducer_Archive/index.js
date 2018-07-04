@@ -278,6 +278,8 @@ export default (previousState = DEFAULT_STATE, action) => {
           newState.checkPassedFileError = payload;
           break;
         }
+        default:
+          break;
       }
       break;
     }
@@ -294,7 +296,10 @@ export default (previousState = DEFAULT_STATE, action) => {
         }
         case actionStatus.ERROR: {
           newState.emailOpenExternalError = payload;
+          break;
         }
+        default:
+          break;
       }
       break;
     }
