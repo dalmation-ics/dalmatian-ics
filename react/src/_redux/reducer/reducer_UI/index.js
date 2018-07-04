@@ -10,11 +10,11 @@ import * as action_UI_SelectTheme
   from '../../action/action_UI/action_UI_SelectTheme';
 import type {Action, State} from '../../types';
 
-type STATE = STATE & {
-  settingsMenuOpen: ?boolean,
-  updatePanelOpen: ?boolean,
-  acceptedLegal: ?Date | ?boolean,
-  themeName: ?action_UI_SelectTheme.ThemeName
+type STATE = State & {
+  settingsMenuOpen: boolean | null,
+  updatePanelOpen: boolean | null,
+  acceptedLegal: Date | boolean | null,
+  themeName: action_UI_SelectTheme.ThemeName | null
 }
 
 const DEFAULT_STATE: STATE = {
