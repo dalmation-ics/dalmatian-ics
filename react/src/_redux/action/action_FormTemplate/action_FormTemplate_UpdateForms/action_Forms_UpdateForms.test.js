@@ -1,7 +1,7 @@
 import action_Forms_UpdateForms, {TYPE} from '.';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
+import ipcRWrapper from 'src/_core/electron/ipcWrapper/index';
 import sinon from 'sinon';
 import {ACT_UPDATE_FORMS} from 'src/_core/contract/formsBridge';
 import actionStatus from 'src/_core/redux/types/actionStatus';
@@ -69,7 +69,7 @@ describe('action_FormTemplate_UpdateForms should ', () => {
                 expect(actionName).toBe(ACT_UPDATE_FORMS);
                 callback(expected.ERROR, expected.RESULT);
             };
-            //stub out the prompt ipc function
+            //stub out the prompt ipcWrapper function
             sandbox.stub(ipcRWrapper, 'prompt').callsFake(fakePrompt);
 
             // Act
@@ -95,7 +95,7 @@ describe('action_FormTemplate_UpdateForms should ', () => {
                 const fakePrompt = (actionName, callback) => {
                     callback(expected.ERROR, expected.RESULT);
                 };
-                //stub out the prompt ipc function
+                //stub out the prompt ipcWrapper function
                 sandbox.stub(ipcRWrapper, 'prompt').callsFake(fakePrompt);
 
             });
@@ -150,7 +150,7 @@ describe('action_FormTemplate_UpdateForms should ', () => {
                 const fakePrompt = (actionName, callback) => {
                     callback(expected.ERROR, expected.RESULT);
                 };
-                //stub out the prompt ipc function
+                //stub out the prompt ipcWrapper function
                 sandbox.stub(ipcRWrapper, 'prompt').callsFake(fakePrompt);
 
                 // Act

@@ -1,7 +1,7 @@
 import action_Forms_CancelCheckForUpdates, {TYPE} from '.';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
+import ipcRWrapper from 'src/_core/electron/ipcWrapper/index';
 import sinon from 'sinon';
 import {ACT_CANCEL_CHECK_FOR_UPDATES} from 'src/_core/contract/formsBridge';
 
@@ -59,7 +59,7 @@ describe('Action archive suite update should ', () => {
                 expect(actionName).toBe(ACT_CANCEL_CHECK_FOR_UPDATES);
                 callback(expected.ERROR, expected.RESULT);
             };
-            //stub out the prompt ipc function
+            //stub out the prompt ipcWrapper function
             sandbox.stub(ipcRWrapper, 'prompt').callsFake(fakePrompt);
 
             // Act
@@ -83,7 +83,7 @@ describe('Action archive suite update should ', () => {
             const fakePrompt = (actionName, callback) => {
                 callback(expected.ERROR, expected.RESULT);
             };
-            //stub out the prompt ipc function
+            //stub out the prompt ipcWrapper function
             sandbox.stub(ipcRWrapper, 'prompt').callsFake(fakePrompt);
 
             // Act

@@ -2,7 +2,7 @@
 import type {Action, Dispatch} from 'src/_core/redux/types';
 
 import actionStatus from 'src/_core/redux/types/actionStatus';
-import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
+import ipcRWrapper from 'src/_core/electron/ipcWrapper/index';
 import {ACT_CHECK_PASSED_FILE} from 'src/_core/contract/exportBridge';
 import action_Archive_Suite_Load
   from 'src/_redux/action/action_Archive_Suite/action_Archive_Suite_Load';

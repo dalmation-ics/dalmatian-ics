@@ -1,4 +1,4 @@
-import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
+import ipcRWrapper from 'src/_core/electron/ipcWrapper/index';
 import {ACT_IMPORT_FORM} from 'src/_core/contract/exportBridge';
 import uuid from 'uuid';
 import actionStatus from 'src/_core/redux/types/actionStatus';

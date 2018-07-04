@@ -1,6 +1,6 @@
 // @flow
 import type {Action, Dispatch} from 'src/_core/redux/types';
-import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
+import ipcRWrapper from 'src/_core/electron/ipcWrapper/index';
 import {ACT_CANCEL_UPDATE_FORMS} from 'src/_core/contract/formsBridge';
 
 export const TYPE = 'TYPE_FORM_TEMPLATE_CANCELUPDATEFORMS';

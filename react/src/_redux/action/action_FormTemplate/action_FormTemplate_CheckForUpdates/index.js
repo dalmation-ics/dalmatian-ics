@@ -1,7 +1,7 @@
 // @flow
 import type {Action, Dispatch} from 'src/_core/redux/types';
 import actionStatus from 'src/_core/redux/types/actionStatus';
-import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
+import ipcRWrapper from 'src/_core/electron/ipcWrapper/index';
 import {ACT_CHECK_FOR_UPDATES} from 'src/_core/contract/formsBridge';
 
 export const TYPE = 'TYPE_FORM_TEMPLATE_CHECK_UPDATES';

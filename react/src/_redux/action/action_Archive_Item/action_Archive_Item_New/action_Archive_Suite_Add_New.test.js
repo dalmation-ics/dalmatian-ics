@@ -1,7 +1,7 @@
 import action_Archive_Suite_Add_New, {TYPE} from '../../../../../../electron/src/main';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
+import ipcRWrapper from 'src/_core/electron/ipcWrapper/index';
 import sinon from 'sinon';
 import {ACT_GET_FORM} from 'src/_core/contract/formsBridge';
 import * as actionStatus from 'src/_core/redux/types';
@@ -68,7 +68,7 @@ describe('action_Archive_Suite_Add_New should ', () => {
                 expect(actionName).toBe(ACT_GET_FORM);
                 callback(expected.ERROR, expected.RESULT);
             };
-            //stub out the prompt ipc function
+            //stub out the prompt ipcWrapper function
             sandbox.stub(ipcRWrapper, 'prompt').callsFake(fakePrompt);
 
             // Act
@@ -85,7 +85,7 @@ describe('action_Archive_Suite_Add_New should ', () => {
                 const fakePrompt = (actionName, callback) => {
                     callback(expected.ERROR, expected.RESULT);
                 };
-                //stub out the prompt ipc function
+                //stub out the prompt ipcWrapper function
                 sandbox.stub(ipcRWrapper, 'prompt').callsFake(fakePrompt);
                 sandbox.stub(uuid, 'v4').
                     returns(() => 'cf4bf184-1383-45cc-abee-82d39aa3' +
@@ -145,7 +145,7 @@ describe('action_Archive_Suite_Add_New should ', () => {
                 const fakePrompt = (actionName, callback) => {
                     callback(expected.ERROR, expected.RESULT);
                 };
-                //stub out the prompt ipc function
+                //stub out the prompt ipcWrapper function
                 sandbox.stub(ipcRWrapper, 'prompt').callsFake(fakePrompt);
 
                 // Act

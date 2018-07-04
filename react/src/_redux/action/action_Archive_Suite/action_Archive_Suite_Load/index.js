@@ -1,11 +1,11 @@
 // @flow
 import type {Action, Dispatch} from 'src/_core/redux/types';
 
-import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
+import ipcRWrapper from 'src/_core/electron/ipcWrapper/index';
 import React from 'react';
 import actionStatus from 'src/_core/redux/types/actionStatus';
 import action_Navigation_RedirectUser
-  from 'src/_redux/actions/action_Navigation/action_Navigation_RedirectUser';
+  from 'src/_redux/action/action_Nav/action_Nav_RedirectUser';
 import {ACT_OPEN_ARCHIVE} from 'src/_core/contract/exportBridge';
 import uuidv4 from 'uuid/v4';
 import {toast} from 'react-toastify';

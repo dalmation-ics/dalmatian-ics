@@ -1,7 +1,7 @@
 // @flow
 import type {Action, Dispatch, GetState} from 'src/_core/redux/types';
-import ipcRWrapper from '../../../../_core/electron/IpcRWrapper';
-import {ACT_GET_FORM} from '../../../../_core/contract/formsBridge';
+import ipcRWrapper from 'src/_core/electron/ipcWrapper/index';
+import {ACT_GET_FORM} from 'src/_core/contract/formsBridge';
 import actionStatus from 'src/_core/redux/types/actionStatus';
 import uuidv4 from 'uuid/v4';
 import _ from 'lodash';

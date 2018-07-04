@@ -2,7 +2,7 @@ import action_Archive_Suite_Email, {TYPE} from '.';
 import * as actionCreator_Archive_Save from '../action_Archive_Suite_Save';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
+import ipcRWrapper from 'src/_core/electron/ipcWrapper/index';
 import sinon from 'sinon';
 import {
     ACT_ARCHIVE_SEND_EMAIL,
@@ -67,7 +67,7 @@ describe('Action archive email should ', () => {
                 expect(actionName).toBe(ACT_ARCHIVE_SEND_EMAIL);
                 callback(expected.ERROR, expected.RESULT);
             };
-            //stub out the prompt ipc function
+            //stub out the prompt ipcWrapper function
             sandbox.stub(ipcRWrapper, 'prompt').callsFake(fakePrompt);
 
             // Act
@@ -102,7 +102,7 @@ describe('Action archive email should ', () => {
                 if (actionName === actionCreator_Archive_Save.TYPE)
                     callback(expected.ERROR, expected.DUMMY);
             };
-            //stub out the prompt ipc function
+            //stub out the prompt ipcWrapper function
             sandbox.stub(ipcRWrapper, 'prompt').callsFake(fakePrompt);
 
             // Act

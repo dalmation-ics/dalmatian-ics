@@ -1,7 +1,7 @@
 // @flow
 import type {Action, Dispatch, GetState} from 'src/_core/redux/types';
 
-import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
+import ipcRWrapper from 'src/_core/electron/ipcWrapper/index';
 import {ACT_SHOW_PATH_IN_FOLDER} from 'src/_core/contract/exportBridge';
 
 export const TYPE = 'TYPE_ARCHIVE_SHOW_FILE_IN_FOLDER';

@@ -1,11 +1,13 @@
 // @flow
 import _ from 'lodash';
+
 import * as action_Navigation_PathChange
   from '../../action/action_Nav/action_Nav_PathChange';
 import * as action_Navigation_RedirectUser
   from '../../action/action_Nav/action_Nav_RedirectUser';
 import * as action_Navigation_SelectForm
   from '../../action/action_Nav/action_Nav_SelectForm';
+
 import type {Action, State} from 'src/_core/redux/types';
 
 type STATE = State & {
