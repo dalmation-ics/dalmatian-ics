@@ -1,14 +1,12 @@
-// @flow
-import type {Dispatch, Action, PromiseAction} from '../../../types';
+import type {Dispatch, Action} from '../../../types';
 
-export const themeList = Object.freeze(
-    {'normal': 'normal', 'dark': 'dark', 'contrast': 'contrast'});
+let nameList = Object.freeze(['normal', 'dark', 'contrast']);
 
-export type ThemeName = 'normal' | 'dark';
+export type ThemeName = $Keys<typeof nameList>;
 
 export const TYPE = 'ACTION_UI_SELECT_THEME';
 
-export default (themeName: ThemeName) => (dispatch: Dispatch) => {
+export default (themeName?: ThemeName = 'normal') => (dispatch: Dispatch) => {
   return new Promise((resolve, reject) => {
     try {
       dispatch(({
