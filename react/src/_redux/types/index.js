@@ -1,8 +1,8 @@
 // @flow
 export type Action = {
   type: string,
-  payload?: any,
-  state?: string
+  payload?: any | null,
+  state?: string | null
 };
 export type State = Object;
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;
