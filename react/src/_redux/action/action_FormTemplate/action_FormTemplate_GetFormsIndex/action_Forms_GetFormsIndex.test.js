@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
 import sinon from 'sinon';
 import {ACT_GET_FORMS_INDEX} from 'src/_core/contract/formsBridge';
-import * as actionStatus from 'src/_core/redux/types/actionStatus/index';
+import actionStatus from 'src/_core/redux/types/actionStatus';
 
 describe('action_FormTemplate_GetFormsIndex should ', () => {
 

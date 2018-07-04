@@ -1,7 +1,7 @@
 // @flow
 import type {Action, Dispatch, GetState} from 'src/_core/redux/types';
 
-import * as actionStatus from 'src/_core/redux/types/actionStatus/index';
+import actionStatus from 'src/_core/redux/types/actionStatus';
 import {ACT_SAVE_ARCHIVE} from 'src/_core/contract/exportBridge';
 import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
 import _ from 'lodash';
@@ -16,6 +16,8 @@ export default () => (dispatch: Dispatch, getState: GetState) => new Promise(
 
         const out = _.cloneDeep(archive);
         out.map(f => {
+          //todo: change to only add html to form files
+          // this needs done to support image files
           delete f.uuid;
           f.fileName += '.html';
         });
