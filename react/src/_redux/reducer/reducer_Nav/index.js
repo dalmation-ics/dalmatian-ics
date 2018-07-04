@@ -9,9 +9,9 @@ import * as action_Navigation_SelectForm
 import type {Action, State} from '../../types';
 
 type STATE = State & {
-  redirectTarget?: string,
-  path?: string,
-  selectedFormId?: string
+  redirectTarget: string | null,
+  path: string | null,
+  selectedFormId: string | null
 }
 
 const DEFAULT_STATE: STATE = {
