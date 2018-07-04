@@ -1,5 +1,6 @@
 // @flow
 import _ from 'lodash';
+
 import * as action_UI_ToggleSettingsMenu
   from '../../action/action_UI/action_UI_ToggleSettingsMenu';
 import * as action_UI_ToggleUpdatePanel
@@ -8,7 +9,8 @@ import * as action_UI_AcceptLegal
   from '../../action/action_UI/action_UI_AcceptLegal';
 import * as action_UI_SelectTheme
   from '../../action/action_UI/action_UI_SelectTheme';
-import type {Action, State} from '../../../_core/redux/types/index';
+
+import type {Action, State} from 'src/_core/redux/types/index';
 
 type STATE = State & {
   settingsMenuOpen: boolean | null,
