@@ -1,0 +1,62 @@
+// @flow
+import type {Action, Dispatch, GetState} from '../../../types';
+
+import * as actionStatus from 'src/_core/redux/actionStatus';
+import {ACT_ARCHIVE_SEND_EMAIL} from 'src/_core/contract/exportBridge';
+import * as action_Archive_Save from '../action_Archive_Save';
+import ipcRWrapper from 'src/_core/electron/IpcRWrapper';
+
+export const TYPE = 'TYPE_ARCHIVE_SUITE_EMAIL';
+export default () => (dispatch: Dispatch, getState: GetState) => new Promise(
+    (resolve, reject) => {
+
+      // Dispatch START
+      dispatch(({type: TYPE, status: actionStatus.STARTED}: Action));
+
+      // First let's prompt the user to save the file
+      dispatch(action_Archive_Save.default()).then(() => {
+        try {
+          const NL = '\n';
+          const {
+            archiveStore: {
+              archive,
+            },
+          } = getState();
+          let body = 'Forms attached below' + NL;
+          // for (const item in archive) {
+          //     body += archive[item].content + NL + '<hr/>' + NL;
+          // }
+          // console.log(body);
+          // Prompt Electron to email an archive
+          ipcRWrapper.prompt(ACT_ARCHIVE_SEND_EMAIL, (err, result) => {
+
+            if (!err) {
+              // Dispatch COMPLETE
+              dispatch((
+                  {
+                    type: TYPE,
+                    status: actionStatus.COMPLETE,
+                    payload: result,
+                  }: Action));
+            } else {
+              // Dispatch ERROR
+              dispatch((
+                  {
+                    type: TYPE,
+                    status: actionStatus.ERROR,
+                    payload: err,
+                  }: Action));
+            }
+            // Resolve
+            resolve(err, result);
+          }, {
+            subject: 'ICS forms',
+            body: 'Please attach the .bcics file from the file browser.',
+          });
+        } catch (exc) {
+          dispatch((
+              {type: TYPE, status: actionStatus.ERROR, payload: exc}: Action));
+        }
+      });
+    });
+
