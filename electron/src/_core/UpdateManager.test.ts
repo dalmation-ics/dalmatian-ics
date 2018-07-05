@@ -2,17 +2,31 @@ import * as sinon from 'sinon'; // http://sinonjs.org/releases/v2.0.0/
 import * as ServerMock from 'mock-http-server'; // https://www.npmjs.com/package/mock-http-server
 import SUT from './UpdateManager';
 import StorageManager from './StorageManager';
-import * as request from 'request-promise';
-import {RequestError} from 'request-promise/errors';
+import * as getIt from 'get-it';
+
+import * as gi_base from 'get-it/lib/middleware/base';
+import * as gi_promise from 'get-it/lib/middleware/promise';
 
 const server = new ServerMock({host: 'localhost', port: 30025});
+const request = getIt([
+    gi_base('http://localhost:30025'),
+    gi_promise({onlyBody: true})
+]);
 
 let sandbox;
 
 describe('UpdateManager should ', () => {
 
+    beforeAll(() => {
+        SUT.setGetItRequest(request);
+    });
+
     beforeEach(() => {
         sandbox = sinon.createSandbox();
+    });
+
+    beforeEach(() => {
+        SUT.setGetItRequest(request);
     });
 
     afterEach(() => {
@@ -29,7 +43,6 @@ describe('UpdateManager should ', () => {
 
         beforeEach((done) => {
             server.start(done);
-            SUT.setTarget('http://localhost:30025/');
         });
 
         afterEach((done) => {
@@ -193,8 +206,9 @@ describe('UpdateManager should ', () => {
             const stub_read = sandbox.stub(StorageManager, 'read');
             stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
 
-            const stub_request = sandbox.stub(request, 'get');
+            const stub_request = sandbox.stub();
             stub_request.rejects(error);
+            SUT.setGetItRequest(stub_request);
 
             // Act
             await expect(SUT.checkForUpdates()).rejects.toBe(error);
@@ -218,21 +232,51 @@ describe('UpdateManager should ', () => {
             const stub_read = sandbox.stub(StorageManager, 'read');
             stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
 
-            const stub_request = sandbox.stub(request, 'get');
-            stub_request.resolves('1 0+1');
+            const stub_request = sandbox.stub();
+            stub_request.resolves('falsee');
+            SUT.setGetItRequest(stub_request);
 
             // Act Assert
             await expect(SUT.checkForUpdates()).rejects.toBeInstanceOf(SyntaxError);
 
         });
 
-        it('handles server timeout appropriately', async () => {
+        // it('handles server timeout appropriately', (done) => {
+        //
+        //     // Arrange
+        //     const stub_read = sandbox.stub(StorageManager, 'read');
+        //     stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
+        //
+        //     SUT.setTimeout(1000);
+        //
+        //     server.on({
+        //         method: 'GET',
+        //         path: '/index.json',
+        //         reply: {
+        //             status: 200,
+        //             headers: {'content-type': 'application/json'},
+        //             body: JSON.stringify({
+        //                 hello: 'is it me you\'re looking for?'
+        //             })
+        //         },
+        //         delay: 2000
+        //     });
+        //
+        //     // Act Assert
+        //     SUT.checkForUpdates().catch(e => {
+        //         expect(e.message).toContain('Socket timed out');
+        //         done();
+        //     });
+        //
+        // });
+
+        it('can be aborted', async (done) => {
 
             // Arrange
             const stub_read = sandbox.stub(StorageManager, 'read');
             stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
 
-            SUT.setTimeout(1000);
+            SUT.setTimeout(5000);
 
             server.on({
                 method: 'GET',
@@ -244,43 +288,60 @@ describe('UpdateManager should ', () => {
                         hello: 'is it me you\'re looking for?'
                     })
                 },
-                delay: 2000
+                delay: 5000
             });
 
             // Act Assert
-            await expect(SUT.checkForUpdates()).rejects.toBeInstanceOf(RequestError);
+            SUT.checkForUpdates().catch(e => {
+                console.log(e);
+                expect(e.constructor.name).toContain('Cancel');
+                done();
+            });
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            SUT.abort();
 
         });
 
     });
 
-    describe('has method downloadNewForms that', () => {
-
-        beforeEach((done) => {
-            server.start(done);
-            SUT.setTarget('http://localhost:30025/');
-        });
-
-        afterEach((done) => {
-            server.stop(done);
-        });
-
-        it('exists', () => {
-
-            expect(SUT.checkForUpdates).toBeDefined();
-
-        });
-
-    });
-
-    describe('has method abort that ', () => {
-
-        it('exists', () => {
-
-            expect(SUT.abort).toBeDefined();
-
-        });
-
-    });
+    // describe('has method downloadNewForms that', () => {
+    //
+    //     beforeEach((done) => {
+    //         server.start(done);
+    //     });
+    //
+    //     afterEach((done) => {
+    //         server.stop(done);
+    //     });
+    //
+    //     it('exists', () => {
+    //
+    //         expect(SUT.checkForUpdates).toBeDefined();
+    //
+    //     });
+    //
+    // });
+    //
+    // describe('has method abort that ', () => {
+    //
+    //     it('exists', () => {
+    //
+    //         expect(SUT.abort).toBeDefined();
+    //
+    //     });
+    //
+    //     it('works', async () => {
+    //
+    //         // jest.setTimeout(5000);
+    //         //
+    //         // await StorageManager.initialize('/home/spectre/.config/dalmatian-ics-electron/storage/forms').then(async () => {
+    //         //     await SUT.downloadNewForms().catch(e => console.log(e));
+    //         // }).catch(e => console.log(e));
+    //
+    //     });
+    //
+    // });
 
 });

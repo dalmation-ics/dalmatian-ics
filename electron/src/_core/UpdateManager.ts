@@ -6,17 +6,26 @@
  * - Download these new forms if they are available
  * - Storing forms locally
  */
-import * as request from 'request-promise'; // https://www.npmjs.com/package/request-promise
+// import * as request from 'request-promise'; // https://www.npmjs.com/package/request-promise
+import * as getIt from 'get-it';
 import StorageManager from './StorageManager';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
+import * as gi_base from 'get-it/lib/middleware/base';
+import * as gi_promise from 'get-it/lib/middleware/promise';
+
 const DOWNLOAD_DIRECTORY = '/forms';
-let target = 'https://s3-us-west-2.amazonaws.com/dalmatian-ics-forms/';
+let target = 'https://s3-us-west-2.amazonaws.com/dalmatian-ics-forms';
 let timeout = 20000;
 
-let process_active = false;
-let active_request = null;
+let request = getIt([
+    gi_base(target),
+    gi_promise({onlyBody: true})
+]);
+
+let update_process_active = false;
+let cancel_token = gi_promise.CancelToken.source();
 let isAborting = false;
 
 /**
@@ -32,11 +41,11 @@ function checkForUpdates(): Promise<Array<string>> {
         let index_local = null;
         let index_server = null;
 
-        if (active_request != null) {
-            reject('A request is already pending');
+        if (update_process_active == true) {
+            reject('An update process is already underway');
         }
 
-        process_active = true; // Set process_active to true
+        update_process_active = true;
 
         /*
         Read the local index.json file
@@ -47,15 +56,18 @@ function checkForUpdates(): Promise<Array<string>> {
             if (!isAborting) {
                 if (!contents) {
                     index_local = {};
+                    return p_download_index();
                 } else {
                     try {
                         index_local = JSON.parse(contents);
                         return p_download_index();
                     } catch (e) {
+                        update_process_active = false;
                         reject(e);
                     }
                 }
             } else {
+                update_process_active = false;
                 isAborting = false;
             }
         });
@@ -65,35 +77,29 @@ function checkForUpdates(): Promise<Array<string>> {
         If there is no index.json file on the server. Panic
         Else continue on to compare the two files
          */
-        const p_download_index = () => {
+        const p_download_index = () => request({
+            url: `/index.json`,
+            timeout,
+            cancelToken: cancel_token.token
+        }).then(content => {
 
-            // Assign request promise to active_request so it can be cancelled
-            active_request = request.get({
-                uri: `${target}index.json`,
-                timeout
-            }).then(content => {
-
-                active_request = null; // On complete, null out active_request
-
-                if (!content) {
-                    reject('Server response empty');
-                } else {
-                    try {
-                        index_server = JSON.parse(content);
-                        return p_compare_indexes();
-                    } catch (e) {
-                        reject(e);
-                    }
+            if (!content) {
+                reject('Server response empty');
+            } else {
+                try {
+                    index_server = JSON.parse(content);
+                    return p_compare_indexes();
+                } catch (e) {
+                    update_process_active = false;
+                    reject(e);
                 }
+            }
 
-            }, e => {
-                active_request = null; // On error, null out active_request
-                reject(e);
-            });
+        }, e => {
+            update_process_active = false;
+            reject(e);
+        });
 
-            return active_request;
-
-        };
 
         /*
         Compare the two indexes which should be stored in variables index_local and index_server
@@ -103,12 +109,15 @@ function checkForUpdates(): Promise<Array<string>> {
 
             resolve(findNewServerFiles(index_local, index_server));
 
-            process_active = false; // Once the entire process is complete, process_active is false
+            update_process_active = false;
 
         });
 
         // Begin
-        p_get_local_index().catch(e => reject(e));
+        p_get_local_index().catch(e => {
+            update_process_active = false;
+            reject(e);
+        });
 
     });
 
@@ -117,19 +126,42 @@ function checkForUpdates(): Promise<Array<string>> {
 /**
  * DownloadNewForms starts by checking for updates, receiving a list of form updates available
  * It will then download each of these new forms, as well as the updates index.json file
- * @returns {Promise<void>}
+ * @returns {Promise<Array<string>>}
  */
-function downloadNewForms(): Promise<void> {
+function downloadNewForms(): Promise<Array<string>> {
 
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<Array<string>>((resolve, reject) => {
 
-        if (active_request != null) {
-            reject('A request is already pending');
+        if (update_process_active == true) {
+            reject('An update process is already underway');
         }
 
-        const p_get_new_forms = checkForUpdates().then(needsUpdating => {
+        const failed = [];
 
+        const p_get_new_forms = () => checkForUpdates().then(needsUpdating => {
+
+            return Promise.all(needsUpdating.map(file => new Promise((_resolve, _reject) => {
+
+                request.get({
+                    uri: `${target}${file}.html`,
+                    timeout,
+                    cancelToken: cancel_token.token
+                }).then(content => {
+                    console.log(`Success ${file}`);
+                    _resolve();
+                }).catch(e => {
+                    failed.push(file);
+                    _resolve();
+                });
+
+            })));
+
+        }).then(() => {
+            resolve();
         });
+
+        // Begin
+        p_get_new_forms().catch(e => reject(e));
 
     });
 
@@ -183,20 +215,14 @@ function findNewServerFiles(index_local: object, index_server: object): Array<st
 }
 
 function abort() {
-    isAborting = true;
-    if (active_request) {
-        active_request.cancel();
-        active_request = null;
-        isAborting = false;
+    if (update_process_active) {
+        cancel_token.cancel();
+        isAborting = true;
     }
 }
 
-function hasActiveRequest() {
-    return active_request != null;
-}
-
-function setTarget(uri: string) {
-    target = uri;
+function setGetItRequest(getItRequestObject: any) {
+    request = getItRequestObject;
 }
 
 function setTimeout(millis: number) {
@@ -206,9 +232,8 @@ function setTimeout(millis: number) {
 export default {
     checkForUpdates,
     downloadNewForms,
+    setTimeout,
     abort,
-    hasActiveRequest,
-    setTarget,
-    setTimeout
+    setGetItRequest,
 };
 

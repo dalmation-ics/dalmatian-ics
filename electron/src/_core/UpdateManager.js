@@ -8,15 +8,22 @@ exports.__esModule = true;
  * - Download these new forms if they are available
  * - Storing forms locally
  */
-var request = require("request-promise"); // https://www.npmjs.com/package/request-promise
+// import * as request from 'request-promise'; // https://www.npmjs.com/package/request-promise
+var getIt = require("get-it");
 var StorageManager_1 = require("./StorageManager");
 var _ = require("lodash");
 var moment = require("moment");
+var gi_base = require("get-it/lib/middleware/base");
+var gi_promise = require("get-it/lib/middleware/promise");
 var DOWNLOAD_DIRECTORY = '/forms';
-var target = 'https://s3-us-west-2.amazonaws.com/dalmatian-ics-forms/';
+var target = 'https://s3-us-west-2.amazonaws.com/dalmatian-ics-forms';
 var timeout = 20000;
-var process_active = false;
-var active_request = null;
+var request = getIt([
+    gi_base(target),
+    gi_promise({ onlyBody: true })
+]);
+var update_process_active = false;
+var cancel_token = gi_promise.CancelToken.source();
 var isAborting = false;
 /**
  * CheckForUpdates read a local index.json file and compares it to the servers index.json file
@@ -28,10 +35,10 @@ function checkForUpdates() {
     return new Promise(function (resolve, reject) {
         var index_local = null;
         var index_server = null;
-        if (active_request != null) {
-            reject('A request is already pending');
+        if (update_process_active == true) {
+            reject('An update process is already underway');
         }
-        process_active = true; // Set process_active to true
+        update_process_active = true;
         /*
         Read the local index.json file
         If no index.json file exists, updates are most certainly needed. Resolve true
@@ -41,6 +48,7 @@ function checkForUpdates() {
             if (!isAborting) {
                 if (!contents) {
                     index_local = {};
+                    return p_download_index();
                 }
                 else {
                     try {
@@ -48,11 +56,13 @@ function checkForUpdates() {
                         return p_download_index();
                     }
                     catch (e) {
+                        update_process_active = false;
                         reject(e);
                     }
                 }
             }
             else {
+                update_process_active = false;
                 isAborting = false;
             }
         }); };
@@ -61,55 +71,73 @@ function checkForUpdates() {
         If there is no index.json file on the server. Panic
         Else continue on to compare the two files
          */
-        var p_download_index = function () {
-            // Assign request promise to active_request so it can be cancelled
-            active_request = request.get({
-                uri: target + "index.json",
-                timeout: timeout
-            }).then(function (content) {
-                active_request = null; // On complete, null out active_request
-                if (!content) {
-                    reject('Server response empty');
+        var p_download_index = function () { return request({
+            url: "/index.json",
+            timeout: timeout,
+            cancelToken: cancel_token.token
+        }).then(function (content) {
+            if (!content) {
+                reject('Server response empty');
+            }
+            else {
+                try {
+                    index_server = JSON.parse(content);
+                    return p_compare_indexes();
                 }
-                else {
-                    try {
-                        index_server = JSON.parse(content);
-                        return p_compare_indexes();
-                    }
-                    catch (e) {
-                        reject(e);
-                    }
+                catch (e) {
+                    update_process_active = false;
+                    reject(e);
                 }
-            }, function (e) {
-                active_request = null; // On error, null out active_request
-                reject(e);
-            });
-            return active_request;
-        };
+            }
+        }, function (e) {
+            update_process_active = false;
+            reject(e);
+        }); };
         /*
         Compare the two indexes which should be stored in variables index_local and index_server
         Resolve true if findNewServerFiles returns an array with any new server file
          */
         var p_compare_indexes = function () { return new Promise(function () {
             resolve(findNewServerFiles(index_local, index_server));
-            process_active = false; // Once the entire process is complete, process_active is false
+            update_process_active = false;
         }); };
         // Begin
-        p_get_local_index()["catch"](function (e) { return reject(e); });
+        p_get_local_index()["catch"](function (e) {
+            update_process_active = false;
+            reject(e);
+        });
     });
 }
 /**
  * DownloadNewForms starts by checking for updates, receiving a list of form updates available
  * It will then download each of these new forms, as well as the updates index.json file
- * @returns {Promise<void>}
+ * @returns {Promise<Array<string>>}
  */
 function downloadNewForms() {
     return new Promise(function (resolve, reject) {
-        if (active_request != null) {
-            reject('A request is already pending');
+        if (update_process_active == true) {
+            reject('An update process is already underway');
         }
-        var p_get_new_forms = checkForUpdates().then(function (needsUpdating) {
-        });
+        var failed = [];
+        var p_get_new_forms = function () { return checkForUpdates().then(function (needsUpdating) {
+            return Promise.all(needsUpdating.map(function (file) { return new Promise(function (_resolve, _reject) {
+                request.get({
+                    uri: "" + target + file + ".html",
+                    timeout: timeout,
+                    cancelToken: cancel_token.token
+                }).then(function (content) {
+                    console.log("Success " + file);
+                    _resolve();
+                })["catch"](function (e) {
+                    failed.push(file);
+                    _resolve();
+                });
+            }); }));
+        }).then(function () {
+            resolve();
+        }); };
+        // Begin
+        p_get_new_forms()["catch"](function (e) { return reject(e); });
     });
 }
 /**
@@ -151,18 +179,13 @@ function findNewServerFiles(index_local, index_server) {
     return needsUpdating;
 }
 function abort() {
-    isAborting = true;
-    if (active_request) {
-        active_request.cancel();
-        active_request = null;
-        isAborting = false;
+    if (update_process_active) {
+        cancel_token.cancel();
+        isAborting = true;
     }
 }
-function hasActiveRequest() {
-    return active_request != null;
-}
-function setTarget(uri) {
-    target = uri;
+function setGetItRequest(getItRequestObject) {
+    request = getItRequestObject;
 }
 function setTimeout(millis) {
     timeout = millis;
@@ -170,8 +193,7 @@ function setTimeout(millis) {
 exports["default"] = {
     checkForUpdates: checkForUpdates,
     downloadNewForms: downloadNewForms,
+    setTimeout: setTimeout,
     abort: abort,
-    hasActiveRequest: hasActiveRequest,
-    setTarget: setTarget,
-    setTimeout: setTimeout
+    setGetItRequest: setGetItRequest
 };

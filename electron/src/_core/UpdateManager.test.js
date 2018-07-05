@@ -40,13 +40,24 @@ var sinon = require("sinon"); // http://sinonjs.org/releases/v2.0.0/
 var ServerMock = require("mock-http-server"); // https://www.npmjs.com/package/mock-http-server
 var UpdateManager_1 = require("./UpdateManager");
 var StorageManager_1 = require("./StorageManager");
-var request = require("request-promise");
-var errors_1 = require("request-promise/errors");
+var getIt = require("get-it");
+var gi_base = require("get-it/lib/middleware/base");
+var gi_promise = require("get-it/lib/middleware/promise");
 var server = new ServerMock({ host: 'localhost', port: 30025 });
+var request = getIt([
+    gi_base('http://localhost:30025'),
+    gi_promise({ onlyBody: true })
+]);
 var sandbox;
 describe('UpdateManager should ', function () {
+    beforeAll(function () {
+        UpdateManager_1["default"].setGetItRequest(request);
+    });
     beforeEach(function () {
         sandbox = sinon.createSandbox();
+    });
+    beforeEach(function () {
+        UpdateManager_1["default"].setGetItRequest(request);
     });
     afterEach(function () {
         sandbox.restore();
@@ -57,7 +68,6 @@ describe('UpdateManager should ', function () {
     describe('has method checkForUpdates that ', function () {
         beforeEach(function (done) {
             server.start(done);
-            UpdateManager_1["default"].setTarget('http://localhost:30025/');
         });
         afterEach(function (done) {
             server.stop(done);
@@ -223,8 +233,9 @@ describe('UpdateManager should ', function () {
                         error = new Error('oh no');
                         stub_read = sandbox.stub(StorageManager_1["default"], 'read');
                         stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
-                        stub_request = sandbox.stub(request, 'get');
+                        stub_request = sandbox.stub();
                         stub_request.rejects(error);
+                        UpdateManager_1["default"].setGetItRequest(stub_request);
                         // Act
                         return [4 /*yield*/, expect(UpdateManager_1["default"].checkForUpdates()).rejects.toBe(error)];
                     case 1:
@@ -257,8 +268,9 @@ describe('UpdateManager should ', function () {
                     case 0:
                         stub_read = sandbox.stub(StorageManager_1["default"], 'read');
                         stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
-                        stub_request = sandbox.stub(request, 'get');
-                        stub_request.resolves('1 0+1');
+                        stub_request = sandbox.stub();
+                        stub_request.resolves('falsee');
+                        UpdateManager_1["default"].setGetItRequest(stub_request);
                         // Act Assert
                         return [4 /*yield*/, expect(UpdateManager_1["default"].checkForUpdates()).rejects.toBeInstanceOf(SyntaxError)];
                     case 1:
@@ -268,14 +280,42 @@ describe('UpdateManager should ', function () {
                 }
             });
         }); });
-        it('handles server timeout appropriately', function () { return __awaiter(_this, void 0, void 0, function () {
+        // it('handles server timeout appropriately', (done) => {
+        //
+        //     // Arrange
+        //     const stub_read = sandbox.stub(StorageManager, 'read');
+        //     stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
+        //
+        //     SUT.setTimeout(1000);
+        //
+        //     server.on({
+        //         method: 'GET',
+        //         path: '/index.json',
+        //         reply: {
+        //             status: 200,
+        //             headers: {'content-type': 'application/json'},
+        //             body: JSON.stringify({
+        //                 hello: 'is it me you\'re looking for?'
+        //             })
+        //         },
+        //         delay: 2000
+        //     });
+        //
+        //     // Act Assert
+        //     SUT.checkForUpdates().catch(e => {
+        //         expect(e.message).toContain('Socket timed out');
+        //         done();
+        //     });
+        //
+        // });
+        it('can be aborted', function (done) { return __awaiter(_this, void 0, void 0, function () {
             var stub_read;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         stub_read = sandbox.stub(StorageManager_1["default"], 'read');
                         stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
-                        UpdateManager_1["default"].setTimeout(1000);
+                        UpdateManager_1["default"].setTimeout(5000);
                         server.on({
                             method: 'GET',
                             path: '/index.json',
@@ -286,33 +326,58 @@ describe('UpdateManager should ', function () {
                                     hello: 'is it me you\'re looking for?'
                                 })
                             },
-                            delay: 2000
+                            delay: 5000
                         });
                         // Act Assert
-                        return [4 /*yield*/, expect(UpdateManager_1["default"].checkForUpdates()).rejects.toBeInstanceOf(errors_1.RequestError)];
+                        UpdateManager_1["default"].checkForUpdates()["catch"](function (e) {
+                            console.log(e);
+                            expect(e.constructor.name).toContain('Cancel');
+                            done();
+                        });
+                        return [4 /*yield*/, new Promise(function (resolve) { return setTimeout(resolve, 1000); })];
                     case 1:
-                        // Act Assert
                         _a.sent();
+                        UpdateManager_1["default"].abort();
                         return [2 /*return*/];
                 }
             });
         }); });
     });
-    describe('has method downloadNewForms that', function () {
-        beforeEach(function (done) {
-            server.start(done);
-            UpdateManager_1["default"].setTarget('http://localhost:30025/');
-        });
-        afterEach(function (done) {
-            server.stop(done);
-        });
-        it('exists', function () {
-            expect(UpdateManager_1["default"].checkForUpdates).toBeDefined();
-        });
-    });
-    describe('has method abort that ', function () {
-        it('exists', function () {
-            expect(UpdateManager_1["default"].abort).toBeDefined();
-        });
-    });
+    // describe('has method downloadNewForms that', () => {
+    //
+    //     beforeEach((done) => {
+    //         server.start(done);
+    //     });
+    //
+    //     afterEach((done) => {
+    //         server.stop(done);
+    //     });
+    //
+    //     it('exists', () => {
+    //
+    //         expect(SUT.checkForUpdates).toBeDefined();
+    //
+    //     });
+    //
+    // });
+    //
+    // describe('has method abort that ', () => {
+    //
+    //     it('exists', () => {
+    //
+    //         expect(SUT.abort).toBeDefined();
+    //
+    //     });
+    //
+    //     it('works', async () => {
+    //
+    //         // jest.setTimeout(5000);
+    //         //
+    //         // await StorageManager.initialize('/home/spectre/.config/dalmatian-ics-electron/storage/forms').then(async () => {
+    //         //     await SUT.downloadNewForms().catch(e => console.log(e));
+    //         // }).catch(e => console.log(e));
+    //
+    //     });
+    //
+    // });
 });
