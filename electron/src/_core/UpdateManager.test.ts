@@ -1,6 +1,6 @@
 import * as sinon from 'sinon'; // http://sinonjs.org/releases/v2.0.0/
 import * as ServerMock from 'mock-http-server'; // https://www.npmjs.com/package/mock-http-server
-import SUT from './UpdateManager';
+import SUT, {UserCancelledError} from './UpdateManager';
 import StorageManager from './StorageManager';
 import * as getIt from 'get-it';
 
@@ -241,36 +241,69 @@ describe('UpdateManager should ', () => {
 
         });
 
-        // it('handles server timeout appropriately', (done) => {
-        //
-        //     // Arrange
-        //     const stub_read = sandbox.stub(StorageManager, 'read');
-        //     stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
-        //
-        //     SUT.setTimeout(1000);
-        //
-        //     server.on({
-        //         method: 'GET',
-        //         path: '/index.json',
-        //         reply: {
-        //             status: 200,
-        //             headers: {'content-type': 'application/json'},
-        //             body: JSON.stringify({
-        //                 hello: 'is it me you\'re looking for?'
-        //             })
-        //         },
-        //         delay: 2000
-        //     });
-        //
-        //     // Act Assert
-        //     SUT.checkForUpdates().catch(e => {
-        //         expect(e.message).toContain('Socket timed out');
-        //         done();
-        //     });
-        //
-        // });
+        it('handles server timeout appropriately', (done) => {
 
-        it('can be aborted', async (done) => {
+            // Arrange
+            const stub_read = sandbox.stub(StorageManager, 'read');
+            stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
+
+            SUT.setTimeout(1000);
+
+            server.on({
+                method: 'GET',
+                path: '/index.json',
+                reply: {
+                    status: 200,
+                    headers: {'content-type': 'application/json'},
+                    body: JSON.stringify({
+                        hello: 'is it me you\'re looking for?'
+                    })
+                },
+                delay: 2000
+            });
+
+            // Act Assert
+            SUT.checkForUpdates().catch(e => {
+                expect(e.message).toContain('Socket timed out');
+                done();
+            });
+
+        });
+
+        it('can be aborted when requesting', async (done) => {
+
+            // Arrange
+            const stub_read = sandbox.stub(StorageManager, 'read');
+            stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
+
+            SUT.setTimeout(5000);
+
+            server.on({
+                method: 'GET',
+                path: '/index.json',
+                reply: {
+                    status: 200,
+                    headers: {'content-type': 'application/json'},
+                    body: JSON.stringify({
+                        hello: 'is it me you\'re looking for?'
+                    })
+                },
+                delay: 5000
+            });
+
+            // Act Assert
+            SUT.checkForUpdates().catch(e => {
+                expect(e).toBeInstanceOf(UserCancelledError);
+                done();
+            });
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            SUT.abort();
+
+        });
+
+        it('can be aborted when reading', async (done) => {
 
             // Arrange
             const stub_read = sandbox.stub(StorageManager, 'read');
@@ -294,16 +327,13 @@ describe('UpdateManager should ', () => {
             // Act Assert
             SUT.checkForUpdates().catch(e => {
                 console.log(e);
-                expect(e.constructor.name).toContain('Cancel');
+                expect(e).toBeInstanceOf(UserCancelledError);
                 done();
             });
-
-            await new Promise(resolve => setTimeout(resolve, 1000));
 
             SUT.abort();
 
         });
-
     });
 
     // describe('has method downloadNewForms that', () => {

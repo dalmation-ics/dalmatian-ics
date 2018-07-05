@@ -280,35 +280,30 @@ describe('UpdateManager should ', function () {
                 }
             });
         }); });
-        // it('handles server timeout appropriately', (done) => {
-        //
-        //     // Arrange
-        //     const stub_read = sandbox.stub(StorageManager, 'read');
-        //     stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
-        //
-        //     SUT.setTimeout(1000);
-        //
-        //     server.on({
-        //         method: 'GET',
-        //         path: '/index.json',
-        //         reply: {
-        //             status: 200,
-        //             headers: {'content-type': 'application/json'},
-        //             body: JSON.stringify({
-        //                 hello: 'is it me you\'re looking for?'
-        //             })
-        //         },
-        //         delay: 2000
-        //     });
-        //
-        //     // Act Assert
-        //     SUT.checkForUpdates().catch(e => {
-        //         expect(e.message).toContain('Socket timed out');
-        //         done();
-        //     });
-        //
-        // });
-        it('can be aborted', function (done) { return __awaiter(_this, void 0, void 0, function () {
+        it('handles server timeout appropriately', function (done) {
+            // Arrange
+            var stub_read = sandbox.stub(StorageManager_1["default"], 'read');
+            stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
+            UpdateManager_1["default"].setTimeout(1000);
+            server.on({
+                method: 'GET',
+                path: '/index.json',
+                reply: {
+                    status: 200,
+                    headers: { 'content-type': 'application/json' },
+                    body: JSON.stringify({
+                        hello: 'is it me you\'re looking for?'
+                    })
+                },
+                delay: 2000
+            });
+            // Act Assert
+            UpdateManager_1["default"].checkForUpdates()["catch"](function (e) {
+                expect(e.message).toContain('Socket timed out');
+                done();
+            });
+        });
+        it('can be aborted when requesting', function (done) { return __awaiter(_this, void 0, void 0, function () {
             var stub_read;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -330,8 +325,7 @@ describe('UpdateManager should ', function () {
                         });
                         // Act Assert
                         UpdateManager_1["default"].checkForUpdates()["catch"](function (e) {
-                            console.log(e);
-                            expect(e.constructor.name).toContain('Cancel');
+                            expect(e).toBeInstanceOf(UpdateManager_1.UserCancelledError);
                             done();
                         });
                         return [4 /*yield*/, new Promise(function (resolve) { return setTimeout(resolve, 1000); })];
@@ -340,6 +334,34 @@ describe('UpdateManager should ', function () {
                         UpdateManager_1["default"].abort();
                         return [2 /*return*/];
                 }
+            });
+        }); });
+        it('can be aborted when reading', function (done) { return __awaiter(_this, void 0, void 0, function () {
+            var stub_read;
+            return __generator(this, function (_a) {
+                stub_read = sandbox.stub(StorageManager_1["default"], 'read');
+                stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
+                UpdateManager_1["default"].setTimeout(5000);
+                server.on({
+                    method: 'GET',
+                    path: '/index.json',
+                    reply: {
+                        status: 200,
+                        headers: { 'content-type': 'application/json' },
+                        body: JSON.stringify({
+                            hello: 'is it me you\'re looking for?'
+                        })
+                    },
+                    delay: 5000
+                });
+                // Act Assert
+                UpdateManager_1["default"].checkForUpdates()["catch"](function (e) {
+                    console.log(e);
+                    expect(e).toBeInstanceOf(UpdateManager_1.UserCancelledError);
+                    done();
+                });
+                UpdateManager_1["default"].abort();
+                return [2 /*return*/];
             });
         }); });
     });

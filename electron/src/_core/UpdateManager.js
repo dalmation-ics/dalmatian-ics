@@ -64,6 +64,7 @@ function checkForUpdates() {
             else {
                 update_process_active = false;
                 isAborting = false;
+                reject(new UserCancelledError());
             }
         }); };
         /*
@@ -85,13 +86,20 @@ function checkForUpdates() {
                     return p_compare_indexes();
                 }
                 catch (e) {
+                    isAborting = false;
                     update_process_active = false;
                     reject(e);
                 }
             }
         }, function (e) {
             update_process_active = false;
-            reject(e);
+            isAborting = false;
+            if (e.constructor.name === 'Cancel') {
+                reject(new UserCancelledError());
+            }
+            else {
+                reject(e);
+            }
         }); };
         /*
         Compare the two indexes which should be stored in variables index_local and index_server
@@ -104,6 +112,7 @@ function checkForUpdates() {
         // Begin
         p_get_local_index()["catch"](function (e) {
             update_process_active = false;
+            isAborting = false;
             reject(e);
         });
     });
@@ -190,6 +199,10 @@ function setGetItRequest(getItRequestObject) {
 function setTimeout(millis) {
     timeout = millis;
 }
+function UserCancelledError() {
+    this.message = 'User Cancelled';
+}
+exports.UserCancelledError = UserCancelledError;
 exports["default"] = {
     checkForUpdates: checkForUpdates,
     downloadNewForms: downloadNewForms,

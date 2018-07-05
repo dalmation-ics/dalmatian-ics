@@ -69,6 +69,7 @@ function checkForUpdates(): Promise<Array<string>> {
             } else {
                 update_process_active = false;
                 isAborting = false;
+                reject(new UserCancelledError());
             }
         });
 
@@ -90,6 +91,7 @@ function checkForUpdates(): Promise<Array<string>> {
                     index_server = JSON.parse(content);
                     return p_compare_indexes();
                 } catch (e) {
+                    isAborting = false;
                     update_process_active = false;
                     reject(e);
                 }
@@ -97,7 +99,12 @@ function checkForUpdates(): Promise<Array<string>> {
 
         }, e => {
             update_process_active = false;
-            reject(e);
+            isAborting = false;
+            if(e.constructor.name === 'Cancel') {
+                reject(new UserCancelledError());
+            } else {
+                reject(e);
+            }
         });
 
 
@@ -108,7 +115,6 @@ function checkForUpdates(): Promise<Array<string>> {
         const p_compare_indexes = () => new Promise(() => {
 
             resolve(findNewServerFiles(index_local, index_server));
-
             update_process_active = false;
 
         });
@@ -116,6 +122,7 @@ function checkForUpdates(): Promise<Array<string>> {
         // Begin
         p_get_local_index().catch(e => {
             update_process_active = false;
+            isAborting = false;
             reject(e);
         });
 
@@ -227,6 +234,10 @@ function setGetItRequest(getItRequestObject: any) {
 
 function setTimeout(millis: number) {
     timeout = millis;
+}
+
+export function UserCancelledError() {
+    this.message = 'User Cancelled';
 }
 
 export default {
