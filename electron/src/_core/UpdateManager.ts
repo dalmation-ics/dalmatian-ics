@@ -100,7 +100,7 @@ function checkForUpdates(): Promise<Array<string>> {
         }, e => {
             update_process_active = false;
             isAborting = false;
-            if(e.constructor.name === 'Cancel') {
+            if (e.constructor.name === 'Cancel') {
                 reject(new UserCancelledError());
             } else {
                 reject(e);
@@ -115,6 +115,7 @@ function checkForUpdates(): Promise<Array<string>> {
         const p_compare_indexes = () => new Promise(() => {
 
             resolve(findNewServerFiles(index_local, index_server));
+            isAborting = false;
             update_process_active = false;
 
         });

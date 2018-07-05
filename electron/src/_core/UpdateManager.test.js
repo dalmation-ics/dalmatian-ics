@@ -365,41 +365,26 @@ describe('UpdateManager should ', function () {
             });
         }); });
     });
-    // describe('has method downloadNewForms that', () => {
-    //
-    //     beforeEach((done) => {
-    //         server.start(done);
-    //     });
-    //
-    //     afterEach((done) => {
-    //         server.stop(done);
-    //     });
-    //
-    //     it('exists', () => {
-    //
-    //         expect(SUT.checkForUpdates).toBeDefined();
-    //
-    //     });
-    //
-    // });
-    //
-    // describe('has method abort that ', () => {
-    //
-    //     it('exists', () => {
-    //
-    //         expect(SUT.abort).toBeDefined();
-    //
-    //     });
-    //
-    //     it('works', async () => {
-    //
-    //         // jest.setTimeout(5000);
-    //         //
-    //         // await StorageManager.initialize('/home/spectre/.config/dalmatian-ics-electron/storage/forms').then(async () => {
-    //         //     await SUT.downloadNewForms().catch(e => console.log(e));
-    //         // }).catch(e => console.log(e));
-    //
-    //     });
-    //
-    // });
+    describe('has method downloadNewForms that', function () {
+        beforeEach(function (done) {
+            server.start(done);
+        });
+        afterEach(function (done) {
+            server.stop(done);
+        });
+        it('exists', function () {
+            expect(UpdateManager_1["default"].checkForUpdates).toBeDefined();
+        });
+        it('Downloads the forms returned by checkForUpdates', function () { return __awaiter(_this, void 0, void 0, function () {
+            var stub_checkForUpdates;
+            return __generator(this, function (_a) {
+                stub_checkForUpdates = sandbox.stub(UpdateManager_1["default"], 'checkForUpdates');
+                stub_checkForUpdates.resolves([
+                    'bcics_ICS205',
+                    'bcics_ICS206'
+                ]);
+                return [2 /*return*/];
+            });
+        }); });
+    });
 });

@@ -107,6 +107,7 @@ function checkForUpdates() {
          */
         var p_compare_indexes = function () { return new Promise(function () {
             resolve(findNewServerFiles(index_local, index_server));
+            isAborting = false;
             update_process_active = false;
         }); };
         // Begin

@@ -336,42 +336,33 @@ describe('UpdateManager should ', () => {
         });
     });
 
-    // describe('has method downloadNewForms that', () => {
-    //
-    //     beforeEach((done) => {
-    //         server.start(done);
-    //     });
-    //
-    //     afterEach((done) => {
-    //         server.stop(done);
-    //     });
-    //
-    //     it('exists', () => {
-    //
-    //         expect(SUT.checkForUpdates).toBeDefined();
-    //
-    //     });
-    //
-    // });
-    //
-    // describe('has method abort that ', () => {
-    //
-    //     it('exists', () => {
-    //
-    //         expect(SUT.abort).toBeDefined();
-    //
-    //     });
-    //
-    //     it('works', async () => {
-    //
-    //         // jest.setTimeout(5000);
-    //         //
-    //         // await StorageManager.initialize('/home/spectre/.config/dalmatian-ics-electron/storage/forms').then(async () => {
-    //         //     await SUT.downloadNewForms().catch(e => console.log(e));
-    //         // }).catch(e => console.log(e));
-    //
-    //     });
-    //
-    // });
+    describe('has method downloadNewForms that', () => {
+
+        beforeEach((done) => {
+            server.start(done);
+        });
+
+        afterEach((done) => {
+            server.stop(done);
+        });
+
+        it('exists', () => {
+
+            expect(SUT.checkForUpdates).toBeDefined();
+
+        });
+
+        it('Downloads the forms returned by checkForUpdates', async () => {
+
+            // Arrange
+            const stub_checkForUpdates = sandbox.stub(SUT, 'checkForUpdates');
+            stub_checkForUpdates.resolves([
+                'bcics_ICS205',
+                'bcics_ICS206'
+            ]);
+
+        });
+
+    });
 
 });
