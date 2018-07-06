@@ -22,10 +22,7 @@ export class FormDetails {
 export function parseForm(htmlContent: string, fileName: string, lastModified: string) {
 
     const {window} = new JSDOM(htmlContent);
-    const $ = (input) => jQuery(input, window);
-
-    console.log(window.document.querySelectorAll('.ics_input'));
-    console.log($('.ics_input').length);
+    const $ = (input) => jQuery(input, window.document);
 
     const id = $('.ics_Id').text();
     const name = $('.ics_Title').text();

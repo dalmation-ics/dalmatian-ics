@@ -15,9 +15,7 @@ var FormDetails = /** @class */ (function () {
 exports.FormDetails = FormDetails;
 function parseForm(htmlContent, fileName, lastModified) {
     var window = new jsdom_1.JSDOM(htmlContent).window;
-    var $ = function (input) { return jQuery(input, window); };
-    console.log(window.document.querySelectorAll('.ics_input'));
-    console.log($('.ics_input').length);
+    var $ = function (input) { return jQuery(input, window.document); };
     var id = $('.ics_Id').text();
     var name = $('.ics_Title').text();
     var detail = $('.ics_Description').text();

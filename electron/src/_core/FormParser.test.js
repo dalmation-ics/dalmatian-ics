@@ -9,9 +9,11 @@ describe('FormParser should ', function () {
         });
         it('parses ICS210 correctly', function () {
             var result = FormParser.parseForm(HTML, 'bcics_ICS213', 'Thu Jul 5');
-            console.log(result);
-        });
-        it('parses ICS213 correctly', function () {
+            expect(result.id).toEqual('ICS213');
+            expect(result.name).toEqual('GENERAL MESSAGE');
+            expect(result.detail).toMatch(/ICS213 General Message.*versatile form/);
+            expect(result.lastModified).toEqual('Thu Jul 5');
+            expect(result.fileName).toEqual('bcics_ICS213');
         });
     });
 });
