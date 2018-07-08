@@ -43,10 +43,12 @@ function fetchIndex() {
                 }
                 catch (e) {
                     reject(new BadServerResponseError('Server responded with invalid json'));
+                    index_fetch_in_progress = false;
                 }
             }
             else {
                 reject(new BadServerResponseError('Server provided empty response'));
+                index_fetch_in_progress = false;
             }
         })["catch"](function (e) {
             index_fetch_in_progress = false;
@@ -87,7 +89,7 @@ function fetchForms(formNameArray) {
                     if (content) {
                         console.log("File download " + name + " successful");
                         out.push({
-                            name: name,
+                            fileName: name,
                             details: FormDetails_1.parseForm(content, name, index[name].lastModified),
                             content: content,
                             error: null,
@@ -102,7 +104,7 @@ function fetchForms(formNameArray) {
                     console.log("File download " + name + " failed");
                     var error = e.constructor.name === 'Cancel' ? new UserCancelledError() : e;
                     out.push({
-                        name: name,
+                        fileName: name,
                         details: null,
                         content: null,
                         error: error,

@@ -49,9 +49,11 @@ export function fetchIndex(): Promise<I_ServerIndex> {
                     resolve(JSON.parse(content));
                 } catch (e) {
                     reject(new BadServerResponseError('Server responded with invalid json'));
+                    index_fetch_in_progress = false;
                 }
             } else {
                 reject(new BadServerResponseError('Server provided empty response'));
+                index_fetch_in_progress = false;
             }
 
         }).catch(e => {
@@ -105,7 +107,7 @@ export function fetchForms(formNameArray: Array<string>): Promise<Array<I_FetchF
                     if (content) {
                         console.log(`File download ${name} successful`);
                         out.push({
-                            name,
+                            fileName: name,
                             details: parseForm(content, name, index[name].lastModified),
                             content: content,
                             error: null,
@@ -121,7 +123,7 @@ export function fetchForms(formNameArray: Array<string>): Promise<Array<I_FetchF
                     console.log(`File download ${name} failed`);
                     let error = e.constructor.name === 'Cancel' ? new UserCancelledError() : e;
                     out.push({
-                        name,
+                        fileName: name,
                         details: null,
                         content: null,
                         error: error,
@@ -177,7 +179,7 @@ export function setGetItInstance(getItInstance) {
 }
 
 export interface I_FetchFormResult {
-    name: string,
+    fileName: string,
     content: string
     details: FormDetails
     failure: boolean

@@ -36,30 +36,69 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 exports.__esModule = true;
-var sinon = require("sinon"); // http://sinonjs.org/releases/v2.0.0/
-var ServerMock = require("mock-http-server");
-var UpdateManager_1 = require("./UpdateManager");
-var StorageManager_1 = require("./StorageManager");
-var getIt = require("get-it");
-var FormDetails_1 = require("./class/FormDetails"), _FormDetails = FormDetails_1;
-var moment = require("moment");
-var gi_base = require("get-it/lib/middleware/base");
-var gi_promise = require("get-it/lib/middleware/promise");
-var server = new ServerMock({ host: 'localhost', port: 30025 });
-var request = getIt([
-    gi_base('http://localhost:30025'),
-    gi_promise({ onlyBody: true })
-]);
+var sinon = require("sinon");
+var SUT = require("./UpdateManager");
+var FormFetcher = require("./FormFetcher");
+var StorageManager = require("./StorageManager");
+var FormDetails_1 = require("./class/FormDetails");
+var _ = require("lodash");
+var SERVER_INDEX = {
+    bcics_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
+    bcics_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
+    bcics_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' }
+};
+var ICS205_Details = new FormDetails_1["default"]({
+    fileName: 'bcics_ICS205',
+    name: 'ICS205 A Land Before Time',
+    id: 'ICS205',
+    detail: 'ICS205 Details',
+    lastModified: '2018-05-18T12:37:21-07:00'
+});
+var ICS206_Details = new FormDetails_1["default"]({
+    fileName: 'bcics_ICS206',
+    name: 'ICS206 Electric Boogaloo',
+    id: 'ICS206',
+    detail: 'ICS206 Details',
+    lastModified: '2018-05-18T12:37:21-07:00'
+});
+var ICS205A_Details = new FormDetails_1["default"]({
+    fileName: 'bcics_ICS205A',
+    name: 'ICS205A This time its different',
+    id: 'ICS205A',
+    detail: 'ICS205A Details',
+    lastModified: '2018-05-18T12:37:21-07:00'
+});
+var LOCAL_INDEX = {
+    'bcics_ICS205': ICS205_Details,
+    'bcics_ICS206': ICS206_Details,
+    'bcics_ICS205A': ICS205A_Details
+};
+var ICS205_ServerResponse = {
+    fileName: 'bcics_ICS205',
+    content: 'ICS205 Content',
+    details: ICS205_Details,
+    error: null,
+    failure: false
+};
+var ICS206_ServerResponse = {
+    fileName: 'bcics_ICS206',
+    content: 'ICS206 Content',
+    details: ICS206_Details,
+    error: null,
+    failure: false
+};
+var ICS205A_ServerResponse = {
+    fileName: 'bcics_ICS205A',
+    content: 'ICS205A Content',
+    details: ICS205A_Details,
+    error: null,
+    failure: false
+};
 var sandbox;
+var DIRECTORY = '/forms';
 describe('UpdateManager should ', function () {
-    beforeAll(function () {
-        UpdateManager_1["default"].setGetItRequest(request);
-    });
     beforeEach(function () {
         sandbox = sinon.createSandbox();
-    });
-    beforeEach(function () {
-        UpdateManager_1["default"].setGetItRequest(request);
     });
     afterEach(function () {
         sandbox.restore();
@@ -67,53 +106,61 @@ describe('UpdateManager should ', function () {
     it('resolve true to be true', function () {
         expect(true).toBe(true);
     });
-    describe('has method checkForUpdates that ', function () {
-        beforeEach(function (done) {
-            server.start(done);
-        });
-        afterEach(function (done) {
-            server.stop(done);
-        });
+    describe('have method checkForFormUpdates that', function () {
         it('exists', function () {
-            expect(UpdateManager_1["default"].checkForUpdates).toBeDefined();
+            expect(SUT.checkForFormUpdates).toBeDefined();
         });
-        it('loads local index, downloads server index, and compares the two, resolving empty array', function () { return __awaiter(_this, void 0, void 0, function () {
-            var stub_read, result;
+        it('can find updateable forms', function () { return __awaiter(_this, void 0, void 0, function () {
+            var stub_fetchIndex, m_Local_Index, stub_read, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        stub_read = sandbox.stub(StorageManager_1["default"], 'read');
-                        stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({
-                            bcics_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS210: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS213: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS214: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS214A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS217A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS309: { lastModified: '2018-05-18T12:37:21-07:00' }
-                        }));
-                        server.on({
-                            method: 'GET',
-                            path: '/index.json',
-                            reply: {
-                                status: 200,
-                                headers: { 'content-type': 'application/json' },
-                                body: JSON.stringify({
-                                    bcics_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS210: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS213: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS214: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS214A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS217A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS309: { lastModified: '2018-05-18T12:37:21-07:00' }
-                                })
-                            }
-                        });
-                        return [4 /*yield*/, UpdateManager_1["default"].checkForUpdates()["catch"](function (e) { return console.log(e); })];
+                        stub_fetchIndex = sandbox.stub(FormFetcher, 'fetchIndex');
+                        stub_fetchIndex.resolves(SERVER_INDEX);
+                        m_Local_Index = _.cloneDeep(LOCAL_INDEX);
+                        m_Local_Index['bcics_ICS206'].lastModified = '2018-05-11T12:37:21-07:00';
+                        stub_read = sandbox.stub(StorageManager, 'read');
+                        stub_read.withArgs(DIRECTORY, 'index.json').resolves(JSON.stringify(m_Local_Index));
+                        return [4 /*yield*/, SUT.checkForFormUpdates()];
+                    case 1:
+                        result = _a.sent();
+                        // Assert
+                        expect(result).toEqual(['bcics_ICS206']);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('can find multiple updateable forms', function () { return __awaiter(_this, void 0, void 0, function () {
+            var stub_fetchIndex, m_Local_Index, stub_read, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        stub_fetchIndex = sandbox.stub(FormFetcher, 'fetchIndex');
+                        stub_fetchIndex.resolves(SERVER_INDEX);
+                        m_Local_Index = _.cloneDeep(LOCAL_INDEX);
+                        m_Local_Index['bcics_ICS206'].lastModified = '2018-05-11T12:37:21-07:00';
+                        m_Local_Index['bcics_ICS205A'].lastModified = '2018-05-11T12:37:21-07:00';
+                        stub_read = sandbox.stub(StorageManager, 'read');
+                        stub_read.withArgs(DIRECTORY, 'index.json').resolves(JSON.stringify(m_Local_Index));
+                        return [4 /*yield*/, SUT.checkForFormUpdates()];
+                    case 1:
+                        result = _a.sent();
+                        // Assert
+                        expect(result).toEqual(['bcics_ICS206', 'bcics_ICS205A']);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('can find zero updateable forms', function () { return __awaiter(_this, void 0, void 0, function () {
+            var stub_fetchIndex, stub_read, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        stub_fetchIndex = sandbox.stub(FormFetcher, 'fetchIndex');
+                        stub_fetchIndex.resolves(SERVER_INDEX);
+                        stub_read = sandbox.stub(StorageManager, 'read');
+                        stub_read.withArgs(DIRECTORY, 'index.json').resolves(JSON.stringify(LOCAL_INDEX));
+                        return [4 /*yield*/, SUT.checkForFormUpdates()];
                     case 1:
                         result = _a.sent();
                         // Assert
@@ -122,384 +169,89 @@ describe('UpdateManager should ', function () {
                 }
             });
         }); });
-        it('loads local index, downloads server index, and compares the two, resolving updates needed due to new version', function () { return __awaiter(_this, void 0, void 0, function () {
-            var stub_read, result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        stub_read = sandbox.stub(StorageManager_1["default"], 'read');
-                        stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({
-                            bcics_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS210: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS213: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS214: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS214A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS217A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS309: { lastModified: '2018-05-18T12:37:21-07:00' }
-                        }));
-                        server.on({
-                            method: 'GET',
-                            path: '/index.json',
-                            reply: {
-                                status: 200,
-                                headers: { 'content-type': 'application/json' },
-                                body: JSON.stringify({
-                                    bcics_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS206: { lastModified: '2018-06-18T12:37:21-07:00' },
-                                    bcics_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS210: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS213: { lastModified: '2018-06-18T12:37:21-07:00' },
-                                    bcics_ICS214: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS214A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS217A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS309: { lastModified: '2018-05-18T12:37:21-07:00' }
-                                })
-                            }
-                        });
-                        return [4 /*yield*/, UpdateManager_1["default"].checkForUpdates()];
-                    case 1:
-                        result = _a.sent();
-                        // Assert
-                        expect(result).toEqual(['bcics_ICS206', 'bcics_ICS213']);
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        it('loads local index, downloads server index, and compares the two, resolving updates needed due to new file', function () { return __awaiter(_this, void 0, void 0, function () {
-            var stub_read, result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        stub_read = sandbox.stub(StorageManager_1["default"], 'read');
-                        stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({
-                            bcics_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS210: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS213: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS214: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS214A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                            bcics_ICS309: { lastModified: '2018-05-18T12:37:21-07:00' }
-                        }));
-                        server.on({
-                            method: 'GET',
-                            path: '/index.json',
-                            reply: {
-                                status: 200,
-                                headers: { 'content-type': 'application/json' },
-                                body: JSON.stringify({
-                                    bcics_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS210: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS213: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS214: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS214A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS217A: { lastModified: '2018-05-18T12:37:21-07:00' },
-                                    bcics_ICS309: { lastModified: '2018-05-18T12:37:21-07:00' }
-                                })
-                            }
-                        });
-                        return [4 /*yield*/, UpdateManager_1["default"].checkForUpdates()];
-                    case 1:
-                        result = _a.sent();
-                        // Assert
-                        expect(result).toEqual(['bcics_ICS205A', 'bcics_ICS217A']);
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        it('handles errors from read appropriately', function () { return __awaiter(_this, void 0, void 0, function () {
-            var error, stub_read;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        error = new Error('Oh no');
-                        stub_read = sandbox.stub(StorageManager_1["default"], 'read');
-                        stub_read.rejects(error);
-                        // Act
-                        return [4 /*yield*/, expect(UpdateManager_1["default"].checkForUpdates()).rejects.toBe(error)];
-                    case 1:
-                        // Act
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        it('handles errors from request appropriately', function () { return __awaiter(_this, void 0, void 0, function () {
-            var error, stub_read, stub_request;
+        it('can handle rejection from fetchIndex', function () { return __awaiter(_this, void 0, void 0, function () {
+            var error, stub_fetchIndex;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         error = new Error('oh no');
-                        stub_read = sandbox.stub(StorageManager_1["default"], 'read');
-                        stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
-                        stub_request = sandbox.stub();
-                        stub_request.rejects(error);
-                        UpdateManager_1["default"].setGetItRequest(stub_request);
+                        stub_fetchIndex = sandbox.stub(FormFetcher, 'fetchIndex');
+                        stub_fetchIndex.rejects(error);
+                        // Act & Assert
+                        return [4 /*yield*/, expect(SUT.checkForFormUpdates()).rejects.toBe(error)];
+                    case 1:
+                        // Act & Assert
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('can handle rejection from read', function () { return __awaiter(_this, void 0, void 0, function () {
+            var error, stub_fetchIndex, stub_read;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        error = new Error('oh no');
+                        stub_fetchIndex = sandbox.stub(FormFetcher, 'fetchIndex');
+                        stub_fetchIndex.resolves(SERVER_INDEX);
+                        stub_read = sandbox.stub(StorageManager, 'read');
+                        stub_read.withArgs(DIRECTORY, 'index.json').rejects(error);
+                        // Act & Assert
+                        return [4 /*yield*/, expect(SUT.checkForFormUpdates()).rejects.toBe(error)];
+                    case 1:
+                        // Act & Assert
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('only allows one process at a time', function (done) { return __awaiter(_this, void 0, void 0, function () {
+            var stub_fetchIndex, stub_read;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        stub_fetchIndex = sandbox.stub(FormFetcher, 'fetchIndex');
+                        stub_fetchIndex.resolves(new Promise(function (resolve) { return setTimeout(resolve, 1000); }).then(function () { return SERVER_INDEX; }));
+                        stub_read = sandbox.stub(StorageManager, 'read');
+                        stub_read.withArgs(DIRECTORY, 'index.json').resolves(JSON.stringify(LOCAL_INDEX));
                         // Act
-                        return [4 /*yield*/, expect(UpdateManager_1["default"].checkForUpdates()).rejects.toBe(error)];
-                    case 1:
-                        // Act
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        it('handles invalid local json appropriately', function () { return __awaiter(_this, void 0, void 0, function () {
-            var stub_read;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        stub_read = sandbox.stub(StorageManager_1["default"], 'read');
-                        stub_read.withArgs('/forms', 'index.json').resolves('1 0+1');
-                        // Act Assert
-                        return [4 /*yield*/, expect(UpdateManager_1["default"].checkForUpdates()).rejects.toBeInstanceOf(SyntaxError)];
-                    case 1:
-                        // Act Assert
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        it('handles invalid server json appropriately', function () { return __awaiter(_this, void 0, void 0, function () {
-            var stub_read, stub_request;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        stub_read = sandbox.stub(StorageManager_1["default"], 'read');
-                        stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
-                        stub_request = sandbox.stub();
-                        stub_request.resolves('falsee');
-                        UpdateManager_1["default"].setGetItRequest(stub_request);
-                        // Act Assert
-                        return [4 /*yield*/, expect(UpdateManager_1["default"].checkForUpdates()).rejects.toBeInstanceOf(SyntaxError)];
-                    case 1:
-                        // Act Assert
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        it('handles server timeout appropriately', function (done) {
-            // Arrange
-            var stub_read = sandbox.stub(StorageManager_1["default"], 'read');
-            stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
-            UpdateManager_1["default"].setTimeout(1000);
-            server.on({
-                path: '/index.json',
-                reply: {
-                    status: 200,
-                    headers: { 'content-type': 'application/json' },
-                    body: JSON.stringify({
-                        hello: 'is it me you\'re looking for?'
-                    })
-                },
-                delay: 2000
-            });
-            // Act Assert
-            UpdateManager_1["default"].checkForUpdates()["catch"](function (e) {
-                expect(e.message).toContain('Socket timed out');
-                done();
-            });
-        });
-        it('can be aborted when requesting', function (done) { return __awaiter(_this, void 0, void 0, function () {
-            var stub_read;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        stub_read = sandbox.stub(StorageManager_1["default"], 'read');
-                        stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
-                        UpdateManager_1["default"].setTimeout(5000);
-                        server.on({
-                            path: '/index.json',
-                            reply: {
-                                status: 200,
-                                headers: { 'content-type': 'application/json' },
-                                body: JSON.stringify({
-                                    hello: 'is it me you\'re looking for?'
-                                })
-                            },
-                            delay: 5000
-                        });
-                        // Act Assert
-                        UpdateManager_1["default"].checkForUpdates()["catch"](function (e) {
-                            expect(e).toBeInstanceOf(UpdateManager_1.UserCancelledError);
+                        SUT.checkForFormUpdates().then(function () {
                             done();
                         });
-                        return [4 /*yield*/, new Promise(function (resolve) { return setTimeout(resolve, 1000); })];
+                        return [4 /*yield*/, expect(SUT.checkForFormUpdates()).rejects.toEqual('A checkForUpdates operation is already underway')];
                     case 1:
                         _a.sent();
-                        UpdateManager_1["default"].abort();
                         return [2 /*return*/];
                 }
             });
         }); });
-        it('can be aborted when reading', function (done) { return __awaiter(_this, void 0, void 0, function () {
-            var stub_read;
+        it('can be run twice', function () { return __awaiter(_this, void 0, void 0, function () {
+            var stub_fetchIndex, stub_read, result, result2;
             return __generator(this, function (_a) {
-                stub_read = sandbox.stub(StorageManager_1["default"], 'read');
-                stub_read.withArgs('/forms', 'index.json').resolves(JSON.stringify({}));
-                UpdateManager_1["default"].setTimeout(5000);
-                server.on({
-                    path: '/index.json',
-                    reply: {
-                        status: 200,
-                        headers: { 'content-type': 'application/json' },
-                        body: JSON.stringify({
-                            hello: 'is it me you\'re looking for?'
-                        })
-                    },
-                    delay: 5000
-                });
-                // Act Assert
-                UpdateManager_1["default"].checkForUpdates()["catch"](function (e) {
-                    console.log(e);
-                    expect(e).toBeInstanceOf(UpdateManager_1.UserCancelledError);
-                    done();
-                });
-                UpdateManager_1["default"].abort();
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0:
+                        stub_fetchIndex = sandbox.stub(FormFetcher, 'fetchIndex');
+                        stub_fetchIndex.resolves(SERVER_INDEX);
+                        stub_read = sandbox.stub(StorageManager, 'read');
+                        stub_read.withArgs(DIRECTORY, 'index.json').resolves(JSON.stringify(LOCAL_INDEX));
+                        return [4 /*yield*/, SUT.checkForFormUpdates()];
+                    case 1:
+                        result = _a.sent();
+                        // Assert
+                        expect(result).toEqual([]);
+                        return [4 /*yield*/, SUT.checkForFormUpdates()];
+                    case 2:
+                        result2 = _a.sent();
+                        // Assert
+                        expect(result2).toEqual([]);
+                        return [2 /*return*/];
+                }
             });
         }); });
     });
-    describe('has method downloadNewForms that', function () {
-        beforeEach(function (done) {
-            server.start(done);
-        });
-        afterEach(function (done) {
-            server.stop(done);
-        });
+    describe('have method downloadFormUpdates that', function () {
         it('exists', function () {
-            expect(UpdateManager_1["default"].checkForUpdates).toBeDefined();
+            expect(SUT.downloadFormUpdates).toBeDefined();
         });
-        it('downloads the forms returned by checkForUpdates', function () { return __awaiter(_this, void 0, void 0, function () {
-            var stub_checkForUpdates, stub_write, stub_parseForm, formDetails205, formDetails206;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        stub_checkForUpdates = sandbox.stub(UpdateManager_1["default"], 'checkForUpdates');
-                        stub_checkForUpdates.resolves([
-                            'bcics_ICS205',
-                            'bcics_ICS206'
-                        ]);
-                        server.on({
-                            path: '/bcics_ICS205.html',
-                            reply: {
-                                status: 200,
-                                headers: { 'content-type': 'text/html' },
-                                body: 'ICS205 Content!!!'
-                            }
-                        });
-                        server.on({
-                            path: '/bcics_ICS206.html',
-                            reply: {
-                                status: 200,
-                                headers: { 'content-type': 'text/html' },
-                                body: 'ICS206 Content!!!'
-                            }
-                        });
-                        server.on({
-                            path: '/index.json',
-                            reply: {
-                                status: 200,
-                                headers: { 'content-type': 'application/json' },
-                                body: JSON.stringify({
-                                    bcics_ICS205: {
-                                        lastModified: moment().subtract(1, 'day').format()
-                                    },
-                                    bcics_ICS206: {
-                                        lastModified: moment().subtract(2, 'day').format()
-                                    }
-                                })
-                            }
-                        });
-                        stub_write = sandbox.stub(StorageManager_1["default"], 'write');
-                        stub_write.resolves();
-                        stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
-                        formDetails205 = new FormDetails_1["default"]('bcics_ICS205', 'ICS205', 'ICS 205', 'This is detail for 205', moment().format());
-                        formDetails206 = new FormDetails_1["default"]('bcics_ICS206', 'ICS206', 'ICS 206', 'This is detail for 206', moment().format());
-                        stub_parseForm.withArgs('ICS205 Content!!!').returns(formDetails205);
-                        stub_parseForm.withArgs('ICS206 Content!!!').returns(formDetails206);
-                        // Act
-                        return [4 /*yield*/, UpdateManager_1["default"].downloadNewForms()];
-                    case 1:
-                        // Act
-                        _a.sent();
-                        // Assert
-                        expect(server.requests({ path: '/bcics_ICS205.html' }).length).toEqual(1);
-                        expect(server.requests({ path: '/bcics_ICS206.html' }).length).toEqual(1);
-                        // expect(server.requests({path: '/index.json'}).length).toEqual(1);
-                        expect(stub_write.getCalls().filter(function (c) {
-                            var args = c.args;
-                            return args[0] == '/forms' &&
-                                args[1] === 'bcics_ICS205.html' &&
-                                args[2] === 'ICS205 Content!!!';
-                        }).length).toBe(1);
-                        expect(stub_write.getCalls().filter(function (c) {
-                            var args = c.args;
-                            return args[0] == '/forms' &&
-                                args[1] === 'bcics_ICS206.html' &&
-                                args[2] === 'ICS206 Content!!!';
-                        }).length).toBe(1);
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        // it('downloads the forms returned by checkForUpdates', async () => {
-        //
-        //     // Arrange
-        //     const stub_checkForUpdates = sandbox.stub(SUT, 'checkForUpdates');
-        //     stub_checkForUpdates.resolves([
-        //         'bcics_ICS205',
-        //         'bcics_ICS206'
-        //     ]);
-        //
-        //     server.on({
-        //         path: '/bcics_ICS205.html',
-        //         reply: {
-        //             status: 200,
-        //             headers: {'content-type': 'text/html'},
-        //             body: 'ICS205 Content!!!'
-        //         },
-        //         delay: 30000
-        //     });
-        //
-        //     server.on({
-        //         path: '/bcics_ICS206.html',
-        //         reply: {
-        //             status: 200,
-        //             headers: {'content-type': 'text/html'},
-        //             body: 'ICS206 Content!!!'
-        //         },
-        //         delay: 2000
-        //     });
-        //
-        //     server.on({
-        //         path: '/index.json',
-        //         reply: {
-        //             status: 200,
-        //             headers: {'content-type': 'application/json'},
-        //             body: JSON.stringify({
-        //                 one: 'two'
-        //             })
-        //         }
-        //     });
-        //
-        //     const stub_write = sandbox.stub(StorageManager, 'write');
-        //     stub_write.resolves();
-        //
-        //     // Act
-        //     SUT.downloadNewForms();
-        //
-        //     await new Promise(resolve => setTimeout(resolve, 1500));
-        //
-        //     SUT.abort();
-        //
-        //     await new Promise(resolve => setTimeout(resolve, 1000));
-        //
-        //
-        // });
     });
 });

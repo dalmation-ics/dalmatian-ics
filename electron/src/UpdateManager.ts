@@ -6,125 +6,65 @@
  * - Download these new forms if they are available
  * - Storing forms locally
  */
-// import * as request from 'request-promise'; // https://www.npmjs.com/package/request-promise
-import * as getIt from 'get-it';
-import StorageManager from './StorageManager';
-import * as _ from 'lodash';
 import * as moment from 'moment';
+import * as _ from 'lodash';
+import * as FormFetcher from './FormFetcher';
+import {I_ServerIndex, I_FetchFormResult} from './FormFetcher';
+import FormDetails from './class/FormDetails';
+import * as StorageManager from './StorageManager';
 
-import * as gi_base from 'get-it/lib/middleware/base';
-import * as gi_promise from 'get-it/lib/middleware/promise';
-import {default as FormDetails, parseForm} from './class/FormDetails';
+const DIRECTORY = '/forms';
 
-const DOWNLOAD_DIRECTORY = '/forms';
-let target = 'https://s3-us-west-2.amazonaws.com/dalmatian-ics-forms';
-let timeout = 20000;
-
-let request = getIt([
-    gi_base(target),
-    gi_promise({onlyBody: true})
-]);
-
-let update_process_active = false;
-let cancel_token = gi_promise.CancelToken.source();
-let isAborting = false;
+let checkForUpdates_inProgress: boolean = false;
+let downloadFormUpdates_inProgress: boolean = false;
 
 /**
- * CheckForUpdates read a local index.json file and compares it to the servers index.json file
+ * CheckForFormUpdates read a local index.json file and compares it to the servers index.json file
  * By comparing the two files the client can determine if there are updates available
  * This will resolve an array containing the names of files which require updating
- * @returns {Promise<boolean>}
+ * @returns {Promise<Array<string>>}
  */
-function checkForUpdates(): Promise<Array<string>> {
+export function checkForFormUpdates(): Promise<Array<string>> {
 
     return new Promise<Array<string>>((resolve, reject) => {
 
-        let index_local = null;
-        let index_server = null;
+        if (checkForUpdates_inProgress)
+            reject('A checkForUpdates operation is already underway');
+        else
+            checkForUpdates_inProgress = true;
 
-        if (update_process_active == true) {
-            reject('An update process is already underway');
-        }
-
-        update_process_active = true;
+        let local_index: I_LocalIndex;
+        let server_index: I_ServerIndex;
 
         /*
-        Read the local index.json file
-        If no index.json file exists, updates are most certainly needed. Resolve true
-        Else, continue on to download index.json from the server
+        Fetch index from server
          */
-        const p_get_local_index = () => StorageManager.read(DOWNLOAD_DIRECTORY, 'index.json').then(contents => {
-            if (!isAborting) {
-                if (!contents) {
-                    index_local = {};
-                    return p_download_index();
-                } else {
-                    try {
-                        index_local = JSON.parse(contents);
-                        return p_download_index();
-                    } catch (e) {
-                        update_process_active = false;
-                        reject(e);
-                    }
-                }
-            } else {
-                update_process_active = false;
-                isAborting = false;
-                reject(new UserCancelledError());
-            }
+        const p_fetchIndex = () => FormFetcher.fetchIndex().then(index => {
+            server_index = index;
+            return p_readIndex();
         });
 
         /*
-        Download the server's index.json file
-        If there is no index.json file on the server. Panic
-        Else continue on to compare the two files
+        Read local index and attempt JSON parse
          */
-        const p_download_index = () => request({
-            url: `/index.json`,
-            timeout,
-            cancelToken: cancel_token.token
-        }).then(content => {
-
-            if (!content) {
-                reject('Server response empty');
-            } else {
-                try {
-                    index_server = JSON.parse(content);
-                    return p_compare_indexes();
-                } catch (e) {
-                    isAborting = false;
-                    update_process_active = false;
-                    reject(e);
-                }
-            }
-
-        }, e => {
-            update_process_active = false;
-            isAborting = false;
-            if (e.constructor.name === 'Cancel') {
-                reject(new UserCancelledError());
-            } else {
-                reject(e);
-            }
+        const p_readIndex = () => StorageManager.read(DIRECTORY, 'index.json').then(content => {
+            local_index = JSON.parse(content);
+            return p_compare();
         });
-
 
         /*
-        Compare the two indexes which should be stored in variables index_local and index_server
-        Resolve true if findNewServerFiles returns an array with any new server file
+        Compare the two indexes and resolve a list of updateable forms
          */
-        const p_compare_indexes = () => new Promise(() => {
-
-            resolve(findNewServerFiles(index_local, index_server));
-            isAborting = false;
-            update_process_active = false;
-
+        const p_compare = () => new Promise(() => {
+            checkForUpdates_inProgress = false;
+            resolve(findNewServerFiles(local_index, server_index));
         });
 
-        // Begin
-        p_get_local_index().catch(e => {
-            update_process_active = false;
-            isAborting = false;
+        /*
+        Begin
+         */
+        p_fetchIndex().catch(e => {
+            checkForUpdates_inProgress = false;
             reject(e);
         });
 
@@ -133,78 +73,28 @@ function checkForUpdates(): Promise<Array<string>> {
 }
 
 /**
- * DownloadNewForms starts by checking for updates, receiving a list of form updates available
- * It will then download each of these new forms, as well as the updates index.json file
- * @returns {Promise<Array<string>>}
+ * DownloadFormUpdates starts by checking for updates, receiving a list of form updates available
+ * It will then download each of these new forms, as well as update the index.json file
+ * @returns {Promise<Array<I_FetchFormResult>>}
  */
-function downloadNewForms(): Promise<Array<string>> {
+export function downloadFormUpdates(): Promise<Array<I_FetchFormResult>> {
 
-    return new Promise<Array<string>>((resolve, reject) => {
+    return new Promise<Array<I_FetchFormResult>>((resolve, reject) => {
 
-        if (update_process_active == true) {
-            reject('An update process is already underway');
-        }
+        if (downloadFormUpdates_inProgress)
+            reject('A downloadFormUpdates operation is already underway');
+        else
+            downloadFormUpdates_inProgress = true;
 
-        const failed = [];
-        const writeQueue = [];
+        const p_checkForFormUpdates = checkForFormUpdates;
 
-        class WriteQueueObject {
-
-            content: string;
-            formDetails: FormDetails;
-
-            constructor(content: string, formDetails: FormDetails) {
-                this.content = content;
-                this.formDetails = formDetails;
-            }
-
-        }
-
-        const p_get_new_forms = () => module.exports.default.checkForUpdates().then(needsUpdating => {
-
-            return Promise.all(needsUpdating.map(file => new Promise((_resolve, _reject) => {
-
-                request({
-                    url: `/${file}.html`,
-                    timeout,
-                    cancelToken: cancel_token.token
-                }).then(content => {
-                    console.log(`Success ${file}`);
-                    try {
-                        const formDetails = parseForm(content, file, '');
-                        writeQueue.push(new WriteQueueObject(content, formDetails));
-                        _resolve();
-                    } catch (e) {
-                        _reject(e);
-                    }
-                }).catch(e => {
-                    console.log(`Failed ${file}: ${e}`);
-                    failed.push(file);
-                    _resolve();
-                });
-
-            })));
-
-        }).then(() => p_process_write_queue());
-
-        const p_process_write_queue = () => Promise.all(writeQueue.map(writeQueueObject =>
-            StorageManager.write(DOWNLOAD_DIRECTORY, `${writeQueueObject.formDetails.fileName}.html`, writeQueueObject.content))
-        ).then(() => {
-            return p_update_index();
+        /*
+        Begin
+         */
+        p_checkForFormUpdates().catch(e => {
+            downloadFormUpdates_inProgress = false;
+            reject(e);
         });
-
-        const p_update_index = () => request({
-            url: '/index.json',
-            timeout,
-            cancelToken: cancel_token.token
-        })
-            .then(content => JSON.parse(content))
-            .then(index => {
-
-            });
-
-        // Begin
-        p_get_new_forms().catch(e => reject(e));
 
     });
 
@@ -225,15 +115,15 @@ function downloadNewForms(): Promise<Array<string>> {
  *
  * Returns an empty array if client is up to date
  *
- * @param index_local
- * @param index_server
+ * @param local_index
+ * @param server_index
  */
-function findNewServerFiles(index_local: object, index_server: object): Array<string> {
+function findNewServerFiles(local_index: I_LocalIndex, server_index: I_ServerIndex): Array<string> {
 
     let needsUpdating = [];
 
-    const localNames = Object.keys(index_local);
-    const serverNames = Object.keys(index_server);
+    const localNames = Object.keys(local_index);
+    const serverNames = Object.keys(server_index);
 
     const newServerFiles = _.difference(serverNames, localNames);
 
@@ -243,9 +133,9 @@ function findNewServerFiles(index_local: object, index_server: object): Array<st
     needsUpdating = newServerFiles;
 
     localNames.forEach((name) => {
-        if (index_server[name]) {
-            const serverTime = moment(index_server[name].lastModified);
-            const localTime = moment(index_local[name].lastModified);
+        if (server_index[name]) {
+            const serverTime = moment(server_index[name].lastModified);
+            const localTime = moment(local_index[name].lastModified);
             if (serverTime.isAfter(localTime)) {
                 console.log(`${name} needs updating`);
                 needsUpdating.push(name);
@@ -257,35 +147,14 @@ function findNewServerFiles(index_local: object, index_server: object): Array<st
 
 }
 
-function fetch_index() {
-    return request({
-        url: '/index.json',
-        timeout,
-        cancelToken: cancel_token.token
-    }).then(content => JSON.parse(content));
-}
+export function abort() {
 
-function abort() {
-    if (update_process_active) {
-        cancel_token.cancel();
-        cancel_token = gi_promise.CancelToken.source();
-        isAborting = true;
+    if (checkForUpdates_inProgress || downloadFormUpdates_inProgress) {
+        FormFetcher.abort();
     }
+
 }
 
-function setGetItRequest(getItRequestObject: any) {
-    request = getItRequestObject;
+export interface I_LocalIndex {
+    [form: string]: FormDetails
 }
-
-function setTimeout(millis: number) {
-    timeout = millis;
-}
-
-export default {
-    checkForUpdates,
-    downloadNewForms,
-    setTimeout,
-    abort,
-    setGetItRequest,
-};
-
