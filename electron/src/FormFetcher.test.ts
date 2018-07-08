@@ -376,6 +376,17 @@ describe('FormFetcher should ', () => {
 
         });
 
+        it('can handle rejection from getIndex', async () => {
+
+            // Arrange
+            const stub_fetchIndex = sandbox.stub(SUT,'fetchIndex');
+            stub_fetchIndex.rejects(new UserCancelledError());
+
+            // Act & Assert
+            await expect(SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A'])).rejects.toBeInstanceOf(UserCancelledError);
+
+        });
+
         it('can be aborted', async (done) => {
 
             // Arrange

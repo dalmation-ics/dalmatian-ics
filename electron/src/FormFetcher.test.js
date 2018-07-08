@@ -409,6 +409,22 @@ describe('FormFetcher should ', function () {
                 }
             });
         }); });
+        it('can handle rejection from getIndex', function () { return __awaiter(_this, void 0, void 0, function () {
+            var stub_fetchIndex;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        stub_fetchIndex = sandbox.stub(SUT, 'fetchIndex');
+                        stub_fetchIndex.rejects(new FormFetcher_1.UserCancelledError());
+                        // Act & Assert
+                        return [4 /*yield*/, expect(SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A'])).rejects.toBeInstanceOf(FormFetcher_1.UserCancelledError)];
+                    case 1:
+                        // Act & Assert
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
         it('can be aborted', function (done) { return __awaiter(_this, void 0, void 0, function () {
             var stub_parseForm;
             return __generator(this, function (_a) {
