@@ -46,10 +46,16 @@ export function checkForFormUpdates(): Promise<Array<string>> {
 
         /*
         Read local index and attempt JSON parse
+        If there is no index.json, resolve a list of all forms available on server
          */
         const p_readIndex = () => StorageManager.read(DIRECTORY, 'index.json').then(content => {
-            local_index = JSON.parse(content);
-            return p_compare();
+            if (content !== null) {
+                local_index = JSON.parse(content);
+                return p_compare();
+            } else {
+                resolve(Object.keys(server_index));
+                checkForUpdates_inProgress = false;
+            }
         });
 
         /*
@@ -86,7 +92,66 @@ export function downloadFormUpdates(): Promise<Array<I_FetchFormResult>> {
         else
             downloadFormUpdates_inProgress = true;
 
-        const p_checkForFormUpdates = checkForFormUpdates;
+        let updateableFormList: Array<string>;
+        let downloadResults: Array<I_FetchFormResult>;
+        let local_index: I_LocalIndex;
+
+        /*
+        Get a list of forms which can be updated
+         */
+        const p_checkForFormUpdates = () => module.exports.checkForFormUpdates().then(result => {
+            updateableFormList = result;
+            return p_fetchForms();
+        });
+
+        /*
+        Attempt to download these forms from the server
+         */
+        const p_fetchForms = () => FormFetcher.fetchForms(updateableFormList).then(result => {
+            downloadResults = result;
+            return p_readLocalIndex();
+        });
+
+        /*
+        Load local index for editing
+         */
+        const p_readLocalIndex = () => StorageManager.read(DIRECTORY, 'index.json').then(contents => {
+            local_index = JSON.parse(contents);
+            return p_writeForms();
+        });
+
+        /*
+        Write new forms to disk
+         */
+        const p_writeForms = () => Promise.all(downloadResults.map(fetchResult => {
+
+            if (!fetchResult.error)
+                return StorageManager.write(DIRECTORY, fetchResult.fileName, fetchResult.content);
+
+        })).then(() => {
+
+            return p_updateLocalIndex();
+
+        });
+
+        /*
+        Update local index with new formDetails
+         */
+        const p_updateLocalIndex = () => new Promise((_resolve) => {
+
+            downloadResults.forEach(fetchResult => {
+
+                if (!fetchResult.error)
+                    local_index[fetchResult.fileName] = fetchResult.details;
+
+            });
+
+            _resolve(StorageManager.write(DIRECTORY, 'index.json', JSON.stringify(local_index)));
+
+        }).then(() => {
+            downloadFormUpdates_inProgress = false;
+            resolve(downloadResults);
+        });
 
         /*
         Begin

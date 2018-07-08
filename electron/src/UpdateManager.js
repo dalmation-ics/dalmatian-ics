@@ -38,10 +38,17 @@ function checkForFormUpdates() {
         }); };
         /*
         Read local index and attempt JSON parse
+        If there is no index.json, resolve a list of all forms available on server
          */
         var p_readIndex = function () { return StorageManager.read(DIRECTORY, 'index.json').then(function (content) {
-            local_index = JSON.parse(content);
-            return p_compare();
+            if (content !== null) {
+                local_index = JSON.parse(content);
+                return p_compare();
+            }
+            else {
+                resolve(Object.keys(server_index));
+                checkForUpdates_inProgress = false;
+            }
         }); };
         /*
         Compare the two indexes and resolve a list of updateable forms
@@ -71,7 +78,52 @@ function downloadFormUpdates() {
             reject('A downloadFormUpdates operation is already underway');
         else
             downloadFormUpdates_inProgress = true;
-        var p_checkForFormUpdates = checkForFormUpdates;
+        var updateableFormList;
+        var downloadResults;
+        var local_index;
+        /*
+        Get a list of forms which can be updated
+         */
+        var p_checkForFormUpdates = function () { return module.exports.checkForFormUpdates().then(function (result) {
+            updateableFormList = result;
+            return p_fetchForms();
+        }); };
+        /*
+        Attempt to download these forms from the server
+         */
+        var p_fetchForms = function () { return FormFetcher.fetchForms(updateableFormList).then(function (result) {
+            downloadResults = result;
+            return p_readLocalIndex();
+        }); };
+        /*
+        Load local index for editing
+         */
+        var p_readLocalIndex = function () { return StorageManager.read(DIRECTORY, 'index.json').then(function (contents) {
+            local_index = JSON.parse(contents);
+            return p_writeForms();
+        }); };
+        /*
+        Write new forms to disk
+         */
+        var p_writeForms = function () { return Promise.all(downloadResults.map(function (fetchResult) {
+            if (!fetchResult.error)
+                return StorageManager.write(DIRECTORY, fetchResult.fileName, fetchResult.content);
+        })).then(function () {
+            return p_updateLocalIndex();
+        }); };
+        /*
+        Update local index with new formDetails
+         */
+        var p_updateLocalIndex = function () { return new Promise(function (_resolve) {
+            downloadResults.forEach(function (fetchResult) {
+                if (!fetchResult.error)
+                    local_index[fetchResult.fileName] = fetchResult.details;
+            });
+            _resolve(StorageManager.write(DIRECTORY, 'index.json', JSON.stringify(local_index)));
+        }).then(function () {
+            downloadFormUpdates_inProgress = false;
+            resolve(downloadResults);
+        }); };
         /*
         Begin
          */

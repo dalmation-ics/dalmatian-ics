@@ -278,21 +278,21 @@ describe('FormFetcher should ', function () {
                         result = _a.sent();
                         // Assert
                         expect(result).toContainEqual({
-                            name: 'bcics_ICS205',
+                            fileName: 'bcics_ICS205',
                             content: ICS205_Content,
                             details: ICS205_Details,
                             failure: false,
                             error: null
                         });
                         expect(result).toContainEqual({
-                            name: 'bcics_ICS206',
+                            fileName: 'bcics_ICS206',
                             content: ICS206_Content,
                             details: ICS206_Details,
                             failure: false,
                             error: null
                         });
                         expect(result).toContainEqual({
-                            name: 'bcics_ICS205A',
+                            fileName: 'bcics_ICS205A',
                             content: ICS205A_Content,
                             details: ICS205A_Details,
                             failure: false,
@@ -330,21 +330,21 @@ describe('FormFetcher should ', function () {
                         result = _a.sent();
                         // Assert
                         expect(result).toContainEqual({
-                            name: 'bcics_ICS205',
+                            fileName: 'bcics_ICS205',
                             content: ICS205_Content,
                             details: ICS205_Details,
                             failure: false,
                             error: null
                         });
                         expect(result).toContainEqual({
-                            name: 'bcics_ICS206',
+                            fileName: 'bcics_ICS206',
                             content: null,
                             details: null,
                             failure: true,
                             error: new FormFetcher_1.BadServerResponseError('Server provided empty response')
                         });
                         expect(result).toContainEqual({
-                            name: 'bcics_ICS205A',
+                            fileName: 'bcics_ICS205A',
                             content: ICS205A_Content,
                             details: ICS205A_Details,
                             failure: false,
@@ -385,21 +385,21 @@ describe('FormFetcher should ', function () {
                         result = _a.sent();
                         // Assert
                         expect(result).toContainEqual({
-                            name: 'bcics_ICS205',
+                            fileName: 'bcics_ICS205',
                             content: null,
                             details: null,
                             failure: true,
                             error: new Error('Socket timed out on request')
                         });
                         expect(result).toContainEqual({
-                            name: 'bcics_ICS206',
+                            fileName: 'bcics_ICS206',
                             content: ICS206_Content,
                             details: ICS206_Details,
                             failure: false,
                             error: null
                         });
                         expect(result).toContainEqual({
-                            name: 'bcics_ICS205A',
+                            fileName: 'bcics_ICS205A',
                             content: null,
                             details: null,
                             failure: true,
@@ -454,21 +454,21 @@ describe('FormFetcher should ', function () {
                         SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A']).then(function (result) {
                             // Assert
                             expect(result).toContainEqual({
-                                name: 'bcics_ICS205',
+                                fileName: 'bcics_ICS205',
                                 content: null,
                                 details: null,
                                 failure: true,
                                 error: new FormFetcher_1.UserCancelledError()
                             });
                             expect(result).toContainEqual({
-                                name: 'bcics_ICS206',
+                                fileName: 'bcics_ICS206',
                                 content: ICS206_Content,
                                 details: ICS206_Details,
                                 failure: false,
                                 error: null
                             });
                             expect(result).toContainEqual({
-                                name: 'bcics_ICS205A',
+                                fileName: 'bcics_ICS205A',
                                 content: null,
                                 details: null,
                                 failure: true,
@@ -518,21 +518,21 @@ describe('FormFetcher should ', function () {
                                     case 0:
                                         // Assert
                                         expect(_result).toContainEqual({
-                                            name: 'bcics_ICS205',
+                                            fileName: 'bcics_ICS205',
                                             content: null,
                                             details: null,
                                             failure: true,
                                             error: new FormFetcher_1.UserCancelledError()
                                         });
                                         expect(_result).toContainEqual({
-                                            name: 'bcics_ICS206',
+                                            fileName: 'bcics_ICS206',
                                             content: ICS206_Content,
                                             details: ICS206_Details,
                                             failure: false,
                                             error: null
                                         });
                                         expect(_result).toContainEqual({
-                                            name: 'bcics_ICS205A',
+                                            fileName: 'bcics_ICS205A',
                                             content: null,
                                             details: null,
                                             failure: true,
@@ -545,21 +545,21 @@ describe('FormFetcher should ', function () {
                                                     case 0:
                                                         // Assert
                                                         expect(_result).toContainEqual({
-                                                            name: 'bcics_ICS205',
+                                                            fileName: 'bcics_ICS205',
                                                             content: null,
                                                             details: null,
                                                             failure: true,
                                                             error: new FormFetcher_1.UserCancelledError()
                                                         });
                                                         expect(_result).toContainEqual({
-                                                            name: 'bcics_ICS206',
+                                                            fileName: 'bcics_ICS206',
                                                             content: ICS206_Content,
                                                             details: ICS206_Details,
                                                             failure: false,
                                                             error: null
                                                         });
                                                         expect(_result).toContainEqual({
-                                                            name: 'bcics_ICS205A',
+                                                            fileName: 'bcics_ICS205A',
                                                             content: null,
                                                             details: null,
                                                             failure: true,
@@ -570,21 +570,21 @@ describe('FormFetcher should ', function () {
                                                         final_result = _a.sent();
                                                         // Assert
                                                         expect(final_result).toContainEqual({
-                                                            name: 'bcics_ICS205',
+                                                            fileName: 'bcics_ICS205',
                                                             content: ICS205_Content,
                                                             details: ICS205_Details,
                                                             failure: false,
                                                             error: null
                                                         });
                                                         expect(final_result).toContainEqual({
-                                                            name: 'bcics_ICS206',
+                                                            fileName: 'bcics_ICS206',
                                                             content: ICS206_Content,
                                                             details: ICS206_Details,
                                                             failure: false,
                                                             error: null
                                                         });
                                                         expect(final_result).toContainEqual({
-                                                            name: 'bcics_ICS205A',
+                                                            fileName: 'bcics_ICS205A',
                                                             content: ICS205A_Content,
                                                             details: ICS205A_Details,
                                                             failure: false,
