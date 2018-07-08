@@ -26,11 +26,10 @@ export default class FormDetails implements I_FormDetails {
 export function parseForm(htmlContent: string, fileName: string, lastModified: string) {
 
     const {window} = new JSDOM(htmlContent);
-    const $ = (input) => jQuery(input, window.document);
 
-    const id = $('.ics_Id').text();
-    const name = $('.ics_Title').text();
-    const detail = $('.ics_Description').text();
+    const id = window.document.querySelector('.ics_Id').textContent;
+    const name = window.document.querySelector('.ics_Title').textContent;
+    const detail = window.document.querySelector('.ics_Description').textContent;
 
     return new FormDetails({fileName, id, name, detail, lastModified});
 

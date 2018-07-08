@@ -48,7 +48,7 @@ export function checkForFormUpdates(): Promise<Array<string>> {
         Read local index and attempt JSON parse
         If there is no index.json, resolve a list of all forms available on server
          */
-        const p_readIndex = () => StorageManager.read(DIRECTORY, 'index.json').then(content => {
+        const p_readIndex = () => StorageManager.read(DIRECTORY, 'index').then(content => {
             if (content !== null) {
                 local_index = JSON.parse(content);
                 return p_compare();
@@ -115,7 +115,7 @@ export function downloadFormUpdates(): Promise<Array<I_FetchFormResult>> {
         /*
         Load local index for editing
          */
-        const p_readLocalIndex = () => StorageManager.read(DIRECTORY, 'index.json').then(contents => {
+        const p_readLocalIndex = () => StorageManager.read(DIRECTORY, 'index').then(contents => {
             local_index = JSON.parse(contents);
             return p_writeForms();
         });
@@ -139,6 +139,7 @@ export function downloadFormUpdates(): Promise<Array<I_FetchFormResult>> {
          */
         const p_updateLocalIndex = () => new Promise((_resolve) => {
 
+            local_index = local_index || {};
             downloadResults.forEach(fetchResult => {
 
                 if (!fetchResult.error)
@@ -146,7 +147,7 @@ export function downloadFormUpdates(): Promise<Array<I_FetchFormResult>> {
 
             });
 
-            _resolve(StorageManager.write(DIRECTORY, 'index.json', JSON.stringify(local_index)));
+            _resolve(StorageManager.write(DIRECTORY, 'index', JSON.stringify(local_index)));
 
         }).then(() => {
             downloadFormUpdates_inProgress = false;

@@ -1,10 +1,11 @@
 import {app, BrowserWindow} from 'electron';
-import StorageManager from './StorageManager';
+import * as StorageManager from './StorageManager';
 import PreferenceManager from './PreferenceManager';
 import * as path from 'path';
 import * as url from 'url';
 import * as strings from './_core/res/strings';
 import * as PREFERENCE from './_core/_contract/_preferences';
+import {downloadFormUpdates} from './UpdateManager';
 
 let window: BrowserWindow;
 
@@ -15,6 +16,13 @@ app.on('ready', () => {
 
     // Initialize storage
     StorageManager.initialize(app.getPath('userData')).then(() => {
+
+        downloadFormUpdates().then((result) => {
+            console.log('done');
+            console.log(result);
+        }).catch(e => {
+            console.log(e);
+        });
 
         console.log('Storage initialized');
 

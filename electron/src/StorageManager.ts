@@ -197,6 +197,11 @@ export function write(directory: string, fileName: string, content: string): Pro
          */
         const p_create_directory = () => fs.mkdir(directory_path).then(() => {
             return p_write_file();
+        }).catch(e => {
+            if (e.code === 'EEXIST') {
+                return p_write_file();
+            } else
+                throw e;
         });
 
         /*

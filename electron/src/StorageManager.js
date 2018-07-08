@@ -167,6 +167,12 @@ function write(directory, fileName, content) {
          */
         var p_create_directory = function () { return fs.mkdir(directory_path).then(function () {
             return p_write_file();
+        })["catch"](function (e) {
+            if (e.code === 'EEXIST') {
+                return p_write_file();
+            }
+            else
+                throw e;
         }); };
         /*
         Encrypt contents then write to file

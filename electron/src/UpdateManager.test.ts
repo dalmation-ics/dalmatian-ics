@@ -94,14 +94,14 @@ describe('UpdateManager should ', () => {
 
         });
 
-        it('finds all forms when reading index.json returns null', async () => {
+        it('finds all forms when reading index returns null', async () => {
 
             // Arrange
             const stub_fetchIndex = sandbox.stub(FormFetcher, 'fetchIndex');
             stub_fetchIndex.resolves(SERVER_INDEX);
 
             const stub_read = sandbox.stub(StorageManager, 'read');
-            stub_read.withArgs(DIRECTORY, 'index.json').resolves(null);
+            stub_read.withArgs(DIRECTORY, 'index').resolves(null);
 
             // Act
             const result = await SUT.checkForFormUpdates();
@@ -121,7 +121,7 @@ describe('UpdateManager should ', () => {
             m_Local_Index['bcics_ICS206'].lastModified = '2018-05-11T12:37:21-07:00';
 
             const stub_read = sandbox.stub(StorageManager, 'read');
-            stub_read.withArgs(DIRECTORY, 'index.json').resolves(JSON.stringify(m_Local_Index));
+            stub_read.withArgs(DIRECTORY, 'index').resolves(JSON.stringify(m_Local_Index));
 
             // Act
             const result = await SUT.checkForFormUpdates();
@@ -142,7 +142,7 @@ describe('UpdateManager should ', () => {
             m_Local_Index['bcics_ICS205A'].lastModified = '2018-05-11T12:37:21-07:00';
 
             const stub_read = sandbox.stub(StorageManager, 'read');
-            stub_read.withArgs(DIRECTORY, 'index.json').resolves(JSON.stringify(m_Local_Index));
+            stub_read.withArgs(DIRECTORY, 'index').resolves(JSON.stringify(m_Local_Index));
 
             // Act
             const result = await SUT.checkForFormUpdates();
@@ -159,7 +159,7 @@ describe('UpdateManager should ', () => {
             stub_fetchIndex.resolves(SERVER_INDEX);
 
             const stub_read = sandbox.stub(StorageManager, 'read');
-            stub_read.withArgs(DIRECTORY, 'index.json').resolves(JSON.stringify(LOCAL_INDEX));
+            stub_read.withArgs(DIRECTORY, 'index').resolves(JSON.stringify(LOCAL_INDEX));
 
             // Act
             const result = await SUT.checkForFormUpdates();
@@ -191,7 +191,7 @@ describe('UpdateManager should ', () => {
             stub_fetchIndex.resolves(SERVER_INDEX);
 
             const stub_read = sandbox.stub(StorageManager, 'read');
-            stub_read.withArgs(DIRECTORY, 'index.json').rejects(error);
+            stub_read.withArgs(DIRECTORY, 'index').rejects(error);
 
             // Act & Assert
             await expect(SUT.checkForFormUpdates()).rejects.toBe(error);
@@ -205,7 +205,7 @@ describe('UpdateManager should ', () => {
             stub_fetchIndex.resolves(new Promise(resolve => setTimeout(resolve, 1000)).then(() => SERVER_INDEX));
 
             const stub_read = sandbox.stub(StorageManager, 'read');
-            stub_read.withArgs(DIRECTORY, 'index.json').resolves(JSON.stringify(LOCAL_INDEX));
+            stub_read.withArgs(DIRECTORY, 'index').resolves(JSON.stringify(LOCAL_INDEX));
 
             // Act
             SUT.checkForFormUpdates().then(() => {
@@ -223,7 +223,7 @@ describe('UpdateManager should ', () => {
             stub_fetchIndex.resolves(SERVER_INDEX);
 
             const stub_read = sandbox.stub(StorageManager, 'read');
-            stub_read.withArgs(DIRECTORY, 'index.json').resolves(JSON.stringify(LOCAL_INDEX));
+            stub_read.withArgs(DIRECTORY, 'index').resolves(JSON.stringify(LOCAL_INDEX));
 
             // Act
             const result = await SUT.checkForFormUpdates();
@@ -267,7 +267,7 @@ describe('UpdateManager should ', () => {
             m_Local_Index['bcics_ICS205A'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
 
             const stub_read = sandbox.stub(StorageManager, 'read');
-            stub_read.withArgs(DIRECTORY, 'index.json').resolves(JSON.stringify(m_Local_Index));
+            stub_read.withArgs(DIRECTORY, 'index').resolves(JSON.stringify(m_Local_Index));
 
             const stub_write = sandbox.stub(StorageManager, 'write');
             stub_write.resolves();
@@ -284,7 +284,7 @@ describe('UpdateManager should ', () => {
             expect(stub_write.getCalls().filter(c => {
                 const args = c.args;
                 return args[0] === DIRECTORY &&
-                    args[1] === 'index.json' &&
+                    args[1] === 'index' &&
                     args[2] === JSON.stringify(m_Local_Index_Expected);
             }).length).toBe(1);
 
@@ -348,7 +348,7 @@ describe('UpdateManager should ', () => {
             ]);
 
             const stub_read = sandbox.stub(StorageManager, 'read');
-            stub_read.withArgs(DIRECTORY, 'index.json').rejects(error);
+            stub_read.withArgs(DIRECTORY, 'index').rejects(error);
 
             // Act & Assert
             await expect(SUT.downloadFormUpdates()).rejects.toBe(error);
@@ -370,7 +370,7 @@ describe('UpdateManager should ', () => {
             ]);
 
             const stub_read = sandbox.stub(StorageManager, 'read');
-            stub_read.withArgs(DIRECTORY, 'index.json').resolves('.0');
+            stub_read.withArgs(DIRECTORY, 'index').resolves('.0');
 
             // Act & Assert
             await expect(SUT.downloadFormUpdates()).rejects.toBeInstanceOf(SyntaxError);
@@ -397,7 +397,7 @@ describe('UpdateManager should ', () => {
             m_Local_Index['bcics_ICS205A'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
 
             const stub_read = sandbox.stub(StorageManager, 'read');
-            stub_read.withArgs(DIRECTORY, 'index.json').resolves(JSON.stringify(m_Local_Index));
+            stub_read.withArgs(DIRECTORY, 'index').resolves(JSON.stringify(m_Local_Index));
 
             const stub_write = sandbox.stub(StorageManager, 'write');
             stub_write.onCall(0).rejects(error);
@@ -407,7 +407,7 @@ describe('UpdateManager should ', () => {
 
         });
 
-        it('can handle rejection from write: index.json', async () => {
+        it('can handle rejection from write: index', async () => {
 
             // Arrange
             const error = new Error('oh no');
@@ -427,11 +427,11 @@ describe('UpdateManager should ', () => {
             m_Local_Index['bcics_ICS205A'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
 
             const stub_read = sandbox.stub(StorageManager, 'read');
-            stub_read.withArgs(DIRECTORY, 'index.json').resolves(JSON.stringify(m_Local_Index));
+            stub_read.withArgs(DIRECTORY, 'index').resolves(JSON.stringify(m_Local_Index));
 
             const stub_write = sandbox.stub(StorageManager, 'write');
             stub_write.withArgs().resolves();
-            stub_write.withArgs(DIRECTORY, 'index.json', sinon.match.any).rejects(error);
+            stub_write.withArgs(DIRECTORY, 'index', sinon.match.any).rejects(error);
 
             // Act & Assert
             await expect(SUT.downloadFormUpdates()).rejects.toBe(error);
@@ -456,7 +456,7 @@ describe('UpdateManager should ', () => {
             m_Local_Index['bcics_ICS205A'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
 
             const stub_read = sandbox.stub(StorageManager, 'read');
-            stub_read.withArgs(DIRECTORY, 'index.json').resolves(JSON.stringify(m_Local_Index));
+            stub_read.withArgs(DIRECTORY, 'index').resolves(JSON.stringify(m_Local_Index));
 
             const stub_write = sandbox.stub(StorageManager, 'write');
             stub_write.resolves();
@@ -473,7 +473,7 @@ describe('UpdateManager should ', () => {
             expect(stub_write.getCalls().filter(c => {
                 const args = c.args;
                 return args[0] === DIRECTORY &&
-                    args[1] === 'index.json' &&
+                    args[1] === 'index' &&
                     args[2] === JSON.stringify(m_Local_Index_Expected);
             }).length).toBe(1);
 
@@ -501,7 +501,7 @@ describe('UpdateManager should ', () => {
             expect(stub_write.getCalls().filter(c => {
                 const args = c.args;
                 return args[0] === DIRECTORY &&
-                    args[1] === 'index.json' &&
+                    args[1] === 'index' &&
                     args[2] === JSON.stringify(m_Local_Index_Expected);
             }).length).toBe(1);
 
@@ -518,6 +518,58 @@ describe('UpdateManager should ', () => {
                     args[1] === ICS205A_ServerResponse.fileName &&
                     args[2] === ICS205A_ServerResponse.content;
             }).length).toBe(1);
+
+        });
+
+        it('can update multiple forms with no local', async () => {
+
+            // Arrange
+            const stub_checkForFormUpdates = sandbox.stub(SUT, 'checkForFormUpdates');
+            stub_checkForFormUpdates.resolves(['bcics_ICS205A', 'bcics_ICS205']);
+
+            const stub_FetchForms = sandbox.stub(FormFetcher, 'fetchForms');
+            stub_FetchForms.withArgs(['bcics_ICS205A', 'bcics_ICS205']).resolves([
+                ICS205A_ServerResponse,
+                ICS205_ServerResponse
+            ]);
+
+            const stub_read = sandbox.stub(StorageManager, 'read');
+            stub_read.withArgs(DIRECTORY, 'index').resolves(null);
+
+            const stub_write = sandbox.stub(StorageManager, 'write');
+            stub_write.resolves();
+
+            // Act
+            await SUT.downloadFormUpdates();
+
+            // Assert
+            const m_Local_Index_Expected = _.cloneDeep(LOCAL_INDEX);
+            m_Local_Index_Expected['bcics_ICS205'].lastModified = '2018-05-18T12:37:21-07:00';
+            m_Local_Index_Expected['bcics_ICS205A'].lastModified = '2018-05-18T12:37:21-07:00';
+
+
+            expect(stub_write.getCalls().filter(c => {
+                const args = c.args;
+                return args[0] === DIRECTORY &&
+                    args[1] === 'index' &&
+                    JSON.stringify(JSON.parse(args[2]).bcics_ICS205) === JSON.stringify(m_Local_Index_Expected.bcics_ICS205) &&
+                    JSON.stringify(JSON.parse(args[2]).bcics_ICS205A) === JSON.stringify(m_Local_Index_Expected.bcics_ICS205A);
+            }).length).toBe(1);
+
+            expect(stub_write.getCalls().filter(c => {
+                const args = c.args;
+                return args[0] === DIRECTORY &&
+                    args[1] === ICS205_ServerResponse.fileName &&
+                    args[2] === ICS205_ServerResponse.content;
+            }).length).toBe(1);
+
+            expect(stub_write.getCalls().filter(c => {
+                const args = c.args;
+                return args[0] === DIRECTORY &&
+                    args[1] === ICS205A_ServerResponse.fileName &&
+                    args[2] === ICS205A_ServerResponse.content;
+            }).length).toBe(1);
+
         });
 
 

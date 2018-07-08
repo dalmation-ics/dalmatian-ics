@@ -40,7 +40,7 @@ function checkForFormUpdates() {
         Read local index and attempt JSON parse
         If there is no index.json, resolve a list of all forms available on server
          */
-        var p_readIndex = function () { return StorageManager.read(DIRECTORY, 'index.json').then(function (content) {
+        var p_readIndex = function () { return StorageManager.read(DIRECTORY, 'index').then(function (content) {
             if (content !== null) {
                 local_index = JSON.parse(content);
                 return p_compare();
@@ -98,7 +98,7 @@ function downloadFormUpdates() {
         /*
         Load local index for editing
          */
-        var p_readLocalIndex = function () { return StorageManager.read(DIRECTORY, 'index.json').then(function (contents) {
+        var p_readLocalIndex = function () { return StorageManager.read(DIRECTORY, 'index').then(function (contents) {
             local_index = JSON.parse(contents);
             return p_writeForms();
         }); };
@@ -115,11 +115,12 @@ function downloadFormUpdates() {
         Update local index with new formDetails
          */
         var p_updateLocalIndex = function () { return new Promise(function (_resolve) {
+            local_index = local_index || {};
             downloadResults.forEach(function (fetchResult) {
                 if (!fetchResult.error)
                     local_index[fetchResult.fileName] = fetchResult.details;
             });
-            _resolve(StorageManager.write(DIRECTORY, 'index.json', JSON.stringify(local_index)));
+            _resolve(StorageManager.write(DIRECTORY, 'index', JSON.stringify(local_index)));
         }).then(function () {
             downloadFormUpdates_inProgress = false;
             resolve(downloadResults);
