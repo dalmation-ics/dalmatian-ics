@@ -4,17 +4,20 @@
 import * as getIt from 'get-it';
 import * as gi_base from 'get-it/lib/middleware/base';
 import * as gi_promise from 'get-it/lib/middleware/promise';
+import * as gi_httpErrors from 'get-it/lib/middleware/httpErrors';
 import FormDetails, {parseForm} from './class/FormDetails';
 
 const target = 'https://s3-us-west-2.amazonaws.com/dalmatian-ics-forms';
 
 let timeout: number = 10000;
-let fetch_in_progress: boolean = false;
+let index_fetch_in_progress: boolean = false;
+let forms_fetch_in_progress: boolean = false;
 let cancel_token = gi_promise.CancelToken.source();
 
 export const DEFAULT_GET_IT = getIt([
     gi_base(target),
-    gi_promise({onlyBody: true})
+    gi_promise({onlyBody: true}),
+    gi_httpErrors()
 ]);
 
 let request = DEFAULT_GET_IT;
@@ -29,10 +32,10 @@ export function fetchIndex(): Promise<I_ServerIndex> {
 
     return new Promise((resolve, reject) => {
 
-        if (fetch_in_progress)
+        if (index_fetch_in_progress)
             reject('A fetch operation is already in progress');
         else
-            fetch_in_progress = true;
+            index_fetch_in_progress = true;
 
         return request({
             url: '/index.json',
@@ -40,7 +43,7 @@ export function fetchIndex(): Promise<I_ServerIndex> {
             cancelToken: cancel_token.token
         }).then(content => {
 
-            fetch_in_progress = false;
+            index_fetch_in_progress = false;
             if (content) {
                 try {
                     resolve(JSON.parse(content));
@@ -53,7 +56,7 @@ export function fetchIndex(): Promise<I_ServerIndex> {
 
         }).catch(e => {
 
-            fetch_in_progress = false;
+            index_fetch_in_progress = false;
             if (e.constructor.name === 'Cancel') {
                 reject(new UserCancelledError());
             } else {
@@ -77,21 +80,21 @@ export function fetchForms(formNameArray: Array<string>): Promise<Array<I_FetchF
 
     return new Promise((resolve, reject) => {
 
-        if (fetch_in_progress)
+        if (forms_fetch_in_progress)
             reject('A fetch operation is already in progress');
         else
-            fetch_in_progress = true;
+            forms_fetch_in_progress = true;
 
         let index: I_FetchFormResult;
         const out: Array<I_FetchFormResult> = [];
 
-        module.exports.default.fetchIndex().then(result => {
+        module.exports.fetchIndex().then(result => {
 
             index = result;
 
         }).then(() => {
 
-            Promise.all(formNameArray.map(name => new Promise((_resolve, _reject) => {
+            return Promise.all(formNameArray.map(name => new Promise((_resolve) => {
 
                 request({
                     url: `/${name}.html`,
@@ -102,6 +105,7 @@ export function fetchForms(formNameArray: Array<string>): Promise<Array<I_FetchF
                     if (content) {
                         console.log(`File download ${name} successful`);
                         out.push({
+                            name,
                             details: parseForm(content, name, index[name].lastModified),
                             content: content,
                             error: null,
@@ -117,6 +121,7 @@ export function fetchForms(formNameArray: Array<string>): Promise<Array<I_FetchF
                     console.log(`File download ${name} failed`);
                     let error = e.constructor.name === 'Cancel' ? new UserCancelledError() : e;
                     out.push({
+                        name,
                         details: null,
                         content: null,
                         error: error,
@@ -128,15 +133,15 @@ export function fetchForms(formNameArray: Array<string>): Promise<Array<I_FetchF
 
             }))).then(() => {
 
-                fetch_in_progress = false;
+                forms_fetch_in_progress = false;
                 resolve(out);
 
-            }).catch(e => {
-
-                fetch_in_progress = false;
-                reject(e);
-
             });
+
+        }).catch(e => {
+
+            forms_fetch_in_progress = false;
+            reject(e);
 
         });
 
@@ -149,7 +154,7 @@ export function fetchForms(formNameArray: Array<string>): Promise<Array<I_FetchF
  * Any pending requests will be rejected with UserCancelledError
  */
 export function abort() {
-    if (fetch_in_progress) {
+    if (index_fetch_in_progress || forms_fetch_in_progress) {
         cancel_token.cancel(); // Cancel any request
         cancel_token = gi_promise.CancelToken.source(); // Get a new token
     }
@@ -172,6 +177,7 @@ export function setGetItInstance(getItInstance) {
 }
 
 export interface I_FetchFormResult {
+    name: string,
     content: string
     details: FormDetails
     failure: boolean

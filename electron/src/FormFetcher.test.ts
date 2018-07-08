@@ -1,13 +1,15 @@
 import * as ServerMock from 'mock-http-server'; // https://www.npmjs.com/package/mock-http-server
 import * as SUT from './FormFetcher';
-import * as moment from 'moment';
 import * as getIt from 'get-it';
+import * as sinon from 'sinon';
+import FormDetails from './class/FormDetails';
+import * as _FormDetails from './class/FormDetails';
 
 import * as gi_base from 'get-it/lib/middleware/base';
 import * as gi_promise from 'get-it/lib/middleware/promise';
-import FormDetails from './class/FormDetails';
 import {BadServerResponseError, UserCancelledError} from './FormFetcher';
 
+let sandbox;
 const server = new ServerMock({host: 'localhost', port: 30025});
 const mock_getIt_instance = getIt([
     gi_base('http://localhost:30025'),
@@ -50,12 +52,14 @@ const ICS205A_Details = new FormDetails({
 describe('FormFetcher should ', () => {
 
     beforeEach((done) => {
+        sandbox = sinon.createSandbox();
         SUT.setGetItInstance(mock_getIt_instance);
         SUT.setTimeout(10000);
         server.start(done);
     });
 
     afterEach((done) => {
+        sandbox.restore();
         server.stop(done);
     });
 
@@ -203,6 +207,364 @@ describe('FormFetcher should ', () => {
 
         });
 
+        it('can download forms', async () => {
+
+            // Arrange
+            sandbox.stub(SUT, 'fetchIndex').resolves(SERVER_INDEX);
+
+            server.on({
+                path: '/bcics_ICS205.html',
+                reply: buildSuccessResponse(ICS205_Content)
+            });
+
+            server.on({
+                path: '/bcics_ICS206.html',
+                reply: buildSuccessResponse(ICS206_Content)
+            });
+
+            server.on({
+                path: '/bcics_ICS205A.html',
+                reply: buildSuccessResponse(ICS205A_Content)
+            });
+
+            const stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
+            stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
+            stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
+            stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
+
+            // Act
+            const result = await SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A']);
+
+            // Assert
+            expect(result).toContainEqual({
+                name: 'bcics_ICS205',
+                content: ICS205_Content,
+                details: ICS205_Details,
+                failure: false,
+                error: null
+            });
+
+            expect(result).toContainEqual({
+                name: 'bcics_ICS206',
+                content: ICS206_Content,
+                details: ICS206_Details,
+                failure: false,
+                error: null
+            });
+
+            expect(result).toContainEqual({
+                name: 'bcics_ICS205A',
+                content: ICS205A_Content,
+                details: ICS205A_Details,
+                failure: false,
+                error: null
+            });
+
+        });
+
+        it('can handle single file empty response', async () => {
+
+            // Arrange
+            sandbox.stub(SUT, 'fetchIndex').resolves(SERVER_INDEX);
+
+            server.on({
+                path: '/bcics_ICS205.html',
+                reply: buildSuccessResponse(ICS205_Content)
+            });
+
+            server.on({
+                path: '/bcics_ICS206.html',
+                reply: buildSuccessResponse('')
+            });
+
+            server.on({
+                path: '/bcics_ICS205A.html',
+                reply: buildSuccessResponse(ICS205A_Content)
+            });
+
+            const stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
+            stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
+            stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
+            stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
+
+            // Act
+            const result = await SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A']);
+
+            // Assert
+            expect(result).toContainEqual({
+                name: 'bcics_ICS205',
+                content: ICS205_Content,
+                details: ICS205_Details,
+                failure: false,
+                error: null
+            });
+
+            expect(result).toContainEqual({
+                name: 'bcics_ICS206',
+                content: null,
+                details: null,
+                failure: true,
+                error: new BadServerResponseError('Server provided empty response')
+            });
+
+            expect(result).toContainEqual({
+                name: 'bcics_ICS205A',
+                content: ICS205A_Content,
+                details: ICS205A_Details,
+                failure: false,
+                error: null
+            });
+
+        });
+
+        it('can handle multiple file timeout', async () => {
+
+            // Arrange
+            sandbox.stub(SUT, 'fetchIndex').resolves(SERVER_INDEX);
+
+            SUT.setTimeout(300);
+
+            server.on({
+                path: '/bcics_ICS205.html',
+                reply: buildSuccessResponse(ICS205_Content),
+                delay: 3000
+            });
+
+            server.on({
+                path: '/bcics_ICS206.html',
+                reply: buildSuccessResponse(ICS206_Content)
+            });
+
+            server.on({
+                path: '/bcics_ICS205A.html',
+                reply: buildSuccessResponse(ICS205A_Content),
+                delay: 3000
+            });
+
+            const stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
+            stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
+            stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
+            stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
+
+            // Act
+            const result = await SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A']);
+
+            // Assert
+            expect(result).toContainEqual({
+                name: 'bcics_ICS205',
+                content: null,
+                details: null,
+                failure: true,
+                error: new Error('Socket timed out on request')
+            });
+
+            expect(result).toContainEqual({
+                name: 'bcics_ICS206',
+                content: ICS206_Content,
+                details: ICS206_Details,
+                failure: false,
+                error: null
+            });
+
+            expect(result).toContainEqual({
+                name: 'bcics_ICS205A',
+                content: null,
+                details: null,
+                failure: true,
+                error: new Error('Socket timed out on request')
+            });
+
+        });
+
+        it('can be aborted', async (done) => {
+
+            // Arrange
+            sandbox.stub(SUT, 'fetchIndex').resolves(SERVER_INDEX);
+
+            server.on({
+                path: '/bcics_ICS205.html',
+                reply: buildSuccessResponse(ICS205_Content),
+                delay: 2000
+            });
+
+            server.on({
+                path: '/bcics_ICS206.html',
+                reply: buildSuccessResponse(ICS206_Content)
+            });
+
+            server.on({
+                path: '/bcics_ICS205A.html',
+                reply: buildSuccessResponse(ICS205A_Content),
+                delay: 2000
+            });
+
+            const stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
+            stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
+            stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
+            stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
+
+            // Act
+            SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A']).then(result => {
+
+                // Assert
+                expect(result).toContainEqual({
+                    name: 'bcics_ICS205',
+                    content: null,
+                    details: null,
+                    failure: true,
+                    error: new UserCancelledError()
+                });
+
+                expect(result).toContainEqual({
+                    name: 'bcics_ICS206',
+                    content: ICS206_Content,
+                    details: ICS206_Details,
+                    failure: false,
+                    error: null
+                });
+
+                expect(result).toContainEqual({
+                    name: 'bcics_ICS205A',
+                    content: null,
+                    details: null,
+                    failure: true,
+                    error: new UserCancelledError()
+                });
+
+                done();
+
+            });
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            SUT.abort();
+
+        });
+
+        it('can be aborted twice', async (done) => {
+
+            // Arrange
+            sandbox.stub(SUT, 'fetchIndex').resolves(SERVER_INDEX);
+
+            server.on({
+                path: '/bcics_ICS205.html',
+                reply: buildSuccessResponse(ICS205_Content),
+                delay: 2000
+            });
+
+            server.on({
+                path: '/bcics_ICS206.html',
+                reply: buildSuccessResponse(ICS206_Content)
+            });
+
+            server.on({
+                path: '/bcics_ICS205A.html',
+                reply: buildSuccessResponse(ICS205A_Content),
+                delay: 2000
+            });
+
+            const stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
+            stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
+            stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
+            stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
+
+            // Act
+            SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A']).then(async _result => {
+
+                // Assert
+                expect(_result).toContainEqual({
+                    name: 'bcics_ICS205',
+                    content: null,
+                    details: null,
+                    failure: true,
+                    error: new UserCancelledError()
+                });
+
+                expect(_result).toContainEqual({
+                    name: 'bcics_ICS206',
+                    content: ICS206_Content,
+                    details: ICS206_Details,
+                    failure: false,
+                    error: null
+                });
+
+                expect(_result).toContainEqual({
+                    name: 'bcics_ICS205A',
+                    content: null,
+                    details: null,
+                    failure: true,
+                    error: new UserCancelledError()
+                });
+
+                SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A']).then(async result => {
+
+                    // Assert
+                    expect(_result).toContainEqual({
+                        name: 'bcics_ICS205',
+                        content: null,
+                        details: null,
+                        failure: true,
+                        error: new UserCancelledError()
+                    });
+
+                    expect(_result).toContainEqual({
+                        name: 'bcics_ICS206',
+                        content: ICS206_Content,
+                        details: ICS206_Details,
+                        failure: false,
+                        error: null
+                    });
+
+                    expect(_result).toContainEqual({
+                        name: 'bcics_ICS205A',
+                        content: null,
+                        details: null,
+                        failure: true,
+                        error: new UserCancelledError()
+                    });
+
+                    const final_result = await SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A']);
+
+                    // Assert
+                    expect(final_result).toContainEqual({
+                        name: 'bcics_ICS205',
+                        content: ICS205_Content,
+                        details: ICS205_Details,
+                        failure: false,
+                        error: null
+                    });
+
+                    expect(final_result).toContainEqual({
+                        name: 'bcics_ICS206',
+                        content: ICS206_Content,
+                        details: ICS206_Details,
+                        failure: false,
+                        error: null
+                    });
+
+                    expect(final_result).toContainEqual({
+                        name: 'bcics_ICS205A',
+                        content: ICS205A_Content,
+                        details: ICS205A_Details,
+                        failure: false,
+                        error: null
+                    });
+
+                    done();
+
+                });
+
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                SUT.abort();
+
+            });
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            SUT.abort();
+
+        });
     });
 
 });

@@ -6,14 +6,17 @@ exports.__esModule = true;
 var getIt = require("get-it");
 var gi_base = require("get-it/lib/middleware/base");
 var gi_promise = require("get-it/lib/middleware/promise");
+var gi_httpErrors = require("get-it/lib/middleware/httpErrors");
 var FormDetails_1 = require("./class/FormDetails");
 var target = 'https://s3-us-west-2.amazonaws.com/dalmatian-ics-forms';
 var timeout = 10000;
-var fetch_in_progress = false;
+var index_fetch_in_progress = false;
+var forms_fetch_in_progress = false;
 var cancel_token = gi_promise.CancelToken.source();
 exports.DEFAULT_GET_IT = getIt([
     gi_base(target),
-    gi_promise({ onlyBody: true })
+    gi_promise({ onlyBody: true }),
+    gi_httpErrors()
 ]);
 var request = exports.DEFAULT_GET_IT;
 /**
@@ -24,16 +27,16 @@ var request = exports.DEFAULT_GET_IT;
  */
 function fetchIndex() {
     return new Promise(function (resolve, reject) {
-        if (fetch_in_progress)
+        if (index_fetch_in_progress)
             reject('A fetch operation is already in progress');
         else
-            fetch_in_progress = true;
+            index_fetch_in_progress = true;
         return request({
             url: '/index.json',
             timeout: timeout,
             cancelToken: cancel_token.token
         }).then(function (content) {
-            fetch_in_progress = false;
+            index_fetch_in_progress = false;
             if (content) {
                 try {
                     resolve(JSON.parse(content));
@@ -46,7 +49,7 @@ function fetchIndex() {
                 reject(new BadServerResponseError('Server provided empty response'));
             }
         })["catch"](function (e) {
-            fetch_in_progress = false;
+            index_fetch_in_progress = false;
             if (e.constructor.name === 'Cancel') {
                 reject(new UserCancelledError());
             }
@@ -66,16 +69,16 @@ exports.fetchIndex = fetchIndex;
  */
 function fetchForms(formNameArray) {
     return new Promise(function (resolve, reject) {
-        if (fetch_in_progress)
+        if (forms_fetch_in_progress)
             reject('A fetch operation is already in progress');
         else
-            fetch_in_progress = true;
+            forms_fetch_in_progress = true;
         var index;
         var out = [];
-        module.exports["default"].fetchIndex().then(function (result) {
+        module.exports.fetchIndex().then(function (result) {
             index = result;
         }).then(function () {
-            Promise.all(formNameArray.map(function (name) { return new Promise(function (_resolve, _reject) {
+            return Promise.all(formNameArray.map(function (name) { return new Promise(function (_resolve) {
                 request({
                     url: "/" + name + ".html",
                     timeout: timeout,
@@ -84,6 +87,7 @@ function fetchForms(formNameArray) {
                     if (content) {
                         console.log("File download " + name + " successful");
                         out.push({
+                            name: name,
                             details: FormDetails_1.parseForm(content, name, index[name].lastModified),
                             content: content,
                             error: null,
@@ -98,6 +102,7 @@ function fetchForms(formNameArray) {
                     console.log("File download " + name + " failed");
                     var error = e.constructor.name === 'Cancel' ? new UserCancelledError() : e;
                     out.push({
+                        name: name,
                         details: null,
                         content: null,
                         error: error,
@@ -106,12 +111,12 @@ function fetchForms(formNameArray) {
                     _resolve();
                 });
             }); })).then(function () {
-                fetch_in_progress = false;
+                forms_fetch_in_progress = false;
                 resolve(out);
-            })["catch"](function (e) {
-                fetch_in_progress = false;
-                reject(e);
             });
+        })["catch"](function (e) {
+            forms_fetch_in_progress = false;
+            reject(e);
         });
     });
 }
@@ -121,7 +126,7 @@ exports.fetchForms = fetchForms;
  * Any pending requests will be rejected with UserCancelledError
  */
 function abort() {
-    if (fetch_in_progress) {
+    if (index_fetch_in_progress || forms_fetch_in_progress) {
         cancel_token.cancel(); // Cancel any request
         cancel_token = gi_promise.CancelToken.source(); // Get a new token
     }
