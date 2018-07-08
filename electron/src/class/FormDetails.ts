@@ -1,20 +1,24 @@
 import {JSDOM} from 'jsdom';
 import * as jQuery from 'jquery';
 
-export class FormDetails {
-
+export interface I_FormDetails {
     fileName: string;
     id: string;
     name: string;
     detail: string;
     lastModified: string;
+}
 
-    constructor(fileName: string, id: string, name: string, detail: string, lastModified: string) {
-        this.fileName = fileName;
-        this.id = id;
-        this.name = name;
-        this.detail = detail;
-        this.lastModified = lastModified;
+export default class FormDetails implements I_FormDetails {
+
+    detail: string;
+    fileName: string;
+    id: string;
+    lastModified: string;
+    name: string;
+
+    constructor(props: I_FormDetails) {
+        Object.assign(this, props);
     }
 
 }
@@ -28,7 +32,7 @@ export function parseForm(htmlContent: string, fileName: string, lastModified: s
     const name = $('.ics_Title').text();
     const detail = $('.ics_Description').text();
 
-    return new FormDetails(fileName, id, name, detail, lastModified);
+    return new FormDetails({fileName, id, name, detail, lastModified});
 
 }
 

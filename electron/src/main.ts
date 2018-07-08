@@ -1,6 +1,6 @@
 import {app, BrowserWindow} from 'electron';
-import StorageManager from './_core/StorageManager';
-import PreferenceManager from './_core/PreferenceManager';
+import StorageManager from './StorageManager';
+import PreferenceManager from './PreferenceManager';
 import * as path from 'path';
 import * as url from 'url';
 import * as strings from './_core/res/strings';

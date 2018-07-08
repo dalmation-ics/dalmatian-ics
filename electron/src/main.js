@@ -1,8 +1,8 @@
 "use strict";
 exports.__esModule = true;
 var electron_1 = require("electron");
-var StorageManager_1 = require("./_core/StorageManager");
-var PreferenceManager_1 = require("./_core/PreferenceManager");
+var StorageManager_1 = require("./StorageManager");
+var PreferenceManager_1 = require("./PreferenceManager");
 var path = require("path");
 var url = require("url");
 var strings = require("./_core/res/strings");

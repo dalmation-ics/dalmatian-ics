@@ -15,6 +15,7 @@ var _ = require("lodash");
 var moment = require("moment");
 var gi_base = require("get-it/lib/middleware/base");
 var gi_promise = require("get-it/lib/middleware/promise");
+var FormDetails_1 = require("./class/FormDetails");
 var DOWNLOAD_DIRECTORY = '/forms';
 var target = 'https://s3-us-west-2.amazonaws.com/dalmatian-ics-forms';
 var timeout = 20000;
@@ -129,22 +130,49 @@ function downloadNewForms() {
             reject('An update process is already underway');
         }
         var failed = [];
-        var p_get_new_forms = function () { return checkForUpdates().then(function (needsUpdating) {
+        var writeQueue = [];
+        var WriteQueueObject = /** @class */ (function () {
+            function WriteQueueObject(content, formDetails) {
+                this.content = content;
+                this.formDetails = formDetails;
+            }
+            return WriteQueueObject;
+        }());
+        var p_get_new_forms = function () { return module.exports["default"].checkForUpdates().then(function (needsUpdating) {
             return Promise.all(needsUpdating.map(function (file) { return new Promise(function (_resolve, _reject) {
-                request.get({
-                    uri: "" + target + file + ".html",
+                request({
+                    url: "/" + file + ".html",
                     timeout: timeout,
                     cancelToken: cancel_token.token
                 }).then(function (content) {
                     console.log("Success " + file);
-                    _resolve();
+                    try {
+                        var formDetails = FormDetails_1.parseForm(content, file, '');
+                        writeQueue.push(new WriteQueueObject(content, formDetails));
+                        _resolve();
+                    }
+                    catch (e) {
+                        _reject(e);
+                    }
                 })["catch"](function (e) {
+                    console.log("Failed " + file + ": " + e);
                     failed.push(file);
                     _resolve();
                 });
             }); }));
-        }).then(function () {
-            resolve();
+        }).then(function () { return p_process_write_queue(); }); };
+        var p_process_write_queue = function () { return Promise.all(writeQueue.map(function (writeQueueObject) {
+            return StorageManager_1["default"].write(DOWNLOAD_DIRECTORY, writeQueueObject.formDetails.fileName + ".html", writeQueueObject.content);
+        })).then(function () {
+            return p_update_index();
+        }); };
+        var p_update_index = function () { return request({
+            url: '/index.json',
+            timeout: timeout,
+            cancelToken: cancel_token.token
+        })
+            .then(function (content) { return JSON.parse(content); })
+            .then(function (index) {
         }); };
         // Begin
         p_get_new_forms()["catch"](function (e) { return reject(e); });
@@ -188,9 +216,17 @@ function findNewServerFiles(index_local, index_server) {
     });
     return needsUpdating;
 }
+function fetch_index() {
+    return request({
+        url: '/index.json',
+        timeout: timeout,
+        cancelToken: cancel_token.token
+    }).then(function (content) { return JSON.parse(content); });
+}
 function abort() {
     if (update_process_active) {
         cancel_token.cancel();
+        cancel_token = gi_promise.CancelToken.source();
         isAborting = true;
     }
 }
@@ -200,10 +236,6 @@ function setGetItRequest(getItRequestObject) {
 function setTimeout(millis) {
     timeout = millis;
 }
-function UserCancelledError() {
-    this.message = 'User Cancelled';
-}
-exports.UserCancelledError = UserCancelledError;
 exports["default"] = {
     checkForUpdates: checkForUpdates,
     downloadNewForms: downloadNewForms,

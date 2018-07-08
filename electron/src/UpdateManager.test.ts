@@ -1,8 +1,10 @@
 import * as sinon from 'sinon'; // http://sinonjs.org/releases/v2.0.0/
-import * as ServerMock from 'mock-http-server'; // https://www.npmjs.com/package/mock-http-server
+import * as ServerMock from 'mock-http-server';
 import SUT, {UserCancelledError} from './UpdateManager';
 import StorageManager from './StorageManager';
 import * as getIt from 'get-it';
+import FormDetails, * as _FormDetails from './class/FormDetails';
+import * as moment from 'moment';
 
 import * as gi_base from 'get-it/lib/middleware/base';
 import * as gi_promise from 'get-it/lib/middleware/promise';
@@ -250,7 +252,6 @@ describe('UpdateManager should ', () => {
             SUT.setTimeout(1000);
 
             server.on({
-                method: 'GET',
                 path: '/index.json',
                 reply: {
                     status: 200,
@@ -279,7 +280,6 @@ describe('UpdateManager should ', () => {
             SUT.setTimeout(5000);
 
             server.on({
-                method: 'GET',
                 path: '/index.json',
                 reply: {
                     status: 200,
@@ -312,7 +312,6 @@ describe('UpdateManager should ', () => {
             SUT.setTimeout(5000);
 
             server.on({
-                method: 'GET',
                 path: '/index.json',
                 reply: {
                     status: 200,
@@ -352,7 +351,7 @@ describe('UpdateManager should ', () => {
 
         });
 
-        it('Downloads the forms returned by checkForUpdates', async () => {
+        it('downloads the forms returned by checkForUpdates', async () => {
 
             // Arrange
             const stub_checkForUpdates = sandbox.stub(SUT, 'checkForUpdates');
@@ -361,7 +360,137 @@ describe('UpdateManager should ', () => {
                 'bcics_ICS206'
             ]);
 
+            server.on({
+                path: '/bcics_ICS205.html',
+                reply: {
+                    status: 200,
+                    headers: {'content-type': 'text/html'},
+                    body: 'ICS205 Content!!!'
+                },
+            });
+
+            server.on({
+                path: '/bcics_ICS206.html',
+                reply: {
+                    status: 200,
+                    headers: {'content-type': 'text/html'},
+                    body: 'ICS206 Content!!!'
+                },
+            });
+
+            server.on({
+                path: '/index.json',
+                reply: {
+                    status: 200,
+                    headers: {'content-type': 'application/json'},
+                    body: JSON.stringify({
+                        bcics_ICS205: {
+                            lastModified: moment().subtract(1, 'day').format()
+                        },
+                        bcics_ICS206: {
+                            lastModified: moment().subtract(2, 'day').format()
+                        }
+                    })
+                }
+            });
+
+            const stub_write = sandbox.stub(StorageManager, 'write');
+            stub_write.resolves();
+
+            const stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
+
+            const formDetails205 = new FormDetails('bcics_ICS205', 'ICS205', 'ICS 205', 'This is detail for 205', moment().format());
+            const formDetails206 = new FormDetails('bcics_ICS206', 'ICS206', 'ICS 206', 'This is detail for 206', moment().format());
+
+            stub_parseForm.withArgs('ICS205 Content!!!').returns(formDetails205);
+            stub_parseForm.withArgs('ICS206 Content!!!').returns(formDetails206);
+
+            // Act
+            await SUT.downloadNewForms();
+
+            // Assert
+            expect(server.requests({path: '/bcics_ICS205.html'}).length).toEqual(1);
+            expect(server.requests({path: '/bcics_ICS206.html'}).length).toEqual(1);
+            // expect(server.requests({path: '/index.json'}).length).toEqual(1);
+
+            expect(stub_write.getCalls().filter(c => {
+                const args = c.args;
+                return args[0] == '/forms' &&
+                    args[1] === 'bcics_ICS205.html' &&
+                    args[2] === 'ICS205 Content!!!';
+            }).length).toBe(1);
+
+            expect(stub_write.getCalls().filter(c => {
+                const args = c.args;
+                return args[0] == '/forms' &&
+                    args[1] === 'bcics_ICS206.html' &&
+                    args[2] === 'ICS206 Content!!!';
+            }).length).toBe(1);
+
+
+            // expect(stub_write.getCalls().filter(c => {
+            //     const args = c.args;
+            //     return args[0] == '/forms' &&
+            //         args[1] === 'bcics_ICS205' &&
+            //         args[2] === 'ICS205 Content!!!';
+            // }).length).toBe(1);
+
         });
+
+        // it('downloads the forms returned by checkForUpdates', async () => {
+        //
+        //     // Arrange
+        //     const stub_checkForUpdates = sandbox.stub(SUT, 'checkForUpdates');
+        //     stub_checkForUpdates.resolves([
+        //         'bcics_ICS205',
+        //         'bcics_ICS206'
+        //     ]);
+        //
+        //     server.on({
+        //         path: '/bcics_ICS205.html',
+        //         reply: {
+        //             status: 200,
+        //             headers: {'content-type': 'text/html'},
+        //             body: 'ICS205 Content!!!'
+        //         },
+        //         delay: 30000
+        //     });
+        //
+        //     server.on({
+        //         path: '/bcics_ICS206.html',
+        //         reply: {
+        //             status: 200,
+        //             headers: {'content-type': 'text/html'},
+        //             body: 'ICS206 Content!!!'
+        //         },
+        //         delay: 2000
+        //     });
+        //
+        //     server.on({
+        //         path: '/index.json',
+        //         reply: {
+        //             status: 200,
+        //             headers: {'content-type': 'application/json'},
+        //             body: JSON.stringify({
+        //                 one: 'two'
+        //             })
+        //         }
+        //     });
+        //
+        //     const stub_write = sandbox.stub(StorageManager, 'write');
+        //     stub_write.resolves();
+        //
+        //     // Act
+        //     SUT.downloadNewForms();
+        //
+        //     await new Promise(resolve => setTimeout(resolve, 1500));
+        //
+        //     SUT.abort();
+        //
+        //     await new Promise(resolve => setTimeout(resolve, 1000));
+        //
+        //
+        // });
 
     });
 

@@ -1,7 +1,7 @@
 import IpcMain = Electron.IpcMain;
 import BrowserWindow = Electron.BrowserWindow;
-import {RESPONSE_POSTFIX} from './_contract/_general';
-import {ErrorFirstCallback} from '../_types/Callbacks';
+import {RESPONSE_POSTFIX} from './_core/_contract/_general';
+import {ErrorFirstCallback} from './type/Callbacks';
 
 export default class IpcWrapper {
 

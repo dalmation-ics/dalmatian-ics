@@ -14,6 +14,7 @@ import * as moment from 'moment';
 
 import * as gi_base from 'get-it/lib/middleware/base';
 import * as gi_promise from 'get-it/lib/middleware/promise';
+import {default as FormDetails, parseForm} from './class/FormDetails';
 
 const DOWNLOAD_DIRECTORY = '/forms';
 let target = 'https://s3-us-west-2.amazonaws.com/dalmatian-ics-forms';
@@ -145,28 +146,62 @@ function downloadNewForms(): Promise<Array<string>> {
         }
 
         const failed = [];
+        const writeQueue = [];
 
-        const p_get_new_forms = () => checkForUpdates().then(needsUpdating => {
+        class WriteQueueObject {
+
+            content: string;
+            formDetails: FormDetails;
+
+            constructor(content: string, formDetails: FormDetails) {
+                this.content = content;
+                this.formDetails = formDetails;
+            }
+
+        }
+
+        const p_get_new_forms = () => module.exports.default.checkForUpdates().then(needsUpdating => {
 
             return Promise.all(needsUpdating.map(file => new Promise((_resolve, _reject) => {
 
-                request.get({
-                    uri: `${target}${file}.html`,
+                request({
+                    url: `/${file}.html`,
                     timeout,
                     cancelToken: cancel_token.token
                 }).then(content => {
                     console.log(`Success ${file}`);
-                    _resolve();
+                    try {
+                        const formDetails = parseForm(content, file, '');
+                        writeQueue.push(new WriteQueueObject(content, formDetails));
+                        _resolve();
+                    } catch (e) {
+                        _reject(e);
+                    }
                 }).catch(e => {
+                    console.log(`Failed ${file}: ${e}`);
                     failed.push(file);
                     _resolve();
                 });
 
             })));
 
-        }).then(() => {
-            resolve();
+        }).then(() => p_process_write_queue());
+
+        const p_process_write_queue = () => Promise.all(writeQueue.map(writeQueueObject =>
+            StorageManager.write(DOWNLOAD_DIRECTORY, `${writeQueueObject.formDetails.fileName}.html`, writeQueueObject.content))
+        ).then(() => {
+            return p_update_index();
         });
+
+        const p_update_index = () => request({
+            url: '/index.json',
+            timeout,
+            cancelToken: cancel_token.token
+        })
+            .then(content => JSON.parse(content))
+            .then(index => {
+
+            });
 
         // Begin
         p_get_new_forms().catch(e => reject(e));
@@ -222,9 +257,18 @@ function findNewServerFiles(index_local: object, index_server: object): Array<st
 
 }
 
+function fetch_index() {
+    return request({
+        url: '/index.json',
+        timeout,
+        cancelToken: cancel_token.token
+    }).then(content => JSON.parse(content));
+}
+
 function abort() {
     if (update_process_active) {
         cancel_token.cancel();
+        cancel_token = gi_promise.CancelToken.source();
         isAborting = true;
     }
 }
@@ -235,10 +279,6 @@ function setGetItRequest(getItRequestObject: any) {
 
 function setTimeout(millis: number) {
     timeout = millis;
-}
-
-export function UserCancelledError() {
-    this.message = 'User Cancelled';
 }
 
 export default {
