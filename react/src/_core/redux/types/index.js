@@ -1,11 +1,13 @@
 // @flow
-import actionStatus, {ActionStatus} from './actionStatus';
+import actionStatus from './actionStatus';
+import type {ActionStatus} from './actionStatus';
 
 export type Action = {
   type: string,
   payload?: any | null,
   state?: ActionStatus | null
 };
+
 export type State = Object;
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;
 export type GetState = () => State;

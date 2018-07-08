@@ -1,9 +1,18 @@
-const UNINITIALIZED = 'UNINITIALIZED';
 const STARTED = 'STARTED';
+const UNINITIALIZED = 'UNINITIALIZED';
 const COMPLETE = 'COMPLETE';
 const ERROR = 'ERROR';
 const STOPPED = 'STOPPED';
 const CANCELLED = 'CANCELLED';
+
+const statusCodes = Object.freeze({
+  UNINITIALIZED,
+  STARTED,
+  COMPLETE,
+  ERROR,
+  STOPPED,
+  CANCELLED,
+});
 
 /**
  * The Flow/TS type for actionstatus codes.
@@ -20,11 +29,4 @@ export type ActionStatus =
  *  The list of usable status codes.
  *  To regard these as a type, also import {ActionStatus}
  */
-export default ({
-  UNINITIALIZED,
-  STARTED,
-  COMPLETE,
-  ERROR,
-  STOPPED,
-  CANCELLED,
-}: ActionStatus);
+export default (statusCodes);

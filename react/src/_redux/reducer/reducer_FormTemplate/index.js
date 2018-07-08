@@ -1,3 +1,4 @@
+// @flow
 import _ from 'lodash';
 
 import * as action_FormTemplate_CancelCheckForUpdates
@@ -13,7 +14,14 @@ import * as action_FormTemplate_CancelUpdateForms
 
 import moment from 'moment';
 import type {Action, State} from 'src/_core/redux/types';
-import actionStatus, {ActionStatus} from 'src/_core/redux/types/actionStatus';
+import actionStatus from 'src/_core/redux/types/actionStatus';
+import type ActionStatus from 'src/_core/redux/types/actionStatus';
+
+const hi: ActionStatus = 'test';
+const testaction: Action = {
+  type: '',
+  state: hi,
+};
 
 type STATE = State & {
   checkForUpdatesStatus: ActionStatus | null,

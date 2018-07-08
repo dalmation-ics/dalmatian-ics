@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import actionStatus, {ActionStatus} from 'src/_core/redux/types/actionStatus';
+import actionStatus, {type ActionStatus} from 'src/_core/redux/types/actionStatus';
 import * as action_Archive_Suite_Load
   from '../../action/action_Archive_Suite/action_Archive_Suite_Load';
 import * as action_Archive_Suite_Save
@@ -25,7 +25,7 @@ import * as action_Archive_Suite_Import
 import * as action_Archive_Item_Duplicate
   from '../../action/action_Archive_Item/action_Archive_Item_Duplicate';
 import uuid from 'uuid';
-import type {State} from 'src/_core/redux/types/';
+import type {State} from 'src/_core/redux/types';
 
 type STATE = State & {
   archiveAddNewStatus: ActionStatus | null,

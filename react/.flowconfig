@@ -5,10 +5,11 @@
 [include]
 
 [libs]
+.*/node_modules/.*
 
 [lints]
 
 [options]
-all=true
+all = true
 
 [strict]

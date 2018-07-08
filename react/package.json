@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "babel-preset-flow": "^6.23.0",
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
     "react": "^16.4.1",
