@@ -5,6 +5,8 @@ import './App.css';
 type Props = {};
 
 class App extends Component<Props> {
+  static defaultProps: Props;
+
   render() {
     return (
         <div className="App">
