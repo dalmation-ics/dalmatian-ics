@@ -1,3 +1,7 @@
+// @Flow
+
+// NOTE FOR THE FUTURE, THESE CONSTANTS MUST LINE UP WITH THE STRINGS IN ActionStatus' type
+
 const UNINITIALIZED = 'UNINITIALIZED';
 const STARTED = 'STARTED';
 const COMPLETE = 'COMPLETE';
@@ -10,11 +14,11 @@ const CANCELLED = 'CANCELLED';
  * This is a string containing one of the included status codes
  */
 export type ActionStatus =
-    UNINITIALIZED
-    | STARTED
-    | ERROR
-    | STOPPED
-    | CANCELLED;
+    'UNINITIALIZED'
+    | 'STARTED'
+    | 'ERROR'
+    | 'STOPPED'
+    | 'CANCELLED';
 
 /**
  *  The list of usable status codes.
