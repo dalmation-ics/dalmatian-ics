@@ -1,6 +1,8 @@
 // @flow
 import actionStatus, {ActionStatus} from './actionStatus';
-
+/**
+ * Action type for redux
+ */
 export type Action = {
   type: string,
   payload?: any | null,
