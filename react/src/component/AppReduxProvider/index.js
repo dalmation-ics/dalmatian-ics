@@ -4,7 +4,6 @@ import thunk from 'redux-thunk';
 import {Provider} from 'react-redux';
 import {applyMiddleware, createStore} from 'redux';
 import {createLogger} from 'redux-logger';
-import App from './App';
 import allReducers from 'src/_redux/reducer';
 
 //redux middleware
@@ -29,7 +28,7 @@ class AppReduxProvider extends React.Component<Props> {
   render() {
     return (
         <Provider store={store}>
-          <App/>
+          {this.props.children}
         </Provider>
     );
   }
