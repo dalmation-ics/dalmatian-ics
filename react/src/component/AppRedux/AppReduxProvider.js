@@ -1,3 +1,4 @@
+// @flow
 import React, {Component} from 'react';
 import thunk from 'redux-thunk';
 import {Provider} from 'react-redux';
