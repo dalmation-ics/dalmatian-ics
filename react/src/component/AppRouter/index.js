@@ -2,7 +2,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Router, Route, Link} from 'react-router-dom';
-import createBrowserHistory from 'history/createBrowserHistory';
+import {createBrowserHistory} from 'history';
+import type {RouterHistory} from 'react-router-dom';
 import type {Dispatch, State} from 'src/_core/redux/types';
 import thunkBindActionCreators from 'src/_core/redux/thunkBindActionCreators';
 import action_NavigationPathChange
@@ -14,7 +15,7 @@ import action_RedirectUser
  * Create the history for use in router
  * It is being initialized outside of the component so that a new history is not being created each render
  */
-export const history: BrowserHistory = createBrowserHistory();
+export const history: RouterHistory = createBrowserHistory();
 
 type Props = {};
 
