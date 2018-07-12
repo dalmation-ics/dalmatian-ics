@@ -23,7 +23,7 @@ import type {ActionBound} from 'src/_core/redux/types';
 import type {Dispatch} from 'src/_core/redux/types';
 
 type props = {
-  formStore: Object,
+  formTemplateStore: Object,
   navStore: Object,
   action_Archive_Item_New: ActionBound,
   action_Nav_RedirectUser: ActionBound,
@@ -58,7 +58,7 @@ class PageAddForm extends Component<props> {
   render() {
 
     const {
-      formStore: {formIndex},
+      formTemplateStore: {formIndex},
       navStore: {selectedFormId},
     } = this.props;
 
@@ -102,8 +102,8 @@ class PageAddForm extends Component<props> {
 
 const mapStateToProps = (state) => {
   return {
-    formStore: state.formsStore,
-    NavStore: state.NavStore,
+    formTemplateStore: state.formTemplateStore,
+    navStore: state.navStore,
   };
 };
 
