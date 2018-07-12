@@ -1,12 +1,11 @@
 // @flow
 import React, {Component} from 'react';
+import {Col, Jumbotron, Row} from 'reactstrap';
 import {connect} from 'react-redux';
 import FontAwesome from 'react-fontawesome';
 import type {
-  Action,
   ActionBound,
   Dispatch,
-  PromiseAction,
 } from 'src/_core/redux/types';
 import PanelButton from './container/panel_button';
 import {toast} from 'react-toastify';
@@ -37,41 +36,47 @@ class PageMenuMain extends Component<props> {
       action_Archive_Suite_Load,
     } = this.props;
     return (
-        <div className="container-fluid">
-          <div className='container-fluid'>
-            <PanelButton text={s.ARCHIVE_CREATE_BLANK}
-                         display={<FontAwesome name="file-archive"
-                                               size={'5x'}/>}
-                         testid="ButtonMainMenuCreateForm"
-                         onClick={() => {
-                           action_Archive_Suite_Blank().then(() => {
-                             toast.success('Empty archive created',
-                                 {
-                                   autoClose: 1888,
-                                 });
-                             action_Nav_RedirectUser(
-                                 '/suite');
-                           });
-                         }}
-            />
-            <PanelButton text={s.ARCHIVE_CONTINUE_EDITING_CURRENT}
-                         display={<FontAwesome name="edit"
-                                               size={'5x'}/>}
-                         disabled={!isArchiveLoaded}
-                         onClick={() => {
-                           action_Nav_RedirectUser('/suite');
-                         }}
-            />
-            <PanelButton text={s.ARCHIVE_OPEN_EXISTING}
-                         display={<FontAwesome name="folder-open"
-                                               size={'5x'}/>}
-                         testid="ButtonMainMenuOpenExistingForm"
-                         onClick={() => {
-                           action_Archive_Suite_Load();
-                         }}
-            />
-          </div>
-        </div>
+        <Jumbotron>
+          <Row>
+            <Col xs="4">
+              <PanelButton text={s.ARCHIVE_CREATE_BLANK}
+                           display={<FontAwesome name="file-archive"
+                                                 size={'5x'}/>}
+                           testid="ButtonMainMenuCreateForm"
+                           onClick={() => {
+                             action_Archive_Suite_Blank().then(() => {
+                               toast.success('Empty archive created',
+                                   {
+                                     autoClose: 1888,
+                                   });
+                               action_Nav_RedirectUser(
+                                   '/suite');
+                             });
+                           }}
+              />
+            </Col>
+            <Col xs="4">
+              <PanelButton text={s.ARCHIVE_CONTINUE_EDITING_CURRENT}
+                           display={<FontAwesome name="edit"
+                                                 size={'5x'}/>}
+                           disabled={!isArchiveLoaded}
+                           onClick={() => {
+                             action_Nav_RedirectUser('/suite');
+                           }}
+              />
+            </Col>
+            <Col xs="4">
+              <PanelButton text={s.ARCHIVE_OPEN_EXISTING}
+                           display={<FontAwesome name="folder-open"
+                                                 size={'5x'}/>}
+                           testid="ButtonMainMenuOpenExistingForm"
+                           onClick={() => {
+                             action_Archive_Suite_Load();
+                           }}
+              />
+            </Col>
+          </Row>
+        </Jumbotron>
     );
   }
 }
