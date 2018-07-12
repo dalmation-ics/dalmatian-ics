@@ -9,6 +9,7 @@
     "moment": "^2.22.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-fontawesome": "^1.6.1",
     "react-hot-loader": "^4.3.3",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
