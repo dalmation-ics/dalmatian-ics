@@ -9,6 +9,7 @@
 
 [options]
 module.name_mapper='^src\/\(.*\)$' -> '<PROJECT_ROOT>/src/\1'
+module.name_mapper='^flow\/\(.*\)$' -> '<PROJECT_ROOT>/flow-typed/\1'
 module.system=haste
 
 [strict]
