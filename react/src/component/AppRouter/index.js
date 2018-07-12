@@ -10,6 +10,10 @@ import action_NavigationPathChange
   from 'src/_redux/action/action_Nav/action_Nav_PathChange';
 import action_RedirectUser
   from 'src/_redux/action/action_Nav/action_Nav_RedirectUser';
+import PageMenuMain from './component/pageMenuMain';
+import PageSuite from './component/pageSuite';
+import PageEditor from './component/pageEditor';
+import PageAddForm from './component/pageAddForm';
 
 /**
  * Create the history for use in router
@@ -53,7 +57,7 @@ class AppRouter extends Component<Props> {
                 <Link to="/suite">Suite</Link>
               </li>
               <li>
-                <Link to="/select">Select</Link>
+                <Link to="/addForm">Add Form</Link>
               </li>
               <li>
                 <Link to="/editor">Editor</Link>
@@ -62,10 +66,10 @@ class AppRouter extends Component<Props> {
 
             <hr/>
 
-            <Route exact path="/"/>
-            <Route path="/suite"/>
-            <Route path="/select"/>
-            <Route path="/editor"/>
+            <Route exact path="/" component={PageMenuMain}/>
+            <Route path="/suite" component={PageSuite}/>
+            <Route path="/addForm" component={PageAddForm}/>
+            <Route path="/editor" component={PageEditor}/>
           </div>
         </Router>
     );
