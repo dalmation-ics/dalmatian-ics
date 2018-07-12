@@ -1,7 +1,7 @@
 // @flow
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Router, Route, Link} from 'react-router-dom';
+import {Redirect, Router, Route, Link} from 'react-router-dom';
 import {createBrowserHistory} from 'history';
 import type {RouterHistory} from 'react-router-dom';
 import type {Dispatch, State} from 'src/_core/redux/types';
@@ -21,7 +21,10 @@ import PageAddForm from './component/pageAddForm';
  */
 export const history: RouterHistory = createBrowserHistory();
 
-type Props = {};
+type Props = {
+  redirectTarget: null | string,
+  suiteSelectedUUID: null | string,
+};
 
 class AppRouter extends Component<Props> {
   constructor(props) {
@@ -43,12 +46,15 @@ class AppRouter extends Component<Props> {
     });
   }
 
-  static defaultProps: Props;
-
   render() {
+    const {
+      suiteSelectedUUID,
+      redirectTarget,
+    } = this.props;
     return (
         <Router history={history}>
           <div>
+            {redirectTarget && <Redirect to={redirectTarget}/>}
             <ul>
               <li>
                 <Link to="/">Menu</Link>
@@ -69,7 +75,14 @@ class AppRouter extends Component<Props> {
             <Route exact path="/" component={PageMenuMain}/>
             <Route path="/suite" component={PageSuite}/>
             <Route path="/addForm" component={PageAddForm}/>
-            <Route path="/editor" component={PageEditor}/>
+            <Route path='/editor' render={() => {
+
+              if (!suiteSelectedUUID)
+                return <Redirect to={'/'}/>;
+              else
+                return <PageEditor/>;
+
+            }}/>
           </div>
         </Router>
     );
@@ -85,8 +98,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 
 const mapStateToProps = (state) => {
   return {
-    archiveStore: state.archiveStore,
-    navigationStore: state.navigationStore,
+    suiteSelectedUUID: state.archiveStore.suiteSelectedUUID,
+    redirectTarget: state.navStore.redirectTarget,
   };
 };
 
