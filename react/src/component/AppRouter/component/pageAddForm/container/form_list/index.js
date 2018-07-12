@@ -1,20 +1,25 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {Panel, PanelFooter, PanelHeading} from 'react-bootstrap';
+import {
+  Alert,
+  Card,
+  CardFooter,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  CardSubtitle,
+  CardText,
+  Button,
+} from 'reactstrap';
 
-class FormList extends Component {
+type propTypesFormList = {
+  forms: Array<any>,
+  selected: any,
+  onSelect: (any) => any,
+  onSubmit: (any) => any,
+  onClickOpenUpdatePanel: (any) => any,
+};
 
-  static propTypes = {
-    forms: PropTypes.arrayOf(PropTypes.any),
-    selected: PropTypes.any,
-    onSelect: PropTypes.func,
-    onSubmit: PropTypes.func,
-    onClickOpenUpdatePanel: PropTypes.func,
-  };
-
-  componentDidMount() {
-
-  }
+class FormList extends Component<propTypesFormList> {
 
   render() {
 
@@ -41,22 +46,26 @@ class FormList extends Component {
 
       return (
           <div testid="FormListNoData">
-            <Panel className={'panel panel-warning'}>
-              <Panel.Heading>
-                Warning: no form data
-              </Panel.Heading>
-              <Panel.Body>
-                <p>No form data has been downloaded yet! </p>
-                <p>Please use the form updater to get current
-                  versions of the BCICS forms</p>
-              </Panel.Body>
-              <Panel.Footer>
-                <button className={'btn btn-warning btn-block'}
-                        onClick={this.props.onClickOpenUpdatePanel}>
+            <Card color="warning">
+              <CardHeader>
+                <CardTitle>
+                  Warning: no form data
+                </CardTitle>
+              </CardHeader>
+              <CardBody>
+                <CardText>
+                  <p>No form data has been downloaded yet! </p>
+                  <p>Please use the form updater to get current
+                    versions of the BCICS forms</p>
+                </CardText>
+              </CardBody>
+              <CardFooter>
+                <Button
+                    onClick={this.props.onClickOpenUpdatePanel}>
                   Show/Hide Updater window
-                </button>
-              </Panel.Footer>
-            </Panel>
+                </Button>
+              </CardFooter>
+            </Card>
           </div>
       );
 
