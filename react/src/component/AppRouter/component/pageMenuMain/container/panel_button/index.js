@@ -1,9 +1,9 @@
 // @flow
 import React, {Component} from 'react';
-import './public/style.css';
 import {
-  Card, CardImg, CardText, CardBody, CardLink,
-  CardTitle, CardSubtitle,
+  Card,
+  CardBody,
+  CardTitle,
 } from 'reactstrap';
 
 type props = {
@@ -25,6 +25,7 @@ class PanelButton extends Component <props> {
     } = this.props;
 
     return (
+
         <Card
             onClick={() => {
               if (!disabled && onClick) {
@@ -34,9 +35,9 @@ class PanelButton extends Component <props> {
           <CardBody>
             {display}
           </CardBody>
-          <CardSubtitle>
+          <CardTitle>
             {text}
-          </CardSubtitle>
+          </CardTitle>
         </Card>
     );
 
