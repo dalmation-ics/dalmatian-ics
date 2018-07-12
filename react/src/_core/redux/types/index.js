@@ -13,5 +13,6 @@ export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Act
 export type GetState = () => State;
 export type ThunkAction = (dispatch: Dispatch, getState: GetState) => any;
 export type PromiseAction = Promise<Action>;
+export type ActionBound = (any) => any;
 
 export default {actionStatus};
