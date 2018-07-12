@@ -11,20 +11,25 @@ import action_Archive_Suite_Blank
 import action_Archive_Suite_Load
   from 'src/_redux/action/action_Archive_Suite/action_Archive_Suite_Load';
 import {Jumbotron} from 'reactstrap';
+import SuiteListGrid from './container/suite_list_grid';
 
 type props = {
-  filePath: null | string
+  filePath: null | string,
+  archive: Array<any> | null
 }
 
 class PageSuite extends Component<props> {
 
   render() {
-    let {
+    const {
       filePath,
+      archive,
     } = this.props;
+
     return (
         <Jumbotron fluid>
           <p>{'Files in ' + (filePath || 'unnamed archive')}</p>
+          <SuiteListGrid formList={archive}/>
         </Jumbotron>
     );
   }
@@ -34,7 +39,8 @@ const mapStateToProps = (state) => {
   let isArchiveLoaded = state.archiveStore.archive !== undefined &&
       Array.isArray(state.archiveStore.archive) &&
       state.archiveStore.archive.length > 0;
-  return {isArchiveLoaded};
+  const archive = state.archiveStore.archive;
+  return {isArchiveLoaded, archive};
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
