@@ -25,12 +25,14 @@ class LegalPanel extends Component<propTypes> {
 
     const legalUpToDate = (acceptLegal != null) && (acceptLegal <
         LAST_LEGAL_UPDATE);
+    console.log(acceptLegal, LAST_LEGAL_UPDATE);
 
     return (
         <div>
-          <Modal isOpen={!legalUpToDate} size={'lg'} toggle={() => {
-          }}>
-            <div>woah</div>
+          <Modal isOpen={!legalUpToDate} size={'lg'}
+                 toggle={() => {
+                 }}>
+            <div>{acceptLegal || 'never'}</div>
             <ModalHeader>
               Legal Disclaimer
             </ModalHeader>
@@ -54,7 +56,7 @@ class LegalPanel extends Component<propTypes> {
 }
 
 const mapStateToProps = (state) => {
-  const acceptLegal = state.uiStore.acceptLegal;
+  const acceptLegal = state.uiStore.acceptedLegal;
   return {
     acceptLegal,
   };
