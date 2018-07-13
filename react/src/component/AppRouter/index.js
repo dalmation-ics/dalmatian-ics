@@ -4,7 +4,9 @@ import {connect} from 'react-redux';
 import {Redirect, Router, Route, Link} from 'react-router-dom';
 import {createBrowserHistory} from 'history';
 import type {RouterHistory} from 'react-router-dom';
-import type {Dispatch, State} from 'src/_core/redux/types';
+
+import LegalPanel from '../legal_panel';
+import type {Dispatch} from 'src/_core/redux/types';
 import thunkBindActionCreators from 'src/_core/redux/thunkBindActionCreators';
 import action_NavigationPathChange
   from 'src/_redux/action/action_Nav/action_Nav_PathChange';
@@ -55,6 +57,7 @@ class AppRouter extends Component<Props> {
         <Router history={history}>
           <div>
             {redirectTarget && <Redirect to={redirectTarget}/>}
+            <LegalPanel/>
             <ul>
               <li>
                 <Link to="/">Menu</Link>
