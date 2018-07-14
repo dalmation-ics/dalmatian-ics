@@ -28,20 +28,39 @@ function convertFromXML(xml) {
                     Object.keys(xmlVariables_1).forEach(function (v) {
                         var value = xmlVariables_1[v][0];
                         var el = window_1.document.getElementById(v);
-                        console.log(v);
-                        // const type = el.prop('nodeName');
-                        // switch (type) {
-                        //     case 'INPUT':
-                        //         el.attr('value', value);
-                        //         break;
-                        //     case 'TEXTAREA':
-                        //         el.html(value);
-                        //         break;
-                        //     case 'SELECT':
-                        //         el.find(`option[value="${value}"]`).attr('selected', 'selected');
-                        //         break;
-                        // }
+                        if (el) {
+                            console.log("v: " + v);
+                            console.log("value: " + value);
+                            console.log("el: " + el);
+                            console.log("type: " + el.tagName);
+                            var type = el.tagName;
+                            switch (type) {
+                                case 'INPUT':
+                                    el.defaultValue = value;
+                                    break;
+                                case 'TEXTAREA':
+                                    el.innerHTML = value;
+                                    break;
+                                case 'SELECT':
+                                    var option = window_1.document.querySelector("#" + v + " option[value=\"" + value + "\"]");
+                                    if (option) {
+                                        option.setAttribute('selected', 'selected');
+                                    }
+                                    else {
+                                        var newOption = window_1.document.createElement('option');
+                                        newOption.text = value;
+                                        newOption.value = value;
+                                        newOption.setAttribute('selected', 'selected');
+                                        el.add(newOption);
+                                    }
+                                    break;
+                            }
+                        }
                     });
+                    // const out = window.document.documentElement.outerHTML;
+                    // fs.writeFile('/home/spectre/Downloads/test.html', out).then(() => {
+                    //     resolve(out);
+                    // });
                 }
                 else {
                     reject("Could not find HTML equivalent to " + title);

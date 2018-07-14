@@ -4,6 +4,7 @@
 import {parseString} from 'xml2js';
 import {JSDOM} from 'jsdom';
 import * as StorageManager from './StorageManager';
+import * as fs from 'fs-extra';
 
 /**
  * Convert ICS XML to HTML and generate FormDetails
@@ -39,22 +40,42 @@ export function convertFromXML(xml): Promise<String> {
                         const value = xmlVariables[v][0];
 
                         const el = window.document.getElementById(v);
-                        console.log(v);
 
-                        // const type = el.prop('nodeName');
-                        // switch (type) {
-                        //     case 'INPUT':
-                        //         el.attr('value', value);
-                        //         break;
-                        //     case 'TEXTAREA':
-                        //         el.html(value);
-                        //         break;
-                        //     case 'SELECT':
-                        //         el.find(`option[value="${value}"]`).attr('selected', 'selected');
-                        //         break;
-                        // }
+                        if (el) {
+                            console.log(`v: ${v}`);
+                            console.log(`value: ${value}`);
+                            console.log(`el: ${el}`);
+                            console.log(`type: ${el.tagName}`);
+                            const type = el.tagName;
+                            switch (type) {
+                                case 'INPUT':
+                                    el.defaultValue = value;
+                                    break;
+                                case 'TEXTAREA':
+                                    el.innerHTML = value;
+                                    break;
+                                case 'SELECT':
+                                    const option = window.document.querySelector(`#${v} option[value="${value}"]`);
+                                    if(option) {
+                                        option.setAttribute('selected','selected');
+                                    } else {
+                                        const newOption = window.document.createElement('option');
+                                        newOption.text = value;
+                                        newOption.value = value;
+                                        newOption.setAttribute('selected','selected')
+                                        el.add(newOption);
+                                    }
+                                    break;
+                            }
+
+                        }
 
                     });
+
+                    // const out = window.document.documentElement.outerHTML;
+                    // fs.writeFile('/home/spectre/Downloads/test.html', out).then(() => {
+                    //     resolve(out);
+                    // });
 
                 } else {
                     reject(`Could not find HTML equivalent to ${title}`);
