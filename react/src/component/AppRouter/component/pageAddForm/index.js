@@ -4,7 +4,7 @@ import thunkBindActionCreators from 'src/_core/redux/thunkBindActionCreators';
 import {connect} from 'react-redux';
 import FormList from './container/form_list/index';
 import FormDetail from './container/form_detail/index';
-//import UpdateButton from '../update_panel';
+import UpdatePanel from '../update_panel';
 import action_Nav_SelectForm
   from 'src/_redux/action/action_Nav/action_Nav_SelectForm';
 import action_Nav_RedirectUser
@@ -89,11 +89,7 @@ class PageAddForm extends Component<props> {
           <div className="hidden-xs col-sm-4">
             <FormDetail form={selectedForm}/>
           </div>
-          {/*<UpdateButton style={{*/}
-          {/*position: 'fixed',*/}
-          {/*bottom: '0px',*/}
-          {/*right: '2%',*/}
-          {/*}}/>*/}
+          <UpdatePanel/>
         </div>
     );
 

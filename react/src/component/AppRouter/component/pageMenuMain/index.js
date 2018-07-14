@@ -18,6 +18,7 @@ import action_Archive_Suite_Load
   from 'src/_redux/action/action_Archive_Suite/action_Archive_Suite_Load';
 import thunkBindActionCreators
   from 'src/_core/redux/thunkBindActionCreators';
+import UpdatePanel from '../update_panel';
 
 type props = {
   isArchiveLoaded: boolean,
@@ -75,6 +76,7 @@ class PageMenuMain extends Component<props> {
                            }}
               />
             </Col>
+            <UpdatePanel/>
           </Row>
         </Jumbotron>
     );
