@@ -1,12 +1,13 @@
-import React, {Component} from 'react';
+// @flow
+import * as React from 'react';
 import thunk from 'redux-thunk';
 import {Provider} from 'react-redux';
 import {applyMiddleware, createStore} from 'redux';
 import {createLogger} from 'redux-logger';
-import App from './App';
 import allReducers from 'src/_redux/reducer';
 
 //redux middleware
+
 const middleware = applyMiddleware(
     thunk,
     createLogger({
@@ -19,12 +20,15 @@ const middleware = applyMiddleware(
 
 const store = createStore(allReducers, {}, middleware);
 
-class AppReduxProvider extends Component {
+type Props = {
+  children?: React.Node,
+};
 
+class AppReduxProvider extends React.Component<Props> {
   render() {
     return (
         <Provider store={store}>
-          <App/>
+          {this.props.children}
         </Provider>
     );
   }

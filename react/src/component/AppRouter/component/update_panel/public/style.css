@@ -1,0 +1,24 @@
+.updatePanel.panel {
+    margin-bottom: 0;
+    width: 200px;
+}
+
+.panel-warning {
+    border-color: #f0ad4e;
+}
+
+.panel-warning>.panel-heading {
+    color: #fff;
+    background-color: #f0ad4e;
+    border-color: #f0ad4e;
+}
+
+.panel-danger {
+    border-color: #d9534f;
+}
+
+.panel-danger >.panel-heading {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d9534f;
+}
