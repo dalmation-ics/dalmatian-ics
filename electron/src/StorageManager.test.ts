@@ -2,7 +2,7 @@ import * as sinon from 'sinon'; // http://sinonjs.org/releases/v2.0.0/
 import * as aes256 from 'aes256'; // https://www.npmjs.com/package/aes256
 import * as fs from 'fs-extra';
 import * as _path from 'path';
-import SUT from './StorageManager';
+import * as SUT from './StorageManager';
 
 let sandbox;
 const path = '../../__TestArea__';

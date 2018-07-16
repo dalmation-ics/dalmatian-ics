@@ -15,7 +15,7 @@ import moment from 'moment';
 import type {Action, State} from 'src/_core/redux/types';
 import actionStatus, {ActionStatus} from 'src/_core/redux/types/actionStatus';
 
-type STATE = State & {
+export type StateFormTemplate = State & {
   checkForUpdatesStatus: ActionStatus | null,
   checkForUpdatesError: string | null,
   updatesAvailable: boolean | null,
@@ -29,7 +29,7 @@ type STATE = State & {
   formIndex: number | null,
 }
 
-const DEFAULT_STATE: STATE = {
+const DEFAULT_STATE: StateFormTemplate = {
 
   /**
    * UpdateCheck

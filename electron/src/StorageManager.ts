@@ -22,7 +22,7 @@ let operational_directory: string = null; // The directory StorageManager was in
  *
  * @returns {Promise<void>}
  */
-function initialize(path: string): Promise<void> {
+export function initialize(path: string): Promise<void> {
 
     return new Promise<void>((resolve, reject) => {
 
@@ -93,7 +93,7 @@ function initialize(path: string): Promise<void> {
  * @param {String} fileName
  * @returns {Promise<string>}
  */
-function read(directory: string, fileName: string): Promise<string> {
+export function read(directory: string, fileName: string): Promise<string> {
 
     return new Promise<string>((resolve, reject) => {
 
@@ -165,7 +165,7 @@ function read(directory: string, fileName: string): Promise<string> {
  * @param {String} content
  * @returns {Promise<void>}
  */
-function write(directory: string, fileName: string, content: string): Promise<void> {
+export function write(directory: string, fileName: string, content: string): Promise<void> {
 
     return new Promise<void>((resolve, reject) => {
 
@@ -197,6 +197,11 @@ function write(directory: string, fileName: string, content: string): Promise<vo
          */
         const p_create_directory = () => fs.mkdir(directory_path).then(() => {
             return p_write_file();
+        }).catch(e => {
+            if (e.code === 'EEXIST') {
+                return p_write_file();
+            } else
+                throw e;
         });
 
         /*
@@ -262,14 +267,8 @@ function checkDirectoryIsValid(path: string): Promise<boolean> {
 
 }
 
-function setOperationalDirectory(path: string) {
+export function setOperationalDirectory(path: string) {
     operational_directory = path;
 }
 
-export default {
-    read,
-    write,
-    initialize,
-    setOperationalDirectory,
-};
 

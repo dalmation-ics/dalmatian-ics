@@ -1,5 +1,6 @@
 // @flow
 import _ from 'lodash';
+import * as React from 'react';
 import * as action_UI_ToggleSettingsMenu
   from '../../action/action_UI/action_UI_ToggleSettingsMenu';
 import * as action_UI_ToggleUpdatePanel
@@ -11,14 +12,19 @@ import * as action_UI_SelectTheme
 
 import type {Action, State} from 'src/_core/redux/types/index';
 
-type STATE = State & {
+export type commandBarContextItem = { display: null | string | React.Node }
+
+export type StateUI = State & {
   settingsMenuOpen: boolean | null,
   updatePanelOpen: boolean | null,
   acceptedLegal: Date | null,
-  themeName: action_UI_SelectTheme.ThemeName | null
+  themeName: action_UI_SelectTheme.ThemeName | null,
+  commandBarContextItem: {
+    [string]: commandBarContextItem
+  }
 }
 
-const DEFAULT_STATE: STATE = {
+const DEFAULT_STATE: StateUI = {
 
   /**
    * SettingsMenu
@@ -51,9 +57,10 @@ const DEFAULT_STATE: STATE = {
    * action_UI_SelectTheme
    */
   themeName: 'normal',
+  commandBarContextItem: {},
 };
 
-export default (previousState: STATE = DEFAULT_STATE, action: Action) => {
+export default (previousState: StateUI = DEFAULT_STATE, action: Action) => {
 
   let newState = _.cloneDeep(previousState);
 

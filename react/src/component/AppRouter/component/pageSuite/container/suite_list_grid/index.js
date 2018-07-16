@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import FontAwesome from 'react-fontawesome';
-import {Card, CardHeader, CardFooter, CardTitle, CardBody} from 'reactstrap';
+import {Card, CardFooter, CardTitle, CardBody} from 'reactstrap';
 
 type propsSuiteListGridElement = {
   formData: object,

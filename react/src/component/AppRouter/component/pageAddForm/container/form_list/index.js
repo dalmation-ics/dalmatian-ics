@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 import {
-  Alert,
   Card,
   CardFooter,
   CardBody,
   CardHeader,
   CardTitle,
-  CardSubtitle,
   CardText,
   Button,
 } from 'reactstrap';

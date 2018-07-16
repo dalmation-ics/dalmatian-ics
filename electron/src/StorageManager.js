@@ -69,6 +69,7 @@ function initialize(path) {
         p_check_path_valid()["catch"](function (e) { return reject(e); });
     });
 }
+exports.initialize = initialize;
 /**
  *
  * The read function will return the content of a stored file of fileName under directory
@@ -126,6 +127,7 @@ function read(directory, fileName) {
         p_check_exist_directory_path()["catch"](function (e) { return reject(e); });
     });
 }
+exports.read = read;
 /**
  *
  * The write function will write content to a stored file of fileName under directory
@@ -165,6 +167,12 @@ function write(directory, fileName, content) {
          */
         var p_create_directory = function () { return fs.mkdir(directory_path).then(function () {
             return p_write_file();
+        })["catch"](function (e) {
+            if (e.code === 'EEXIST') {
+                return p_write_file();
+            }
+            else
+                throw e;
         }); };
         /*
         Encrypt contents then write to file
@@ -184,6 +192,7 @@ function write(directory, fileName, content) {
         p_check_exist_directory_path()["catch"](function (e) { return reject(e); });
     });
 }
+exports.write = write;
 /**
  * Runs fs.exists() and fs.stat() on a path to confirm that the path both exists and is a directory
  * @returns {Promise<boolean>}
@@ -217,9 +226,4 @@ function checkDirectoryIsValid(path) {
 function setOperationalDirectory(path) {
     operational_directory = path;
 }
-exports["default"] = {
-    read: read,
-    write: write,
-    initialize: initialize,
-    setOperationalDirectory: setOperationalDirectory
-};
+exports.setOperationalDirectory = setOperationalDirectory;
