@@ -35,7 +35,7 @@ class PageEditor extends Component<propTypes> {
     action_Nav_RedirectUser('/suite');
     try {
       action_Electron_SetTitle(
-          'Editing ' + form.id + ' ~ \"' + form.name + '\"');
+          'Editing ' + form.id + ' ~ "' + form.name + '"');
     } catch (e) {
 
     }
