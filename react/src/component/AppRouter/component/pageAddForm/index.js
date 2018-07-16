@@ -18,7 +18,7 @@ import * as s from 'src/_core/res/strings';
 import type {ActionBound} from 'src/_core/redux/types';
 import type {Dispatch} from 'src/_core/redux/types';
 import CommandBar from '../commandBar';
-import CommandBarButton from '../commandBar/container/commandBarItemNav';
+import CommandBarButton from '../commandBar/component/commandBarItemNav';
 
 type props = {
   formTemplateStore: Object,

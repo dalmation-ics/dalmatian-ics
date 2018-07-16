@@ -1,11 +1,11 @@
 import React from 'react';
 import action_Nav_RedirectUser
-  from 'src/_redux/action/action_Nav/action_Nav_RedirectUser';
+  from 'src/_redux/action/action_Nav/action_Nav_RedirectUser/index';
 import thunkBindActionCreators
   from 'src/_core/redux/thunkBindActionCreators';
 import {connect} from 'react-redux';
-import type {ActionBound, Dispatch} from 'src/_core/redux/types';
-import CommandBarItem from '../commandBarItem';
+import type {ActionBound, Dispatch} from 'src/_core/redux/types/index';
+import CommandBarItem from '../commandBarItem/index';
 import {
   NavItem,
 } from 'reactstrap';

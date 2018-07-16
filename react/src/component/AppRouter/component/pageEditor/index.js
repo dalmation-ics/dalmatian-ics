@@ -12,7 +12,7 @@ import type {ActionBound} from 'src/_core/redux/types';
 import thunkBindActionCreators
   from 'src/_core/redux/thunkBindActionCreators';
 import CommandBar from '../commandBar';
-import CommandBarItemNav from '../commandBar/container/commandBarItemNav';
+import CommandBarItemNav from '../commandBar/component/commandBarItemNav';
 
 type propTypes = {
   action_Nav_RedirectUser: ActionBound,

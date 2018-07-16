@@ -13,7 +13,7 @@ import action_Archive_Suite_Blank
 import action_Archive_Suite_Load
   from 'src/_redux/action/action_Archive_Suite/action_Archive_Suite_Load';
 import CommandBar from '../commandBar';
-import CommandBarItemNav from '../commandBar/container/commandBarItemNav';
+import CommandBarItemNav from '../commandBar/component/commandBarItemNav';
 import SuiteListGrid from './container/suite_list_grid';
 
 type props = {

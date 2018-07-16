@@ -10,7 +10,7 @@ import {
   NavbarToggler,
   Nav,
 } from 'reactstrap';
-import CommandBarItem from './container/commandBarItem';
+import CommandBarItem from './component/commandBarItem';
 
 type props = {
   navStore: StateUI,
@@ -43,7 +43,6 @@ class CommandBar extends Component<props, state> {
         </Collapse>
       </Navbar>
     </div>;
-    ;
   }
 }
 
@@ -58,4 +57,3 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CommandBar);
-;

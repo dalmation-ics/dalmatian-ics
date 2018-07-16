@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {Button} from 'reactstrap';
 import action_Nav_RedirectUser
-  from 'src/_redux/action/action_Nav/action_Nav_RedirectUser';
+  from 'src/_redux/action/action_Nav/action_Nav_RedirectUser/index';
 import thunkBindActionCreators
   from 'src/_core/redux/thunkBindActionCreators';
 import {connect} from 'react-redux';
-import type {Dispatch} from 'src/_core/redux/types';
+import type {Dispatch} from 'src/_core/redux/types/index';
 import {
   NavItem,
 } from 'reactstrap';
