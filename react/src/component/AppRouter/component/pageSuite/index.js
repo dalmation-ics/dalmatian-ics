@@ -1,16 +1,19 @@
 // @flow
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import type {Dispatch} from 'src/_core/redux/types';
+import {Jumbotron} from 'reactstrap';
+
 import action_Nav_RedirectUser
   from 'src/_redux/action/action_Nav/action_Nav_RedirectUser';
 import thunkBindActionCreators
   from 'src/_core/redux/thunkBindActionCreators';
-import {connect} from 'react-redux';
-import type {Dispatch} from 'src/_core/redux/types';
 import action_Archive_Suite_Blank
   from 'src/_redux/action/action_Archive_Suite/action_Archive_Suite_Blank';
 import action_Archive_Suite_Load
   from 'src/_redux/action/action_Archive_Suite/action_Archive_Suite_Load';
-import {Jumbotron} from 'reactstrap';
+import CommandBar from '../commandBar';
+import CommandBarItemNav from '../commandBar/container/commandBarItemNav';
 import SuiteListGrid from './container/suite_list_grid';
 
 type props = {
@@ -27,10 +30,14 @@ class PageSuite extends Component<props> {
     } = this.props;
 
     return (
-        <Jumbotron fluid>
-          <p>{'Files in ' + (filePath || 'unnamed archive')}</p>
-          <SuiteListGrid formList={archive}/>
-        </Jumbotron>
+        <div>
+          <CommandBar><CommandBarItemNav
+              path={'/suite'}>Back</CommandBarItemNav></CommandBar>
+          <Jumbotron fluid>
+            <p>{'Files in ' + (filePath || 'unnamed archive')}</p>
+            <SuiteListGrid formList={archive}/>
+          </Jumbotron>
+        </div>
     );
   }
 }

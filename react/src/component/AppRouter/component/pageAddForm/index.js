@@ -13,14 +13,12 @@ import action_Archive_Item_New
   from 'src/_redux/action/action_Archive_Item/action_Archive_Item_New';
 import action_UI_ToggleUpdatePanel
   from 'src/_redux/action/action_UI/action_UI_ToggleUpdatePanel';
-//import NavMenu, {
-//  NavMenuItem, NavNavLeft,
-//} from 'src/_core/global/Nav_menu/index';
-//import {FullScreenComponent} from 'src/_core/Components';
 import {toast} from 'react-toastify';
 import * as s from 'src/_core/res/strings';
 import type {ActionBound} from 'src/_core/redux/types';
 import type {Dispatch} from 'src/_core/redux/types';
+import CommandBar from '../commandBar';
+import CommandBarButton from '../commandBar/container/commandBarItemNav';
 
 type props = {
   formTemplateStore: Object,
@@ -74,6 +72,7 @@ class PageAddForm extends Component<props> {
 
     return (
         <div className="container-fluid">
+          <CommandBar><CommandBarButton path={'/suite'}>Back</CommandBarButton></CommandBar>
           <div className="col-xs-12 col-sm-8">
             <FormList forms={formIndex}
                       selected={selectedFormId}

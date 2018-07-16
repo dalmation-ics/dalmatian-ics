@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {toast} from 'react-toastify';
+import type {Dispatch} from 'src/_core/redux/types';
 
 import action_Nav_RedirectUser
   from 'src/_redux/action/action_Nav/action_Nav_RedirectUser';
@@ -10,7 +11,8 @@ import action_Electron_SetTitle
 import type {ActionBound} from 'src/_core/redux/types';
 import thunkBindActionCreators
   from 'src/_core/redux/thunkBindActionCreators';
-import type {Dispatch} from 'src/_core/redux/types';
+import CommandBar from '../commandBar';
+import CommandBarItemNav from '../commandBar/container/commandBarItemNav';
 
 type propTypes = {
   action_Nav_RedirectUser: ActionBound,
@@ -39,6 +41,8 @@ class PageEditor extends Component<propTypes> {
     }
     return (
         <div className="container-fluid">
+          <CommandBar><CommandBarItemNav
+              path={'/suite'}>Back</CommandBarItemNav></CommandBar>
           <div
               id="FormContent"
               dangerouslySetInnerHTML={{__html: form.content}}>
