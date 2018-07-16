@@ -27,7 +27,7 @@ import * as action_Archive_Item_Duplicate
 import uuid from 'uuid';
 import type {State} from 'src/_core/redux/types/';
 
-type STATE = State & {
+export type StateArchive = State & {
   archiveAddNewStatus: ActionStatus | null,
   archiveAddNewError?: any | null,
   archiveImportStatus: ActionStatus | null,
@@ -49,7 +49,7 @@ type STATE = State & {
 }
 
 // What should be in this store when the application is first started
-const DEFAULT_STATE: STATE = {
+const DEFAULT_STATE: StateArchive = {
 
   /**
    *  Add new item to suite
