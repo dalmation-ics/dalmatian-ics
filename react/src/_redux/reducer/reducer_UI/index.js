@@ -71,7 +71,11 @@ export default (previousState: StateUI = DEFAULT_STATE, action: Action) => {
        * action_UI_ToggleSettingsMenu
        */
     case action_UI_ToggleSettingsMenu.TYPE: {
-      newState.settingsMenuOpen = payload;
+      if (payload === null)
+        newState.settingsMenuOpen = !newState.settingsMenuOpen;
+
+      else
+        newState.settingsMenuOpen = payload;
       break;
     }
 
