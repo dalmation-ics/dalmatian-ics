@@ -6,18 +6,29 @@ import {Button, FormGroup} from 'reactstrap';
 import action_SelectTheme
   from 'src/_redux/action/action_UI/action_UI_SelectTheme';
 import type {ActionBound, Dispatch} from 'src/_core/redux/types';
+import ThemeList from '../../res/themeList';
+import type {Theme} from '../../types';
 
 class SettingTheme extends Component<{
   action_SelectTheme: ActionBound
 }> {
 
-  makeThemeButton = (themeName) => {
-    return <Button className={'themeButton_' + themeName}
+  makeThemeButton = (theme: Theme, index) => {
+    return <Button className={'themeButton_' + theme.name}
+                   key={'themeButton_' + index}
                    onClick={() => {
-                     this.props.action_SelectTheme(themeName);
+                     this.props.action_SelectTheme(theme);
                    }}>
-      {themeName}
+      {theme.name}
     </Button>;
+  };
+
+  makeThemeButtonList = () => {
+    return ThemeList.map(
+        (w, i) => {
+          return this.makeThemeButton(w, i);
+        },
+    );
   };
 
   render() {
@@ -29,8 +40,7 @@ class SettingTheme extends Component<{
             Select one of the below themes (updates automatically)
           </p>
           <FormGroup>
-            {this.makeThemeButton('standard')}
-            {this.makeThemeButton('dark')}
+            {this.makeThemeButtonList()}
           </FormGroup>
         </div>
     );
@@ -44,4 +54,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   }, dispatch);
 };
 
-export default connect(mapDispatchToProps)(SettingTheme);
+export default connect(null, mapDispatchToProps)(SettingTheme);
