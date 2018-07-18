@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 import {Redirect, Router, Route, Link} from 'react-router-dom';
 import {createBrowserHistory} from 'history';
 import type {RouterHistory} from 'react-router-dom';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import LegalPanel from '../legalPanel';
 import type {Dispatch} from 'src/_core/redux/types';
@@ -81,6 +83,7 @@ class AppRouter extends Component<Props> {
               </ul>
 
               <hr/>
+              <ToastContainer/>
               <SettingsModal/>
 
               <Route exact path="/" component={PageMenuMain}/>

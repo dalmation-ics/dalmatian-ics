@@ -34,8 +34,8 @@ class CommandBar extends Component<props, state> {
 
   render() {
     return <div>
-      <Navbar color="light" light fluid={'true'} toggleable>
-        <NavbarToggler right onClick={this.toggle}/>
+      <Navbar color="light" light fluid={'true'} expand>
+        <NavbarToggler onClick={this.toggle} right={'true'}/>
         <Collapse isOpen={this.state.isOpen} navbar>
           <Nav className="ml-auto" navbar>
             {this.props.children}
