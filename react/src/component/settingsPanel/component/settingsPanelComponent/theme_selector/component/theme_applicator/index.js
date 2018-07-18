@@ -1,16 +1,23 @@
-import React, {Component} from 'react';
+// @flow
+import * as React from 'react';
+import {Component} from 'react';
 import {connect} from 'react-redux';
-import '../../public/css/*';
+import type {Theme} from '../../types';
+import '../../public/css/dark.css';
+import '../../public/css/normal.css';
 
-class ThemeApplicator extends Component {
+class ThemeApplicator extends Component<{
+  theme: Theme,
+  children: React.Node
+}> {
 
   render() {
-    const css = `html {
-            background:black;
-        }`;
+    let cssClass = 'themeApplicator_default';
+    if (this.props.theme !== undefined && this.props.theme !== null)
+      cssClass = this.props.theme.name;
+
     return (
-        <div className={'themeApplicator_' + (this.props.themeName || '')}>
-          <style>{css}</style>
+        <div className={cssClass}>
           {this.props.children}
         </div>
     );
@@ -19,9 +26,9 @@ class ThemeApplicator extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const {themeName} = state.uiStore;
+  const {theme} = state.uiStore;
   return {
-    themeName,
+    theme,
   };
 };
 
