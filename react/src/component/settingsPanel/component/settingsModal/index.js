@@ -12,7 +12,7 @@ import {
 } from 'reactstrap';
 import action_UI_ToggleSettingsMenu
   from 'src/_redux/action/action_UI/action_UI_ToggleSettingsMenu/index';
-import SettingsPanelComponentList
+import SettingsPanelComponentList, {type SettingsPanelSection}
   from '../settingsPanelComponent';
 import type {ActionBound, Dispatch} from 'src/_core/redux/types';
 
@@ -41,17 +41,17 @@ class MenuSettings extends Component<{
     }
   }
 
-  wrapSettingsPanelCell = (Content, index) => {
+  wrapSettingsPanelCell = (section: SettingsPanelSection, index) => {
+    const Content = section.BodyComponent;
     return <TabPane name={index}
                     tabId={index}
                     key={'settingsPanelComponentCell_' + index}
     >
-      <p>test</p>
       <Content/>
     </TabPane>;
   };
 
-  makeTabHeader = (item, index) => {
+  makeTabHeader = (section: SettingsPanelSection, index) => {
     return <NavItem key={'settingsPanelTabNavItem_' + index}>
       <NavLink
           key={'settingsPanelTabNavLink_' + index}
@@ -60,7 +60,7 @@ class MenuSettings extends Component<{
             this.toggle(index);
           }}
       >
-        {'Tab ' + index}
+        {section.title}
       </NavLink>
     </NavItem>;
   };
@@ -89,7 +89,8 @@ class MenuSettings extends Component<{
     const list = MenuSettings.settingsItemList();
 
     return (
-        <Modal size={'lg'} style={{maxWidth: '90%'}} isOpen={settingsMenuOpen}
+        <Modal size={'lg'} style={{maxWidth: '90%', height: '90vh'}}
+               isOpen={settingsMenuOpen}
                toggle={() => {
                  action_UI_ToggleSettingsMenu();
                }}>
