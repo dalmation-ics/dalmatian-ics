@@ -14,7 +14,7 @@ class SettingTheme extends Component<{
 }> {
 
   makeThemeButton = (theme: Theme, index) => {
-    return <Button className={'themeButton_' + theme.name}
+    return <Button color={'secondary'} className={'themeButton_' + theme.name}
                    key={'themeButton_' + index}
                    onClick={() => {
                      this.props.action_SelectTheme(theme);

@@ -3,6 +3,10 @@
     color: lightgrey;
 }
 
+.themeApplicator_dark .navbar-light {
+    color: darkcyan;
+}
+
 .themeApplicator_dark .ics_Header,
 .themeApplicator_dark .ics-table th {
     background-color: #2c3e50; /* a dark version of slate gray */
@@ -145,21 +149,25 @@
 }
 
 .themeApplicator_dark .bg-warning {
-    background-color: #ff8800;
+    background-color: #F39C12 !important;
+    color: #fff !important;
 }
 
 .themeApplicator_dark a.bg-warning:hover,
 .themeApplicator_dark a.bg-warning:focus {
     background-color: #cc6d00;
+    color: #fff !important;
 }
 
 .themeApplicator_dark .bg-danger {
     background-color: #cc0000;
+    color: #fff !important;
 }
 
 .themeApplicator_dark a.bg-danger:hover,
 .themeApplicator_dark a.bg-danger:focus {
     background-color: #990000;
+    color: #fff !important;
 }
 
 .themeApplicator_dark table {
@@ -182,7 +190,7 @@
     background-color: #151515;
 }
 
-.themeApplicator_dark .panel {
+.themeApplicator_dark .card {
     margin-bottom: 20px;
     background-color: #222222;
     border: 1px solid transparent;
@@ -191,37 +199,37 @@
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 
-.themeApplicator_dark .panel-body {
+.themeApplicator_dark .card-body {
     padding: 15px;
 }
 
-.themeApplicator_dark .panel-heading {
+.themeApplicator_dark .card-heading {
     padding: 10px 15px;
     border-bottom: 1px solid transparent;
     border-top-right-radius: 3px;
     border-top-left-radius: 3px;
 }
 
-.themeApplicator_dark .panel-heading > .dropdown .dropdown-toggle {
+.themeApplicator_dark .card-heading > .dropdown .dropdown-toggle {
     color: inherit;
 }
 
-.themeApplicator_dark .panel-title {
+.themeApplicator_dark .card-title {
     margin-top: 0;
     margin-bottom: 0;
     font-size: 16px;
     color: inherit;
 }
 
-.themeApplicator_dark .panel-title > a,
-.themeApplicator_dark .panel-title > small,
-.themeApplicator_dark .panel-title > .small,
-.themeApplicator_dark .panel-title > small > a,
-.themeApplicator_dark .panel-title > .small > a {
+.themeApplicator_dark .card-title > a,
+.themeApplicator_dark .card-title > small,
+.themeApplicator_dark .card-title > .small,
+.themeApplicator_dark .card-title > small > a,
+.themeApplicator_dark .card-title > .small > a {
     color: inherit;
 }
 
-.themeApplicator_dark .panel-footer {
+.themeApplicator_dark .card-footer {
     padding: 10px 15px;
     background-color: #3c3c3c;
     border-top: 1px solid #282828;

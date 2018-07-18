@@ -12,7 +12,7 @@ import {
 import DeveloperCardStack from './container/developerCardStack';
 import {connect} from 'react-redux';
 
-class SettingAbout extends Component<{ children: React.Node }> {
+class SettingAbout extends Component<{}> {
 
   render() {
     return (

@@ -47,7 +47,7 @@ class MenuSettings extends Component<{
                     tabId={index}
                     key={'settingsPanelComponentCell_' + index}
     >
-      <Content/>
+      {Content}
     </TabPane>;
   };
 
@@ -90,6 +90,7 @@ class MenuSettings extends Component<{
 
     return (
         <Modal size={'lg'} style={{maxWidth: '90%', height: '90vh'}}
+               className={'h-100'}
                isOpen={settingsMenuOpen}
                toggle={() => {
                  action_UI_ToggleSettingsMenu();
@@ -98,12 +99,19 @@ class MenuSettings extends Component<{
             Settings
           </ModalHeader>
           <ModalBody>
-            <Nav tabs>
-              {this.makeTabHeaderList(list)}
-            </Nav>
-            <TabContent activeTab={this.state.activeTab}>
-              {this.makeSettingsComponentList(list)}
-            </TabContent>
+            <div className={'row'}>
+              <div className={'col-12 col-md-3 col-lg-2'}>
+                <Nav tabs>
+                  {this.makeTabHeaderList(list)}
+                </Nav>
+              </div>
+              <div className={'col-12 col-md'}>
+                <TabContent
+                    activeTab={this.state.activeTab}>
+                  {this.makeSettingsComponentList(list)}
+                </TabContent>
+              </div>
+            </div>
           </ModalBody>
           <ModalFooter>
             <Button size={'lg'} onClick={() => {

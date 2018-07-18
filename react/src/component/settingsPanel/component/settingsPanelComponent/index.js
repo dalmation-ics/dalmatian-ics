@@ -10,14 +10,14 @@ import {SettingsTheme} from './theme_selector';
 
 export type SettingsPanelSection = {
   title: string,
-  BodyComponent: Component
+  BodyComponent: Component<any | null, any | null> | React.Node
 }
 
 ///List of settings items
 const list: Array<SettingsPanelSection> = [
-  {title: 'Legal', BodyComponent: SettingLegal},
-  {title: 'Look and feel', BodyComponent: SettingsTheme},
-  {title: 'About', BodyComponent: SettingAbout},
+  {title: 'Legal', BodyComponent: <SettingLegal/>},
+  {title: 'Look and feel', BodyComponent: <SettingsTheme/>},
+  {title: 'About', BodyComponent: <SettingAbout/>},
 ];
 
 export default list;
