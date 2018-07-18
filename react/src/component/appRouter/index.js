@@ -16,6 +16,8 @@ import PageMenuMain from './component/pageMenuMain';
 import PageSuite from './component/pageSuite';
 import PageEditor from './component/pageEditor';
 import PageAddForm from './component/pageAddForm';
+import {SettingsButton, SettingsModal}
+  from 'src/component/settingsPanel';
 
 /**
  * Create the history for use in router
@@ -71,9 +73,11 @@ class AppRouter extends Component<Props> {
               <li>
                 <Link to="/editor">Editor</Link>
               </li>
+              <SettingsButton/>
             </ul>
 
             <hr/>
+            <SettingsModal/>
 
             <Route exact path="/" component={PageMenuMain}/>
             <Route path="/suite" component={PageSuite}/>
