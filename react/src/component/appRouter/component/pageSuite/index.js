@@ -30,7 +30,7 @@ class PageSuite extends Component<props> {
     } = this.props;
 
     return (
-        <div>
+        <div className={'container-fluid'}>
           <CommandBar><CommandBarItemNav
               path={'/suite'}>Back</CommandBarItemNav></CommandBar>
           <Jumbotron fluid>
