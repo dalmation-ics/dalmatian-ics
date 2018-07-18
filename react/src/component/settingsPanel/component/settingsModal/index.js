@@ -41,7 +41,7 @@ class MenuSettings extends Component<{
                   flexFlow: 'column nowrap',
                   alignItems: 'stretch',
                 }}>
-      {MenuSettings.settingsItemList.map(
+      {MenuSettings.settingsItemList().forEach(
           (w, index) => MenuSettings.wrapSettingsPanelCell(w, index))}
     </div>;
 
