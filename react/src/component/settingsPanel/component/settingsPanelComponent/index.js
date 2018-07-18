@@ -8,7 +8,7 @@ import {SettingsTheme} from './theme_selector';
 
 ///List of settings items
 export default [
-  SettingAbout,
   SettingLegal,
   SettingsTheme,
+  SettingAbout,
 ];
