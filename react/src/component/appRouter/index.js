@@ -5,7 +5,7 @@ import {Redirect, Router, Route, Link} from 'react-router-dom';
 import {createBrowserHistory} from 'history';
 import type {RouterHistory} from 'react-router-dom';
 
-import LegalPanel from '../legal_panel';
+import LegalPanel from '../legalPanel';
 import type {Dispatch} from 'src/_core/redux/types';
 import thunkBindActionCreators from 'src/_core/redux/thunkBindActionCreators';
 import action_NavigationPathChange
