@@ -1,17 +1,15 @@
+// @flow
 import type {Dispatch, Action} from 'src/_core/redux/types';
-
-let nameList = Object.freeze(['normal', 'dark', 'contrast']);
-
-export type ThemeName = $Keys<typeof nameList>;
+import type {Theme} from 'src/component/settingsPanel/component/settingsPanelComponent/theme_selector/types';
 
 export const TYPE = 'ACTION_UI_SELECT_THEME';
 
-export default (themeName?: ThemeName = nameList[0]) => (dispatch: Dispatch) => {
+export default (theme: Theme) => (dispatch: Dispatch) => {
   return new Promise((resolve, reject) => {
     try {
       dispatch(({
         type: TYPE,
-        payload: themeName,
+        payload: theme,
       }: Action));
       resolve();
     } catch (exc) {

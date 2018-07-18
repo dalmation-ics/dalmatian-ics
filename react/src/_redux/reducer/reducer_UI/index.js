@@ -11,6 +11,7 @@ import * as action_UI_SelectTheme
   from '../../action/action_UI/action_UI_SelectTheme';
 
 import type {Action, State} from 'src/_core/redux/types/index';
+import type {Theme} from 'src/component/settingsPanel/component/settingsPanelComponent/theme_selector/types';
 
 export type commandBarContextItem = { display: null | string | React.Node }
 
@@ -18,7 +19,7 @@ export type StateUI = State & {
   settingsMenuOpen: boolean | null,
   updatePanelOpen: boolean | null,
   acceptedLegal: Date | null,
-  themeName: action_UI_SelectTheme.ThemeName | null,
+  theme: Theme | null,
   commandBarContextItem: {
     [string]: commandBarContextItem
   }
@@ -56,7 +57,7 @@ const DEFAULT_STATE: StateUI = {
    * Affected by:
    * action_UI_SelectTheme
    */
-  themeName: 'normal',
+  theme: {name: 'normal'},
   commandBarContextItem: {},
 };
 
@@ -99,7 +100,7 @@ export default (previousState: StateUI = DEFAULT_STATE, action: Action) => {
        * action_UI_SelectTheme
        */
     case action_UI_SelectTheme.TYPE: {
-      newState.themeName = payload;
+      newState.theme = payload;
       break;
     }
     default:
