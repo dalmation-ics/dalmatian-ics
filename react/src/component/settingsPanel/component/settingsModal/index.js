@@ -24,16 +24,22 @@ class MenuSettings extends Component<{
 
   static cellBsClass = '';
 
-  static wrapSettingsPanelCell = (content, index) => {
+  static wrapSettingsPanelCell = (Content, index) => {
     return <div className={MenuSettings.cellBsClass}
                 style={{flexGrow: 1, flexShrink: 1}}
                 key={'settingsPanelComponentCell_' + index}
     >
-      {content}
+      <Content/>
     </div>;
   };
 
   makeSettingsComponentList = () => {
+
+    const list = MenuSettings.settingsItemList();
+    const components = list.map((w, i) => {
+      console.log(w, i);
+      return MenuSettings.wrapSettingsPanelCell(w, i);
+    });
 
     return <div className="row"
                 style={{
@@ -41,8 +47,7 @@ class MenuSettings extends Component<{
                   flexFlow: 'column nowrap',
                   alignItems: 'stretch',
                 }}>
-      {MenuSettings.settingsItemList().forEach(
-          (w, index) => MenuSettings.wrapSettingsPanelCell(w, index))}
+      {components}
     </div>;
 
   };
@@ -60,7 +65,7 @@ class MenuSettings extends Component<{
         <Modal size={'wide'} isOpen={settingsMenuOpen} toggle={() => {
           action_UI_ToggleSettingsMenu();
         }}>
-          <ModalHeader closeButton>
+          <ModalHeader>
             Settings
           </ModalHeader>
           <ModalBody>
