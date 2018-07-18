@@ -37,7 +37,6 @@ class MenuSettings extends Component<{
 
     const list = MenuSettings.settingsItemList();
     const components = list.map((w, i) => {
-      console.log(w, i);
       return MenuSettings.wrapSettingsPanelCell(w, i);
     });
 
