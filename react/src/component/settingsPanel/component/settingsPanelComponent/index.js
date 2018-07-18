@@ -1,5 +1,5 @@
 // @flow
-import SettingAbout from './setting_About';
+import SettingAbout from './settingAbout';
 import SettingLegal from './settingLegal';
 import {SettingsTheme} from './theme_selector';
 
