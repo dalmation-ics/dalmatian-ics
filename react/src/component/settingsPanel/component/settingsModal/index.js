@@ -61,9 +61,10 @@ class MenuSettings extends Component<{
     } = this.props;
 
     return (
-        <Modal size={'lg'} isOpen={settingsMenuOpen} toggle={() => {
-          action_UI_ToggleSettingsMenu();
-        }}>
+        <Modal size={'lg'} style={{maxWidth: '90%'}} isOpen={settingsMenuOpen}
+               toggle={() => {
+                 action_UI_ToggleSettingsMenu();
+               }}>
           <ModalHeader>
             Settings
           </ModalHeader>
