@@ -1,7 +1,7 @@
 // @flow
 import SettingAbout from './setting_About';
 import SettingLegal from './settingLegal';
-import ThemeSelector from './theme_selector/component/settingTheme/index';
+import {SettingsTheme} from './theme_selector';
 
 // select what settings items will actually be displayed by commenting them
 // out in the following export
@@ -10,5 +10,5 @@ import ThemeSelector from './theme_selector/component/settingTheme/index';
 export default [
   SettingAbout,
   SettingLegal,
-  ThemeSelector,
+  SettingsTheme,
 ];
