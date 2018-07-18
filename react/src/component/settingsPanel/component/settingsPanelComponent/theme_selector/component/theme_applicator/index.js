@@ -14,7 +14,7 @@ class ThemeApplicator extends Component<{
   render() {
     let cssClass = 'themeApplicator_default';
     if (this.props.theme !== undefined && this.props.theme !== null)
-      cssClass = this.props.theme.name;
+      cssClass = 'themeApplicator_' + this.props.theme.name;
 
     return (
         <div className={cssClass}>
