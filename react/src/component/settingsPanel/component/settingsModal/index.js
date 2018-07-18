@@ -3,6 +3,13 @@ import React, {Component} from 'react';
 import thunkBindActionCreators from 'src/_core/redux/thunkBindActionCreators';
 import {connect} from 'react-redux';
 import {Button, Modal, ModalHeader, ModalFooter, ModalBody} from 'reactstrap';
+import {
+  TabContent,
+  TabPane,
+  Nav,
+  NavItem,
+  NavLink,
+} from 'reactstrap';
 import action_UI_ToggleSettingsMenu
   from 'src/_redux/action/action_UI/action_UI_ToggleSettingsMenu/index';
 import SettingsPanelComponentList
@@ -11,44 +18,64 @@ import type {ActionBound, Dispatch} from 'src/_core/redux/types';
 
 class MenuSettings extends Component<{
   action_UI_ToggleSettingsMenu: ActionBound,
-  settingsMenuOpen: boolean
+  settingsMenuOpen: boolean,
+}, {
+  activeTab: number
 }> {
+  state = {
+    activeTab: 1,
+  };
   static settingsItemList = () => {
     if (SettingsPanelComponentList === null ||
         SettingsPanelComponentList === undefined) {
       return [];
     }
-    console.log(SettingsPanelComponentList);
     return SettingsPanelComponentList;
   };
 
-  static cellBsClass = '';
+  toggle(tab: number) {
+    if (this.state.activeTab !== tab) {
+      this.setState({
+        activeTab: tab,
+      });
+    }
+  }
 
-  static wrapSettingsPanelCell = (Content, index) => {
-    return <div className={MenuSettings.cellBsClass}
-                style={{flexGrow: 1, flexShrink: 1}}
-                key={'settingsPanelComponentCell_' + index}
+  wrapSettingsPanelCell = (Content, index) => {
+    return <TabPane name={index}
+                    tabId={index}
+                    key={'settingsPanelComponentCell_' + index}
     >
+      <p>test</p>
       <Content/>
-    </div>;
+    </TabPane>;
   };
 
-  makeSettingsComponentList = () => {
+  makeTabHeader = (item, index) => {
+    return <NavItem key={'settingsPanelTabNavItem_' + index}>
+      <NavLink
+          key={'settingsPanelTabNavLink_' + index}
+          active={this.state.activeTab === index}
+          onClick={() => {
+            this.toggle(index);
+          }}
+      >
+        {'Tab ' + index}
+      </NavLink>
+    </NavItem>;
+  };
 
-    const list = MenuSettings.settingsItemList();
-    const components = list.map((w, i) => {
-      return MenuSettings.wrapSettingsPanelCell(w, i);
+  makeSettingsComponentList = (list) => {
+    return list.map((w, i) => {
+      return this.wrapSettingsPanelCell(w, i);
     });
 
-    return <div className="row"
-                style={{
-                  display: 'flex',
-                  flexFlow: 'column nowrap',
-                  alignItems: 'stretch',
-                }}>
-      {components}
-    </div>;
+  };
 
+  makeTabHeaderList = (list) => {
+    return list.map((w, i) => {
+      return this.makeTabHeader(w, i);
+    });
   };
 
   render() {
@@ -59,6 +86,7 @@ class MenuSettings extends Component<{
     const {
       action_UI_ToggleSettingsMenu,
     } = this.props;
+    const list = MenuSettings.settingsItemList();
 
     return (
         <Modal size={'lg'} style={{maxWidth: '90%'}} isOpen={settingsMenuOpen}
@@ -69,7 +97,12 @@ class MenuSettings extends Component<{
             Settings
           </ModalHeader>
           <ModalBody>
-            {this.makeSettingsComponentList()}
+            <Nav tabs>
+              {this.makeTabHeaderList(list)}
+            </Nav>
+            <TabContent activeTab={this.state.activeTab}>
+              {this.makeSettingsComponentList(list)}
+            </TabContent>
           </ModalBody>
           <ModalFooter>
             <Button size={'lg'} onClick={() => {
