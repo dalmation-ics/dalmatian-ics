@@ -19,6 +19,9 @@ import PageAddForm from './component/pageAddForm';
 import {SettingsButton, SettingsModal}
   from 'src/component/settingsPanel';
 
+import {ThemeApplicator}
+  from 'src/component/settingsPanel/component/settingsPanelComponent/theme_selector';
+
 /**
  * Create the history for use in router
  * It is being initialized outside of the component so that a new history is not being created each render
@@ -56,42 +59,44 @@ class AppRouter extends Component<Props> {
       redirectTarget,
     } = this.props;
     return (
-        <Router history={history}>
-          <div>
-            {redirectTarget && <Redirect to={redirectTarget}/>}
-            <LegalPanel/>
-            <ul>
-              <li>
-                <Link to="/">Menu</Link>
-              </li>
-              <li>
-                <Link to="/suite">Suite</Link>
-              </li>
-              <li>
-                <Link to="/addForm">Add Form</Link>
-              </li>
-              <li>
-                <Link to="/editor">Editor</Link>
-              </li>
-              <SettingsButton/>
-            </ul>
+        <ThemeApplicator>
+          <Router history={history}>
+            <div>
+              {redirectTarget && <Redirect to={redirectTarget}/>}
+              <LegalPanel/>
+              <ul>
+                <li>
+                  <Link to="/">Menu</Link>
+                </li>
+                <li>
+                  <Link to="/suite">Suite</Link>
+                </li>
+                <li>
+                  <Link to="/addForm">Add Form</Link>
+                </li>
+                <li>
+                  <Link to="/editor">Editor</Link>
+                </li>
+                <SettingsButton/>
+              </ul>
 
-            <hr/>
-            <SettingsModal/>
+              <hr/>
+              <SettingsModal/>
 
-            <Route exact path="/" component={PageMenuMain}/>
-            <Route path="/suite" component={PageSuite}/>
-            <Route path="/addForm" component={PageAddForm}/>
-            <Route path='/editor' render={() => {
+              <Route exact path="/" component={PageMenuMain}/>
+              <Route path="/suite" component={PageSuite}/>
+              <Route path="/addForm" component={PageAddForm}/>
+              <Route path='/editor' render={() => {
 
-              if (!suiteSelectedUUID)
-                return <Redirect to={'/'}/>;
-              else
-                return <PageEditor/>;
+                if (!suiteSelectedUUID)
+                  return <Redirect to={'/'}/>;
+                else
+                  return <PageEditor/>;
 
-            }}/>
-          </div>
-        </Router>
+              }}/>
+            </div>
+          </Router>
+        </ThemeApplicator>
     );
   }
 }
