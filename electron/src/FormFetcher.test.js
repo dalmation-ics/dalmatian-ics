@@ -52,13 +52,13 @@ var mock_getIt_instance = getIt([
     gi_promise({ onlyBody: true })
 ]);
 var SERVER_INDEX = {
-    bcics_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
-    bcics_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
-    bcics_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' }
+    dalmatian_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
+    dalmatian_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
+    dalmatian_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' }
 };
 var ICS205_Content = 'ICS205 Content';
 var ICS205_Details = new FormDetails_1["default"]({
-    fileName: 'bcics_ICS205',
+    fileName: 'dalmatian_ICS205',
     name: 'ICS205 A Land Before Time',
     id: 'ICS205',
     detail: 'ICS205 Details',
@@ -66,7 +66,7 @@ var ICS205_Details = new FormDetails_1["default"]({
 });
 var ICS206_Content = 'ICS206 Content';
 var ICS206_Details = new FormDetails_1["default"]({
-    fileName: 'bcics_ICS206',
+    fileName: 'dalmatian_ICS206',
     name: 'ICS206 Electric Boogaloo',
     id: 'ICS206',
     detail: 'ICS206 Details',
@@ -74,7 +74,7 @@ var ICS206_Details = new FormDetails_1["default"]({
 });
 var ICS205A_Content = 'ICS205A Content';
 var ICS205A_Details = new FormDetails_1["default"]({
-    fileName: 'bcics_ICS205A',
+    fileName: 'dalmatian_ICS205A',
     name: 'ICS205A This time its different',
     id: 'ICS205A',
     detail: 'ICS205A Details',
@@ -258,41 +258,41 @@ describe('FormFetcher should ', function () {
                         // Arrange
                         sandbox.stub(SUT, 'fetchIndex').resolves(SERVER_INDEX);
                         server.on({
-                            path: '/bcics_ICS205.html',
+                            path: '/dalmatian_ICS205.html',
                             reply: buildSuccessResponse(ICS205_Content)
                         });
                         server.on({
-                            path: '/bcics_ICS206.html',
+                            path: '/dalmatian_ICS206.html',
                             reply: buildSuccessResponse(ICS206_Content)
                         });
                         server.on({
-                            path: '/bcics_ICS205A.html',
+                            path: '/dalmatian_ICS205A.html',
                             reply: buildSuccessResponse(ICS205A_Content)
                         });
                         stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
                         stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
                         stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
                         stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
-                        return [4 /*yield*/, SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A'])];
+                        return [4 /*yield*/, SUT.fetchForms(['dalmatian_ICS205', 'dalmatian_ICS206', 'dalmatian_ICS205A'])];
                     case 1:
                         result = _a.sent();
                         // Assert
                         expect(result).toContainEqual({
-                            fileName: 'bcics_ICS205',
+                            fileName: 'dalmatian_ICS205',
                             content: ICS205_Content,
                             details: ICS205_Details,
                             failure: false,
                             error: null
                         });
                         expect(result).toContainEqual({
-                            fileName: 'bcics_ICS206',
+                            fileName: 'dalmatian_ICS206',
                             content: ICS206_Content,
                             details: ICS206_Details,
                             failure: false,
                             error: null
                         });
                         expect(result).toContainEqual({
-                            fileName: 'bcics_ICS205A',
+                            fileName: 'dalmatian_ICS205A',
                             content: ICS205A_Content,
                             details: ICS205A_Details,
                             failure: false,
@@ -310,41 +310,41 @@ describe('FormFetcher should ', function () {
                         // Arrange
                         sandbox.stub(SUT, 'fetchIndex').resolves(SERVER_INDEX);
                         server.on({
-                            path: '/bcics_ICS205.html',
+                            path: '/dalmatian_ICS205.html',
                             reply: buildSuccessResponse(ICS205_Content)
                         });
                         server.on({
-                            path: '/bcics_ICS206.html',
+                            path: '/dalmatian_ICS206.html',
                             reply: buildSuccessResponse('')
                         });
                         server.on({
-                            path: '/bcics_ICS205A.html',
+                            path: '/dalmatian_ICS205A.html',
                             reply: buildSuccessResponse(ICS205A_Content)
                         });
                         stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
                         stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
                         stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
                         stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
-                        return [4 /*yield*/, SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A'])];
+                        return [4 /*yield*/, SUT.fetchForms(['dalmatian_ICS205', 'dalmatian_ICS206', 'dalmatian_ICS205A'])];
                     case 1:
                         result = _a.sent();
                         // Assert
                         expect(result).toContainEqual({
-                            fileName: 'bcics_ICS205',
+                            fileName: 'dalmatian_ICS205',
                             content: ICS205_Content,
                             details: ICS205_Details,
                             failure: false,
                             error: null
                         });
                         expect(result).toContainEqual({
-                            fileName: 'bcics_ICS206',
+                            fileName: 'dalmatian_ICS206',
                             content: null,
                             details: null,
                             failure: true,
                             error: new FormFetcher_1.BadServerResponseError('Server provided empty response')
                         });
                         expect(result).toContainEqual({
-                            fileName: 'bcics_ICS205A',
+                            fileName: 'dalmatian_ICS205A',
                             content: ICS205A_Content,
                             details: ICS205A_Details,
                             failure: false,
@@ -363,16 +363,16 @@ describe('FormFetcher should ', function () {
                         sandbox.stub(SUT, 'fetchIndex').resolves(SERVER_INDEX);
                         SUT.setTimeout(300);
                         server.on({
-                            path: '/bcics_ICS205.html',
+                            path: '/dalmatian_ICS205.html',
                             reply: buildSuccessResponse(ICS205_Content),
                             delay: 3000
                         });
                         server.on({
-                            path: '/bcics_ICS206.html',
+                            path: '/dalmatian_ICS206.html',
                             reply: buildSuccessResponse(ICS206_Content)
                         });
                         server.on({
-                            path: '/bcics_ICS205A.html',
+                            path: '/dalmatian_ICS205A.html',
                             reply: buildSuccessResponse(ICS205A_Content),
                             delay: 3000
                         });
@@ -380,26 +380,26 @@ describe('FormFetcher should ', function () {
                         stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
                         stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
                         stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
-                        return [4 /*yield*/, SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A'])];
+                        return [4 /*yield*/, SUT.fetchForms(['dalmatian_ICS205', 'dalmatian_ICS206', 'dalmatian_ICS205A'])];
                     case 1:
                         result = _a.sent();
                         // Assert
                         expect(result).toContainEqual({
-                            fileName: 'bcics_ICS205',
+                            fileName: 'dalmatian_ICS205',
                             content: null,
                             details: null,
                             failure: true,
                             error: new Error('Socket timed out on request')
                         });
                         expect(result).toContainEqual({
-                            fileName: 'bcics_ICS206',
+                            fileName: 'dalmatian_ICS206',
                             content: ICS206_Content,
                             details: ICS206_Details,
                             failure: false,
                             error: null
                         });
                         expect(result).toContainEqual({
-                            fileName: 'bcics_ICS205A',
+                            fileName: 'dalmatian_ICS205A',
                             content: null,
                             details: null,
                             failure: true,
@@ -417,7 +417,7 @@ describe('FormFetcher should ', function () {
                         stub_fetchIndex = sandbox.stub(SUT, 'fetchIndex');
                         stub_fetchIndex.rejects(new FormFetcher_1.UserCancelledError());
                         // Act & Assert
-                        return [4 /*yield*/, expect(SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A'])).rejects.toBeInstanceOf(FormFetcher_1.UserCancelledError)];
+                        return [4 /*yield*/, expect(SUT.fetchForms(['dalmatian_ICS205', 'dalmatian_ICS206', 'dalmatian_ICS205A'])).rejects.toBeInstanceOf(FormFetcher_1.UserCancelledError)];
                     case 1:
                         // Act & Assert
                         _a.sent();
@@ -433,16 +433,16 @@ describe('FormFetcher should ', function () {
                         // Arrange
                         sandbox.stub(SUT, 'fetchIndex').resolves(SERVER_INDEX);
                         server.on({
-                            path: '/bcics_ICS205.html',
+                            path: '/dalmatian_ICS205.html',
                             reply: buildSuccessResponse(ICS205_Content),
                             delay: 2000
                         });
                         server.on({
-                            path: '/bcics_ICS206.html',
+                            path: '/dalmatian_ICS206.html',
                             reply: buildSuccessResponse(ICS206_Content)
                         });
                         server.on({
-                            path: '/bcics_ICS205A.html',
+                            path: '/dalmatian_ICS205A.html',
                             reply: buildSuccessResponse(ICS205A_Content),
                             delay: 2000
                         });
@@ -451,24 +451,24 @@ describe('FormFetcher should ', function () {
                         stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
                         stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
                         // Act
-                        SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A']).then(function (result) {
+                        SUT.fetchForms(['dalmatian_ICS205', 'dalmatian_ICS206', 'dalmatian_ICS205A']).then(function (result) {
                             // Assert
                             expect(result).toContainEqual({
-                                fileName: 'bcics_ICS205',
+                                fileName: 'dalmatian_ICS205',
                                 content: null,
                                 details: null,
                                 failure: true,
                                 error: new FormFetcher_1.UserCancelledError()
                             });
                             expect(result).toContainEqual({
-                                fileName: 'bcics_ICS206',
+                                fileName: 'dalmatian_ICS206',
                                 content: ICS206_Content,
                                 details: ICS206_Details,
                                 failure: false,
                                 error: null
                             });
                             expect(result).toContainEqual({
-                                fileName: 'bcics_ICS205A',
+                                fileName: 'dalmatian_ICS205A',
                                 content: null,
                                 details: null,
                                 failure: true,
@@ -493,16 +493,16 @@ describe('FormFetcher should ', function () {
                         // Arrange
                         sandbox.stub(SUT, 'fetchIndex').resolves(SERVER_INDEX);
                         server.on({
-                            path: '/bcics_ICS205.html',
+                            path: '/dalmatian_ICS205.html',
                             reply: buildSuccessResponse(ICS205_Content),
                             delay: 2000
                         });
                         server.on({
-                            path: '/bcics_ICS206.html',
+                            path: '/dalmatian_ICS206.html',
                             reply: buildSuccessResponse(ICS206_Content)
                         });
                         server.on({
-                            path: '/bcics_ICS205A.html',
+                            path: '/dalmatian_ICS205A.html',
                             reply: buildSuccessResponse(ICS205A_Content),
                             delay: 2000
                         });
@@ -511,80 +511,80 @@ describe('FormFetcher should ', function () {
                         stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
                         stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
                         // Act
-                        SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A']).then(function (_result) { return __awaiter(_this, void 0, void 0, function () {
+                        SUT.fetchForms(['dalmatian_ICS205', 'dalmatian_ICS206', 'dalmatian_ICS205A']).then(function (_result) { return __awaiter(_this, void 0, void 0, function () {
                             var _this = this;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
                                     case 0:
                                         // Assert
                                         expect(_result).toContainEqual({
-                                            fileName: 'bcics_ICS205',
+                                            fileName: 'dalmatian_ICS205',
                                             content: null,
                                             details: null,
                                             failure: true,
                                             error: new FormFetcher_1.UserCancelledError()
                                         });
                                         expect(_result).toContainEqual({
-                                            fileName: 'bcics_ICS206',
+                                            fileName: 'dalmatian_ICS206',
                                             content: ICS206_Content,
                                             details: ICS206_Details,
                                             failure: false,
                                             error: null
                                         });
                                         expect(_result).toContainEqual({
-                                            fileName: 'bcics_ICS205A',
+                                            fileName: 'dalmatian_ICS205A',
                                             content: null,
                                             details: null,
                                             failure: true,
                                             error: new FormFetcher_1.UserCancelledError()
                                         });
-                                        SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A']).then(function (result) { return __awaiter(_this, void 0, void 0, function () {
+                                        SUT.fetchForms(['dalmatian_ICS205', 'dalmatian_ICS206', 'dalmatian_ICS205A']).then(function (result) { return __awaiter(_this, void 0, void 0, function () {
                                             var final_result;
                                             return __generator(this, function (_a) {
                                                 switch (_a.label) {
                                                     case 0:
                                                         // Assert
                                                         expect(_result).toContainEqual({
-                                                            fileName: 'bcics_ICS205',
+                                                            fileName: 'dalmatian_ICS205',
                                                             content: null,
                                                             details: null,
                                                             failure: true,
                                                             error: new FormFetcher_1.UserCancelledError()
                                                         });
                                                         expect(_result).toContainEqual({
-                                                            fileName: 'bcics_ICS206',
+                                                            fileName: 'dalmatian_ICS206',
                                                             content: ICS206_Content,
                                                             details: ICS206_Details,
                                                             failure: false,
                                                             error: null
                                                         });
                                                         expect(_result).toContainEqual({
-                                                            fileName: 'bcics_ICS205A',
+                                                            fileName: 'dalmatian_ICS205A',
                                                             content: null,
                                                             details: null,
                                                             failure: true,
                                                             error: new FormFetcher_1.UserCancelledError()
                                                         });
-                                                        return [4 /*yield*/, SUT.fetchForms(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A'])];
+                                                        return [4 /*yield*/, SUT.fetchForms(['dalmatian_ICS205', 'dalmatian_ICS206', 'dalmatian_ICS205A'])];
                                                     case 1:
                                                         final_result = _a.sent();
                                                         // Assert
                                                         expect(final_result).toContainEqual({
-                                                            fileName: 'bcics_ICS205',
+                                                            fileName: 'dalmatian_ICS205',
                                                             content: ICS205_Content,
                                                             details: ICS205_Details,
                                                             failure: false,
                                                             error: null
                                                         });
                                                         expect(final_result).toContainEqual({
-                                                            fileName: 'bcics_ICS206',
+                                                            fileName: 'dalmatian_ICS206',
                                                             content: ICS206_Content,
                                                             details: ICS206_Details,
                                                             failure: false,
                                                             error: null
                                                         });
                                                         expect(final_result).toContainEqual({
-                                                            fileName: 'bcics_ICS205A',
+                                                            fileName: 'dalmatian_ICS205A',
                                                             content: ICS205A_Content,
                                                             details: ICS205A_Details,
                                                             failure: false,

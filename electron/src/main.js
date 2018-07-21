@@ -6,7 +6,7 @@ var PreferenceManager_1 = require("./PreferenceManager");
 var path = require("path");
 var url = require("url");
 var strings = require("./_core/res/strings");
-var PREFERENCE = require("./_core/_contract/_preferences");
+var PREFERENCE = require("./_core/contract/_preferences");
 var UpdateManager_1 = require("./UpdateManager");
 var window;
 // When app is ready to run

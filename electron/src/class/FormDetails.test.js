@@ -8,12 +8,12 @@ describe('FormParser should ', function () {
             expect(FormParser.parseForm).toBeDefined();
         });
         it('parses ICS210 correctly', function () {
-            var result = FormParser.parseForm(HTML, 'bcics_ICS213', 'Thu Jul 5');
+            var result = FormParser.parseForm(HTML, 'dalmatian_ICS213', 'Thu Jul 5');
             expect(result.id).toEqual('ICS213');
             expect(result.name).toEqual('GENERAL MESSAGE');
             expect(result.detail).toMatch(/ICS213 General Message.*versatile form/);
             expect(result.lastModified).toEqual('Thu Jul 5');
-            expect(result.fileName).toEqual('bcics_ICS213');
+            expect(result.fileName).toEqual('dalmatian_ICS213');
         });
     });
 });

@@ -4,14 +4,13 @@
 import {parseString} from 'xml2js';
 import {JSDOM} from 'jsdom';
 import * as StorageManager from './StorageManager';
-import * as fs from 'fs-extra';
 
 /**
  * Convert ICS XML to HTML and generate FormDetails
  * Resolves on complete with I_ConvertedXMLResult which holds HTML content and FormDetails
  * @returns {Promise<String>}
  */
-export function convertFromXML(xml): Promise<String> {
+export function convertFromXML(xml: string): Promise<String> {
 
     return new Promise<String>((resolve, reject) => {
 
@@ -26,7 +25,7 @@ export function convertFromXML(xml): Promise<String> {
             const title = form['form_parameters'][0]['display_form'][0].match(
                 /[^_]*/)[0].toUpperCase();
 
-            StorageManager.read('/forms', `bcics_${title}`).then(content => {
+            StorageManager.read('/forms', `dalmatian_${title}`).then(content => {
 
                 console.log(content);
 
@@ -38,14 +37,9 @@ export function convertFromXML(xml): Promise<String> {
                     Object.keys(xmlVariables).forEach(v => {
 
                         const value = xmlVariables[v][0];
-
                         const el = window.document.getElementById(v);
 
                         if (el) {
-                            console.log(`v: ${v}`);
-                            console.log(`value: ${value}`);
-                            console.log(`el: ${el}`);
-                            console.log(`type: ${el.tagName}`);
                             const type = el.tagName;
                             switch (type) {
                                 case 'INPUT':
@@ -56,13 +50,13 @@ export function convertFromXML(xml): Promise<String> {
                                     break;
                                 case 'SELECT':
                                     const option = window.document.querySelector(`#${v} option[value="${value}"]`);
-                                    if(option) {
-                                        option.setAttribute('selected','selected');
+                                    if (option) {
+                                        option.setAttribute('selected', 'selected');
                                     } else {
                                         const newOption = window.document.createElement('option');
                                         newOption.text = value;
                                         newOption.value = value;
-                                        newOption.setAttribute('selected','selected')
+                                        newOption.setAttribute('selected', 'selected');
                                         el.add(newOption);
                                     }
                                     break;
@@ -72,10 +66,8 @@ export function convertFromXML(xml): Promise<String> {
 
                     });
 
-                    // const out = window.document.documentElement.outerHTML;
-                    // fs.writeFile('/home/spectre/Downloads/test.html', out).then(() => {
-                    //     resolve(out);
-                    // });
+                    const out = window.document.documentElement.outerHTML;
+                    resolve(out);
 
                 } else {
                     reject(`Could not find HTML equivalent to ${title}`);

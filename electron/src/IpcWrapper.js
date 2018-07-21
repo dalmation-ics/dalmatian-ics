@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-var _general_1 = require("./_core/_contract/_general");
+var _general_1 = require("./_core/contract/_general");
 var IpcWrapper = /** @class */ (function () {
     function IpcWrapper(ipcMain, window) {
         this.ipcMain = ipcMain;

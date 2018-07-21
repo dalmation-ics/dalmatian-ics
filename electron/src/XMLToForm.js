@@ -20,7 +20,7 @@ function convertFromXML(xml) {
             }
             var form = xmlObject['RMS_Express_Form'];
             var title = form['form_parameters'][0]['display_form'][0].match(/[^_]*/)[0].toUpperCase();
-            StorageManager.read('/forms', "bcics_" + title).then(function (content) {
+            StorageManager.read('/forms', "dalmatian_" + title).then(function (content) {
                 console.log(content);
                 if (content) {
                     var xmlVariables_1 = form['variables'][0];
@@ -29,10 +29,6 @@ function convertFromXML(xml) {
                         var value = xmlVariables_1[v][0];
                         var el = window_1.document.getElementById(v);
                         if (el) {
-                            console.log("v: " + v);
-                            console.log("value: " + value);
-                            console.log("el: " + el);
-                            console.log("type: " + el.tagName);
                             var type = el.tagName;
                             switch (type) {
                                 case 'INPUT':
@@ -57,10 +53,8 @@ function convertFromXML(xml) {
                             }
                         }
                     });
-                    // const out = window.document.documentElement.outerHTML;
-                    // fs.writeFile('/home/spectre/Downloads/test.html', out).then(() => {
-                    //     resolve(out);
-                    // });
+                    var out = window_1.document.documentElement.outerHTML;
+                    resolve(out);
                 }
                 else {
                     reject("Could not find HTML equivalent to " + title);
