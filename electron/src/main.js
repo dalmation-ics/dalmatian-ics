@@ -106,8 +106,7 @@ function createPreloader() {
             fullscreenable: false,
             skipTaskbar: true,
             titleBarStyle: 'hiddenInset',
-            vibrancy: 'dark',
-            radii: [5, 5, 5, 5]
+            vibrancy: 'dark'
         });
         windowLoad.loadURL('data:text/html;charset=utf-8,' +
             encodeURI(loaderHtml));

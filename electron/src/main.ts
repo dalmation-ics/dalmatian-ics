@@ -114,7 +114,6 @@ function createPreloader() {
             skipTaskbar: true,
             titleBarStyle: 'hiddenInset',
             vibrancy: 'dark',
-            radii: [5, 5, 5, 5],
         });
         windowLoad.loadURL('data:text/html;charset=utf-8,' +
             encodeURI(loaderHtml));
