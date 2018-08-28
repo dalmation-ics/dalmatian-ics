@@ -6,7 +6,7 @@ import * as url from 'url';
 import * as strings from './_core/res/strings';
 import * as PREFERENCE from './_core/_contract/_preferences';
 import {downloadFormUpdates} from './UpdateManager';
-import IpcBridge from './ipc/IpcWrapper';
+import IpcBridge, {default as IpcWrapper} from './ipc/IpcWrapper';
 
 let window: BrowserWindow = null;
 let windowLoad: BrowserWindow = null;
@@ -70,13 +70,13 @@ function createWindowApp() {
     });
 }
 
-function initializeStorageAndProcess() {
+function initializeStorageAndProcess(): Promise<void> {
     console.log('Application is running');
     // Initialize storage
     return StorageManager.initialize(app.getPath('userData'));
 }
 
-function initializeAppBridge() {
+function initializeAppBridge(): Promise<IpcWrapper> {
     return new Promise((resolve, reject) => {
         try {
             resolve(new IpcBridge(window));
