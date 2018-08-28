@@ -7,11 +7,53 @@ import * as strings from './_core/res/strings';
 import * as PREFERENCE from './_core/_contract/_preferences';
 import {downloadFormUpdates} from './UpdateManager';
 
-let window: BrowserWindow;
+let window: BrowserWindow = null;
+let loadWindow: BrowserWindow = null;
 
 // When app is ready to run
 app.on('ready', () => {
+    createPreloader();
+    createAppWindow();
+});
 
+function createPreloader() {
+    try {
+        // create BrowserWindow with dynamic HTML content
+        const loaderHtml = [
+            '<head><style>',
+            '*{ text-align:center; }',
+            'h1{ color: seagreen;} ',
+            '.contents{background:whitesmoke; border-radius:2em; padding:1em;}',
+            '</style></head>',
+            '<body><div class="contents">',
+            '<h1>Dalmatian ICS</h1>',
+            '<h2>Loading . . .</h2>',
+            '</div></body>',
+        ].join('');
+        loadWindow = new BrowserWindow({
+            title: 'Loading',
+            width: 600,
+            height: 400,
+            transparent: true,
+            closable: false,
+            frame: false,
+            maximizable: false,
+            minimizable: false,
+            fullscreenable: false,
+            skipTaskbar: true,
+            titleBarStyle: 'hiddenInset',
+            vibrancy: 'dark',
+            radii: [5, 5, 5, 5],
+        });
+        loadWindow.loadURL('data:text/html;charset=utf-8,' +
+            encodeURI(loaderHtml));
+    } catch (exc) {
+        loadWindow.hide();
+        console.log('error in loader', exc);
+    }
+}
+
+function createAppWindow() {
     console.log('Application is running');
 
     // Initialize storage
@@ -33,6 +75,10 @@ app.on('ready', () => {
             height: PreferenceManager.get(PREFERENCE.WINDOW_HEIGHT) || 600,
             show: false
         });
+        window.once('ready-to-show', () => {
+            window.show();
+            loadWindow.hide();
+        });
 
         // Determine what to load. React development server or production static files
         if (process.defaultApp) {
@@ -47,12 +93,12 @@ app.on('ready', () => {
             }));
         }
 
-        window.show();
-
         // Handle close
         window.on('close', () => {
-
+            console.log('shutting down');
             if (window) {
+                window.setTitle('Dalmatian ICS' + //version +
+                    ' shutting down');
                 // Persist width and height so they can be restored next time
                 const bounds = window.getBounds();
                 PreferenceManager.set(PREFERENCE.WINDOW_HEIGHT, bounds.height);
@@ -63,5 +109,5 @@ app.on('ready', () => {
 
     });
 
-});
+}
 

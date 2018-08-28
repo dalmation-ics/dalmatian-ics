@@ -8,9 +8,51 @@ var url = require("url");
 var strings = require("./_core/res/strings");
 var PREFERENCE = require("./_core/_contract/_preferences");
 var UpdateManager_1 = require("./UpdateManager");
-var window;
+var window = null;
+var loadWindow = null;
 // When app is ready to run
 electron_1.app.on('ready', function () {
+    createPreloader();
+    createAppWindow();
+});
+function createPreloader() {
+    try {
+        // create BrowserWindow with dynamic HTML content
+        var loaderHtml = [
+            '<head><style>',
+            '*{ text-align:center; }',
+            'h1{ color: seagreen;} ',
+            '.contents{background:whitesmoke; border-radius:2em; padding:1em;}',
+            '</style></head>',
+            '<body><div class="contents">',
+            '<h1>Dalmatian ICS</h1>',
+            '<h2>Loading . . .</h2>',
+            '</div></body>',
+        ].join('');
+        loadWindow = new electron_1.BrowserWindow({
+            title: 'Loading',
+            width: 600,
+            height: 400,
+            transparent: true,
+            closable: false,
+            frame: false,
+            maximizable: false,
+            minimizable: false,
+            fullscreenable: false,
+            skipTaskbar: true,
+            titleBarStyle: 'hiddenInset',
+            vibrancy: 'dark',
+            radii: [5, 5, 5, 5]
+        });
+        loadWindow.loadURL('data:text/html;charset=utf-8,' +
+            encodeURI(loaderHtml));
+    }
+    catch (exc) {
+        loadWindow.hide();
+        console.log('error in loader', exc);
+    }
+}
+function createAppWindow() {
     console.log('Application is running');
     // Initialize storage
     StorageManager.initialize(electron_1.app.getPath('userData')).then(function () {
@@ -28,6 +70,10 @@ electron_1.app.on('ready', function () {
             height: PreferenceManager_1["default"].get(PREFERENCE.WINDOW_HEIGHT) || 600,
             show: false
         });
+        window.once('ready-to-show', function () {
+            window.show();
+            loadWindow.hide();
+        });
         // Determine what to load. React development server or production static files
         if (process.defaultApp) {
             console.log('Loading development server');
@@ -41,10 +87,12 @@ electron_1.app.on('ready', function () {
                 slashes: true
             }));
         }
-        window.show();
         // Handle close
         window.on('close', function () {
+            console.log('shutting down');
             if (window) {
+                window.setTitle('Dalmatian ICS' + //version +
+                    ' shutting down');
                 // Persist width and height so they can be restored next time
                 var bounds = window.getBounds();
                 PreferenceManager_1["default"].set(PREFERENCE.WINDOW_HEIGHT, bounds.height);
@@ -52,4 +100,4 @@ electron_1.app.on('ready', function () {
             }
         });
     });
-});
+}
