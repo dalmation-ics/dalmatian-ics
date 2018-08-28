@@ -87,7 +87,7 @@ function createPreloader() {
             '*{ text-align:center; }',
             'h1{ color: seagreen;} ',
             'body{ margin:3%;} ',
-            '.contents{background:whitesmoke; border-radius:2em; padding:1em;}',
+            '.contents{background:whitesmoke; border-radius:2em; padding:1em;} ',
             '</style></head>',
             '<body><div class="contents">',
             '<h1>Dalmatian ICS</h1>',
@@ -124,17 +124,19 @@ function createWindowCrash(e) {
             '<head><style>',
             '*{ text-align:center; }',
             'h1{ color: seagreen;} ',
+            'pre{ word-wrap: break-word;} ',
             '.contents{background:whitesmoke; border-radius:2em; padding:1em;}',
             '</style></head>',
             '<body><div class="contents">',
             '<h1>Dalmatian ICS failed to start</h1>',
             '<h2>Error: ' + e.name + ' </h2>',
-            '<pre>' + e.message + ' </pre>',
+            '<p>' + e.message + ' </p>',
+            process.defaultApp ? ('<pre>' + e.stack + ' </pre>') : '',
             '</div></body>',
         ].join('');
         windowCrash = new electron_1.BrowserWindow({
             title: 'Dalmatian ICS Crash',
-            width: 600,
+            width: 800,
             height: 400,
             vibrancy: 'dark'
         });
