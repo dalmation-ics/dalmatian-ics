@@ -1,16 +1,21 @@
 import IpcMain = Electron.IpcMain;
+import {ipcMain} from 'electron';
 import BrowserWindow = Electron.BrowserWindow;
-import {RESPONSE_POSTFIX} from './_core/_contract/_general';
-import {ErrorFirstCallback} from './type/Callbacks';
+import {RESPONSE_POSTFIX} from '../_core/_contract/_general';
+import {ErrorFirstCallback} from '../type/Callbacks';
+import * as strings from '../_core/res/strings';
+
+const {version} = require('../../../package.json');
 
 export default class IpcWrapper {
 
     ipcMain: IpcMain;
     window: BrowserWindow;
+    appTitle: string = strings.APP_TITLE + ((version !== undefined) && (' ' + version));
 
-    constructor(ipcMain: IpcMain, window: BrowserWindow) {
-        this.ipcMain = ipcMain;
+    constructor(window: BrowserWindow) {
         this.window = window;
+        this.ipcMain = ipcMain;
     }
 
     register(name: string, action: (callback: ErrorFirstCallback, args: any) => void) {

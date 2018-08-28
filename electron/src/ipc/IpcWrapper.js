@@ -1,10 +1,14 @@
 "use strict";
 exports.__esModule = true;
-var _general_1 = require("./_core/_contract/_general");
+var electron_1 = require("electron");
+var _general_1 = require("../_core/_contract/_general");
+var strings = require("../_core/res/strings");
+var version = require('../../../package.json').version;
 var IpcWrapper = /** @class */ (function () {
-    function IpcWrapper(ipcMain, window) {
-        this.ipcMain = ipcMain;
+    function IpcWrapper(window) {
+        this.appTitle = strings.APP_TITLE + ((version !== undefined) && (' ' + version));
         this.window = window;
+        this.ipcMain = electron_1.ipcMain;
     }
     IpcWrapper.prototype.register = function (name, action) {
         this.ipcMain.on(name, function (event, args) {
