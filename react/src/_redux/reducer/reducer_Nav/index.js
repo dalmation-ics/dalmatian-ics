@@ -10,13 +10,13 @@ import * as action_Navigation_SelectForm
 
 import type {Action, State} from 'src/_core/redux/types';
 
-type STATE = State & {
+export type StateNav = State & {
   redirectTarget: string | null,
   path: string | null,
   selectedFormId: string | null
 }
 
-const DEFAULT_STATE: STATE = {
+const DEFAULT_STATE: StateNav = {
 
   /**
    * RedirectUser
@@ -45,7 +45,7 @@ const DEFAULT_STATE: STATE = {
 
 };
 
-export default (previousState: STATE = DEFAULT_STATE, action: Action) => {
+export default (previousState: StateNav = DEFAULT_STATE, action: Action) => {
 
   let newState = _.cloneDeep(previousState);
 

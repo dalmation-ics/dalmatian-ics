@@ -1,6 +1,6 @@
 // @flow
 import _ from 'lodash';
-
+import * as React from 'react';
 import * as action_UI_ToggleSettingsMenu
   from '../../action/action_UI/action_UI_ToggleSettingsMenu';
 import * as action_UI_ToggleUpdatePanel
@@ -11,15 +11,21 @@ import * as action_UI_SelectTheme
   from '../../action/action_UI/action_UI_SelectTheme';
 
 import type {Action, State} from 'src/_core/redux/types/index';
+import type {Theme} from 'src/component/settingsPanel/component/settingsPanelComponent/theme_selector/types';
 
-type STATE = State & {
+export type commandBarContextItem = { display: null | string | React.Node }
+
+export type StateUI = State & {
   settingsMenuOpen: boolean | null,
   updatePanelOpen: boolean | null,
-  acceptedLegal: Date | boolean | null,
-  themeName: action_UI_SelectTheme.ThemeName | null
+  acceptedLegal: Date | null,
+  theme: Theme | null,
+  commandBarContextItem: {
+    [string]: commandBarContextItem
+  }
 }
 
-const DEFAULT_STATE: STATE = {
+const DEFAULT_STATE: StateUI = {
 
   /**
    * SettingsMenu
@@ -43,7 +49,7 @@ const DEFAULT_STATE: STATE = {
    * Affected by:
    * action_UI_AcceptLegal
    */
-  acceptedLegal: false,
+  acceptedLegal: null,
 
   /**
    * ThemePanel
@@ -51,10 +57,11 @@ const DEFAULT_STATE: STATE = {
    * Affected by:
    * action_UI_SelectTheme
    */
-  themeName: 'normal',
+  theme: {name: 'normal'},
+  commandBarContextItem: {},
 };
 
-export default (previousState: STATE = DEFAULT_STATE, action: Action) => {
+export default (previousState: StateUI = DEFAULT_STATE, action: Action) => {
 
   let newState = _.cloneDeep(previousState);
 
@@ -65,7 +72,11 @@ export default (previousState: STATE = DEFAULT_STATE, action: Action) => {
        * action_UI_ToggleSettingsMenu
        */
     case action_UI_ToggleSettingsMenu.TYPE: {
-      newState.settingsMenuOpen = payload;
+      if (payload === null)
+        newState.settingsMenuOpen = !newState.settingsMenuOpen;
+
+      else
+        newState.settingsMenuOpen = payload;
       break;
     }
 
@@ -81,7 +92,7 @@ export default (previousState: STATE = DEFAULT_STATE, action: Action) => {
        * action_UI_AcceptLegal
        */
     case action_UI_AcceptLegal.TYPE: {
-      newState.acceptedLegal = true;
+      newState.acceptedLegal = Date.now();
       break;
     }
 
@@ -89,7 +100,7 @@ export default (previousState: STATE = DEFAULT_STATE, action: Action) => {
        * action_UI_SelectTheme
        */
     case action_UI_SelectTheme.TYPE: {
-      newState.themeName = payload;
+      newState.theme = payload;
       break;
     }
     default:
