@@ -23,7 +23,7 @@ class LegalPanel extends Component<propTypes> {
       action_UI_AcceptLegal,
     } = this.props;
 
-    const legalUpToDate = (acceptLegal != null) && (acceptLegal <
+    const legalUpToDate = (acceptLegal != null) && (acceptLegal >
         LAST_LEGAL_UPDATE);
     console.log(acceptLegal, LAST_LEGAL_UPDATE);
 
