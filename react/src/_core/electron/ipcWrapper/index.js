@@ -5,7 +5,7 @@ import electron from '../index';
 export default {
 
   prompt: (
-      name: string, callback?, args: Array<string> | any) => {
+      name: string, callback: function | null, args: Array<string> | any) => {
     console.groupCollapsed(
         '%c[AppBridge] ' +
         `%csending ` +
@@ -38,7 +38,7 @@ export default {
           console.groupEnd();
 
           console.groupEnd();
-          callback(err, result);
+          callback && callback(err, result);
         });
     electron.ipcRenderer.send(name, args);
   },
