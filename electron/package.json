@@ -22,12 +22,12 @@
     "electron-store": "^2.0.0",
     "fs-extra": "^6.0.1",
     "get-it": "^4.0.4",
-    "jquery": "^3.3.1",
     "jsdom": "^11.11.0",
     "lodash": "^4.17.10",
     "mock-http-server": "^1.0.0",
     "moment": "^2.22.2",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "@types/es6-promise": "^3.3.0",

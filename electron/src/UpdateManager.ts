@@ -173,10 +173,10 @@ export function downloadFormUpdates(): Promise<Array<I_FetchFormResult>> {
  *
  * Ex. of contents
  * {
- *    bcics_ICS205: {lastModified: '2018-05-18T12:37:21-07:00'},
- *    bcics_ICS206: {lastModified: '2018-05-18T12:37:21-07:00'},
- *    bcics_ICS210: {lastModified: '2018-05-18T12:37:21-07:00'},
- *    bcics_ICS213: {lastModified: '2018-05-18T12:37:21-07:00'}
+ *    dalmatian_ICS205: {lastModified: '2018-05-18T12:37:21-07:00'},
+ *    dalmatian_ICS206: {lastModified: '2018-05-18T12:37:21-07:00'},
+ *    dalmatian_ICS210: {lastModified: '2018-05-18T12:37:21-07:00'},
+ *    dalmatian_ICS213: {lastModified: '2018-05-18T12:37:21-07:00'}
  * }
  *
  * Returns an empty array if client is up to date

@@ -4,7 +4,7 @@ import PreferenceManager from './PreferenceManager';
 import * as path from 'path';
 import * as url from 'url';
 import * as strings from './_core/res/strings';
-import * as PREFERENCE from './_core/_contract/_preferences';
+import * as PREFERENCE from './_core/contract/_preferences';
 import {downloadFormUpdates} from './UpdateManager';
 import IpcBridge, {default as IpcWrapper} from './ipc/IpcWrapper';
 

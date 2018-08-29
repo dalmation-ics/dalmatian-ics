@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var electron_1 = require("electron");
-var _general_1 = require("../_core/_contract/_general");
+var _general_1 = require("../_core/contract/_general");
 var strings = require("../_core/res/strings");
 var version = require('../../../package.json').version;
 var IpcWrapper = /** @class */ (function () {

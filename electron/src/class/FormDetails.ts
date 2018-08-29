@@ -1,5 +1,4 @@
 import {JSDOM} from 'jsdom';
-import * as jQuery from 'jquery';
 
 export interface I_FormDetails {
     fileName: string;
