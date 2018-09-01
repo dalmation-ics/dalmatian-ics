@@ -1,1 +1,1 @@
-export type ErrorFirstCallback = (err: any, result: any) => void;
+export type ErrorFirstCallback = (err: any, result?: any) => void;
