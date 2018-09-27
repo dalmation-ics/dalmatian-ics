@@ -1,11 +1,26 @@
 // @flow
+import type Electron from 'electron';
 // Assign electron to an empty object so that the default export points to this object
-let electron = {
+let electron: Electron
+    = {
   ipcRenderer: {
-    send: (name: string | any | null, callback: string | any | null) => {
+    send: (
+        name: string | any | null, args?: any,
+        callback?: (string | any | null) => any) => {
       console.log('Stub');
     },
-    sendSync: (name: string | any | null) => {
+    sendSync: (name: string | any | null, args?: any) => {
+      console.log('Stub');
+      return {err: '', result: ''};
+    },
+    on: (
+        name: string | any | null, args?: any,
+        callback?: (string | any | null) => any) => {
+      console.log('Stub');
+    },
+    once: (
+        name: string | any | null, args?: any,
+        callback?: (string | any | null) => any) => {
       console.log('Stub');
     },
   },
@@ -22,8 +37,9 @@ export const initialize = () => {
   }
 
   // If require('electron') does not yield, it is probably because the react application is being run in a browser
-  // if (Object.keys(electron).length === 0)
-  //     throw new Error("Electron does not exist in this context. Is React running in Electron?");
+  if (Object.keys(electron).length === 0)
+    throw new Error(
+        'Electron does not exist in this context. Is React running in Electron?');
 
 };
 

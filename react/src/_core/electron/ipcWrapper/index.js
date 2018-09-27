@@ -17,7 +17,7 @@ export default {
         'color:grey',
         '',
     );
-    console.log(`[Args] ${args}`);
+    console.log(`[Args] ${args && args.length > 0 ? args.join(',') : '[]'}`);
     console.groupEnd();
     electron.ipcRenderer.once(name + RESPONSE_POSTFIX,
         (event, {err, result}) => {
@@ -55,7 +55,7 @@ export default {
         'color:grey',
         '',
     );
-    console.log(`[Args] ${args}`);
+    console.log(`[Args] ${args && args.length > 0 ? args.join(',') : '[]'}`);
     console.groupEnd();
     const response = electron.ipcRenderer.sendSync(name, args);
     const {err, result} = response;
@@ -82,7 +82,8 @@ export default {
     return response;
   },
 
-  register: (name: string, action: Array<string> | any) => {
+  register: (
+      name: string, action: (() => any, Array<string> | any) => any) => {
     electron.ipcRenderer.on(name, (event, args) => {
       console.log(`Received ${name}`);
       action((err, result) => {
