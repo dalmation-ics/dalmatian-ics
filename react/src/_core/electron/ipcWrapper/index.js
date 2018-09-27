@@ -5,7 +5,10 @@ import electron from '../index';
 export default {
 
   prompt: (
-      name: string, callback: function | null, args: Array<string> | any) => {
+      name: string,
+      callback: (any, any) => void | null,
+      args: Array<string> | any,
+  ) => {
     console.groupCollapsed(
         '%c[AppBridge] ' +
         `%csending ` +
