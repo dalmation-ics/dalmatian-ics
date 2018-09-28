@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var electron_1 = require("electron");
 var StorageManager = require("./StorageManager");
 var PreferenceManager_1 = require("./PreferenceManager");
@@ -8,30 +8,31 @@ var url = require("url");
 var strings = require("./_core/res/strings");
 var PREFERENCE = require("./_core/contract/_preferences");
 var UpdateManager_1 = require("./UpdateManager");
-var IpcWrapper_1 = require("./ipc/IpcWrapper");
-var window = null;
-var windowLoad = null;
-var windowCrash = null;
+var ipc_1 = require("./ipc");
+var window;
+var windowLoad;
+var windowCrash;
 // When app is ready to run
 electron_1.app.on('ready', function () {
-    createPreloader()["catch"]();
+    createPreloader().catch();
     initializeStorageAndProcess()
         .then(initializeAppBridge)
-        .then(createWindowApp)["catch"](createWindowCrash);
+        .then(createWindowApp)
+        .catch(createWindowCrash);
 });
 function createWindowApp() {
     UpdateManager_1.downloadFormUpdates().then(function (result) {
         console.log('done');
         console.log(result);
-    })["catch"](function (e) {
+    }).catch(function (e) {
         console.log(e);
     });
     console.log('Storage initialized');
     // Create a new window
     window = new electron_1.BrowserWindow({
         title: strings.APP_TITLE,
-        width: PreferenceManager_1["default"].get(PREFERENCE.WINDOW_WIDTH) || 800,
-        height: PreferenceManager_1["default"].get(PREFERENCE.WINDOW_HEIGHT) || 600,
+        width: PreferenceManager_1.default.get(PREFERENCE.WINDOW_WIDTH) || 800,
+        height: PreferenceManager_1.default.get(PREFERENCE.WINDOW_HEIGHT) || 600,
         show: false
     });
     window.once('ready-to-show', function () {
@@ -59,8 +60,8 @@ function createWindowApp() {
                 ' shutting down');
             // Persist width and height so they can be restored next time
             var bounds = window.getBounds();
-            PreferenceManager_1["default"].set(PREFERENCE.WINDOW_HEIGHT, bounds.height);
-            PreferenceManager_1["default"].set(PREFERENCE.WINDOW_WIDTH, bounds.width);
+            PreferenceManager_1.default.set(PREFERENCE.WINDOW_HEIGHT, bounds.height);
+            PreferenceManager_1.default.set(PREFERENCE.WINDOW_WIDTH, bounds.width);
         }
     });
 }
@@ -72,7 +73,8 @@ function initializeStorageAndProcess() {
 function initializeAppBridge() {
     return new Promise(function (resolve, reject) {
         try {
-            resolve(new IpcWrapper_1["default"](window));
+            ipc_1.default(window);
+            resolve();
         }
         catch (e) {
             reject(e);
@@ -107,7 +109,7 @@ function createPreloader() {
                 fullscreenable: false,
                 skipTaskbar: true,
                 titleBarStyle: 'hiddenInset',
-                vibrancy: 'dark'
+                vibrancy: 'dark',
             });
             windowLoad.loadURL('data:text/html;charset=utf-8,' +
                 encodeURI(loaderHtml));
@@ -143,7 +145,7 @@ function createWindowCrash(e) {
                 title: 'Dalmatian ICS Crash',
                 width: 800,
                 height: 400,
-                vibrancy: 'dark'
+                vibrancy: 'dark',
             });
             windowCrash.loadURL('data:text/html;charset=utf-8,' +
                 encodeURI(html));

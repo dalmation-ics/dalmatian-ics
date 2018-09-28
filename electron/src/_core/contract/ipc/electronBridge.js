@@ -1,3 +1,3 @@
 module.exports = {
-    ACT_SET_TITLE: 'SET_TITLE'
+    ACT_SET_TITLE: 'SET_TITLE',
 };

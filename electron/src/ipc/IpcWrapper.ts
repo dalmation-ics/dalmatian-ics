@@ -19,7 +19,7 @@ export default class IpcWrapper {
     }
 
     register(name: string, action: (callback: ErrorFirstCallback, args: any) => void) {
-        this.ipcMain.on(name, (event, args) => {
+        this.ipcMain.on(name, (event: any, args: any) => {
             console.log(`Received ${name}`);
             action((err, result) => {
 
@@ -39,7 +39,7 @@ export default class IpcWrapper {
     }
 
     registerSync(name: string, action: (callback: ErrorFirstCallback, args: any) => void) {
-        this.ipcMain.on(name, (event, args) => {
+        this.ipcMain.on(name, (event: any, args: any) => {
             console.log(`Recieved ${name}`);
             action((err, result) => {
 
@@ -59,10 +59,10 @@ export default class IpcWrapper {
 
     }
 
-    prompt(name: string, action: (callback: ErrorFirstCallback, args: any) => void, args) {
+    prompt(name: string, action: (callback: ErrorFirstCallback, args: any) => void, args: any) {
         console.log(`Sending ${name}`);
         this.window.webContents.send(name, args);
-        this.ipcMain.once(`${name}${RESPONSE_POSTFIX}`, (event, {err, result}) => {
+        this.ipcMain.once(`${name}${RESPONSE_POSTFIX}`, (event: any, {err, result}) => {
             console.log(`Received ${name}${RESPONSE_POSTFIX}`);
             action(err, result);
         });

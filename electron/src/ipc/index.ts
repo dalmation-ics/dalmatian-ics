@@ -1,19 +1,17 @@
-const IpcWrapper = require('./IpcWrapper');
-const formsBridge = require('./formsBridge');
-const stateBridge = require('./stateBridge');
-const archiveBridge = require('./exportBridge');
-const electronBridge = require('./electronBridge');
+import ArchiveBridge from './archiveBridge'
 
-const {
-   stateManager,
-   formManager,
-   exportManager,
-} = require('../storage');
+import IpcWrapper from './IpcWrapper'
+import BrowserWindow = Electron.BrowserWindow;
 
-module.exports = (ipc, window) => {
-    const ipcW = new IpcWrapper(ipc, window);
-   stateBridge(ipcW, stateManager, window);
-   formsBridge(ipcW, formManager);
-   archiveBridge(ipcW, exportManager);
-   electronBridge(ipcW);
+// const formsBridge = require('./formsBridge');
+// const stateBridge = require('./stateBridge');
+import electronBridge from './electronBridge';
+
+const IpcBridgeConfiguration = (window: BrowserWindow) => {
+    const ipcW = new IpcWrapper(window);
+    // stateBridge(ipcW);
+    // formsBridge(ipcW);
+    ArchiveBridge(ipcW);
+    electronBridge(ipcW);
 };
+export default IpcBridgeConfiguration;

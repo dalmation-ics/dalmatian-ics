@@ -11,7 +11,7 @@ const {
 const buildMockIPCW = () => {
 
     return {
-        appTitle: 'BC ICS Form Editor v' + version,
+        appTitle: 'BC ICS FormComplete Editor v' + version,
         register: function (name, action) {
             this[name] = action;
         },

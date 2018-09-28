@@ -2,8 +2,8 @@ import * as ServerMock from 'mock-http-server'; // https://www.npmjs.com/package
 import * as SUT from './FormFetcher';
 import * as getIt from 'get-it';
 import * as sinon from 'sinon';
-import FormDetails from './class/FormDetails';
-import * as _FormDetails from './class/FormDetails';
+import FormDetails from './class/form/index';
+import * as _FormDetails from './class/form/index';
 
 import * as gi_base from 'get-it/lib/middleware/base';
 import * as gi_promise from 'get-it/lib/middleware/promise';

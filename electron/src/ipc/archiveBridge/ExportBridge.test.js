@@ -1,5 +1,5 @@
 const ExportBridge = require('.');
-const exportManager = require('../../storage').exportManager;
+const exportManager = require('../../storage/index').exportManager;
 const {MissingArgumentError, IncorrectTypeError} = require(
     '../../../_core/error/');
 const sinon = require('sinon');
@@ -10,7 +10,7 @@ const {
     ACT_OPEN_ARCHIVE,
     ACT_CHECK_PASSED_FILE,
     ACT_SHOW_PATH_IN_FOLDER,
-} = require('../../../_core/contract/exportBridge');
+} = require('../../../_core/contract/archiveBridge');
 
 const buildMockIPCW = () => {
 

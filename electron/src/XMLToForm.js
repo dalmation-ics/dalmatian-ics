@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * XMLToForm converts ICS XML files into application compatible HTML
  */
@@ -59,7 +59,7 @@ function convertFromXML(xml) {
                 else {
                     reject("Could not find HTML equivalent to " + title);
                 }
-            })["catch"](function (e) {
+            }).catch(function (e) {
                 reject(e);
             });
         });

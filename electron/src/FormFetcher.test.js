@@ -14,8 +14,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -35,13 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var ServerMock = require("mock-http-server"); // https://www.npmjs.com/package/mock-http-server
 var SUT = require("./FormFetcher");
 var getIt = require("get-it");
 var sinon = require("sinon");
-var FormDetails_1 = require("./class/FormDetails");
-var _FormDetails = require("./class/FormDetails");
+var index_1 = require("./class/form/index");
+var _FormDetails = require("./class/form/index");
 var gi_base = require("get-it/lib/middleware/base");
 var gi_promise = require("get-it/lib/middleware/promise");
 var FormFetcher_1 = require("./FormFetcher");
@@ -54,10 +54,10 @@ var mock_getIt_instance = getIt([
 var SERVER_INDEX = {
     dalmatian_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
     dalmatian_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
-    dalmatian_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' }
+    dalmatian_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' },
 };
 var ICS205_Content = 'ICS205 Content';
-var ICS205_Details = new FormDetails_1["default"]({
+var ICS205_Details = new index_1.default({
     fileName: 'dalmatian_ICS205',
     name: 'ICS205 A Land Before Time',
     id: 'ICS205',
@@ -65,7 +65,7 @@ var ICS205_Details = new FormDetails_1["default"]({
     lastModified: '2018-05-18T12:37:21-07:00'
 });
 var ICS206_Content = 'ICS206 Content';
-var ICS206_Details = new FormDetails_1["default"]({
+var ICS206_Details = new index_1.default({
     fileName: 'dalmatian_ICS206',
     name: 'ICS206 Electric Boogaloo',
     id: 'ICS206',
@@ -73,7 +73,7 @@ var ICS206_Details = new FormDetails_1["default"]({
     lastModified: '2018-05-18T12:37:21-07:00'
 });
 var ICS205A_Content = 'ICS205A Content';
-var ICS205A_Details = new FormDetails_1["default"]({
+var ICS205A_Details = new index_1.default({
     fileName: 'dalmatian_ICS205A',
     name: 'ICS205A This time its different',
     id: 'ICS205A',
@@ -164,7 +164,7 @@ describe('FormFetcher should ', function () {
                             delay: 3000
                         });
                         SUT.setTimeout(50);
-                        return [4 /*yield*/, SUT.fetchIndex()["catch"](function (e) {
+                        return [4 /*yield*/, SUT.fetchIndex().catch(function (e) {
                                 expect(e.message).toContain('Socket timed out');
                             })];
                     case 1:
@@ -184,7 +184,7 @@ describe('FormFetcher should ', function () {
                             delay: 3000
                         });
                         // Act
-                        SUT.fetchIndex()["catch"](function (e) {
+                        SUT.fetchIndex().catch(function (e) {
                             expect(e).toBeInstanceOf(FormFetcher_1.UserCancelledError);
                             done();
                         });
@@ -208,13 +208,13 @@ describe('FormFetcher should ', function () {
                             delay: 1000
                         });
                         // Act
-                        SUT.fetchIndex()["catch"](function (e) { return __awaiter(_this, void 0, void 0, function () {
+                        SUT.fetchIndex().catch(function (e) { return __awaiter(_this, void 0, void 0, function () {
                             var _this = this;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
                                     case 0:
                                         expect(e).toBeInstanceOf(FormFetcher_1.UserCancelledError);
-                                        SUT.fetchIndex()["catch"](function (_e) { return __awaiter(_this, void 0, void 0, function () {
+                                        SUT.fetchIndex().catch(function (_e) { return __awaiter(_this, void 0, void 0, function () {
                                             var result;
                                             return __generator(this, function (_a) {
                                                 switch (_a.label) {
@@ -485,8 +485,8 @@ describe('FormFetcher should ', function () {
             });
         }); });
         it('can be aborted twice', function (done) { return __awaiter(_this, void 0, void 0, function () {
-            var _this = this;
             var stub_parseForm;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:

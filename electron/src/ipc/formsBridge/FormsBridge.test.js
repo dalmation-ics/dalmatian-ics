@@ -1,5 +1,5 @@
 const FormsBridge = require('.');
-const formManager = require('../../storage').formManager;
+const formManager = require('../../storage/index').formManager;
 const {IncorrectTypeError, MissingArgumentError} = require(
     '../../../_core/error');
 const sinon = require('sinon');

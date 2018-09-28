@@ -2,7 +2,7 @@ import * as sinon from 'sinon';
 import * as SUT from './UpdateManager';
 import * as FormFetcher from './FormFetcher';
 import * as StorageManager from './StorageManager';
-import FormDetails from './class/FormDetails';
+import FormDetails from './class/form/index';
 import {I_FetchFormResult, I_ServerIndex} from './FormFetcher';
 import {I_LocalIndex} from './UpdateManager';
 import * as _ from 'lodash';

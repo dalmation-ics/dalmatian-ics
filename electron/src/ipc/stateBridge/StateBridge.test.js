@@ -1,5 +1,5 @@
 const stateBridge = require('.');
-const stateManager = require('../../storage').stateManager;
+const stateManager = require('../../storage/index').stateManager;
 const sinon = require('sinon');
 const FileNotFoundError = require('../../../_core/error').FileNotFoundError;
 

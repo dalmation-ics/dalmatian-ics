@@ -4,8 +4,8 @@ const {MissingArgumentError, IncorrectTypeError} = require(
 const {
     ACT_SET_TITLE,
 } = require('../../_core/contract/ipc/electronBridge');
-                    
-module.exports = (ipcW) => {
+
+export default (ipcW: any) => {
 
     ipcW.registerSync(ACT_SET_TITLE, (callback, title) => {
 

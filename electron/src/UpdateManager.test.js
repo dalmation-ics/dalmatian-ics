@@ -14,8 +14,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -35,33 +35,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var sinon = require("sinon");
 var SUT = require("./UpdateManager");
 var FormFetcher = require("./FormFetcher");
 var StorageManager = require("./StorageManager");
-var FormDetails_1 = require("./class/FormDetails");
+var index_1 = require("./class/form/index");
 var _ = require("lodash");
 var SERVER_INDEX = {
     dalmatian_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
     dalmatian_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
-    dalmatian_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' }
+    dalmatian_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' },
 };
-var ICS205_Details = new FormDetails_1["default"]({
+var ICS205_Details = new index_1.default({
     fileName: 'dalmatian_ICS205',
     name: 'ICS205 A Land Before Time',
     id: 'ICS205',
     detail: 'ICS205 Details',
     lastModified: '2018-05-18T12:37:21-07:00'
 });
-var ICS206_Details = new FormDetails_1["default"]({
+var ICS206_Details = new index_1.default({
     fileName: 'dalmatian_ICS206',
     name: 'ICS206 Electric Boogaloo',
     id: 'ICS206',
     detail: 'ICS206 Details',
     lastModified: '2018-05-18T12:37:21-07:00'
 });
-var ICS205A_Details = new FormDetails_1["default"]({
+var ICS205A_Details = new index_1.default({
     fileName: 'dalmatian_ICS205A',
     name: 'ICS205A This time its different',
     id: 'ICS205A',

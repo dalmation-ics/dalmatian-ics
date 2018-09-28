@@ -10,7 +10,7 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import * as FormFetcher from './FormFetcher';
 import {I_ServerIndex, I_FetchFormResult} from './FormFetcher';
-import FormDetails from './class/FormDetails';
+import FormDetails from './class/form/index';
 import * as StorageManager from './StorageManager';
 
 const DIRECTORY = '/forms';
@@ -135,7 +135,7 @@ export function downloadFormUpdates(): Promise<Array<I_FetchFormResult>> {
         });
 
         /*
-        Update local index with new formDetails
+        Update local index with new form
          */
         const p_updateLocalIndex = () => new Promise((_resolve) => {
 

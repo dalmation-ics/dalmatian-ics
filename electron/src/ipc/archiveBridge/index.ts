@@ -1,24 +1,26 @@
 import IpcWrapper from "../IpcWrapper";
 
-const exportManager = require('../../storage').exportManager;
-const {FileNotFoundError} =
-    require('../../../_core/error/');
-
-const {
+import {exportManager} from '../../storage'
+import {
+    MissingArgumentError,
+    IncorrectTypeError,
+    FileNotFoundError
+} from "../../_core/error";
+import {
     ACT_SAVE_ARCHIVE,
     ACT_OPEN_ARCHIVE,
     ACT_CHECK_PASSED_FILE,
     ACT_SHOW_PATH_IN_FOLDER,
     ACT_ARCHIVE_SEND_EMAIL,
     ACT_IMPORT_FORM,
-} = require('../../_core/contract/ipc/exportBridge');
+} from '../../_core/contract/ipc/exportBridge';
 
-module.exports = (ipcW: IpcWrapper) => {
+export default (ipcW: IpcWrapper) => {
 
     /**
      * Listen for SAVE_TO_ARCHIVE
      */
-    ipcW.register(ACT_SAVE_ARCHIVE, (callback, fileList) => {
+    ipcW.register(ACT_SAVE_ARCHIVE, (callback, fileList: Map<string, any>) => {
 
         // Check that fileList exists
         if (fileList === undefined) {
@@ -34,13 +36,14 @@ module.exports = (ipcW: IpcWrapper) => {
         }
 
         // Save the fileList
-        exportManager.save(fileList).then((filePath) => {
+        exportManager.save(fileList).then((filePath: any) => {
             console.log(filePath);
             callback(null, filePath);
         }).catch(callback);
 
     });
 
+    console.log('registering ' + ACT_OPEN_ARCHIVE);
     /**
      * Listen for OPEN_ARCHIVE
      */

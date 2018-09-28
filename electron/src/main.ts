@@ -6,11 +6,11 @@ import * as url from 'url';
 import * as strings from './_core/res/strings';
 import * as PREFERENCE from './_core/contract/_preferences';
 import {downloadFormUpdates} from './UpdateManager';
-import IpcBridge, {default as IpcWrapper} from './ipc/IpcWrapper';
+import IpcBridgeConfiguration from './ipc';
 
-let window: BrowserWindow = null;
-let windowLoad: BrowserWindow = null;
-let windowCrash: BrowserWindow = null;
+let window: BrowserWindow;
+let windowLoad: BrowserWindow;
+let windowCrash: BrowserWindow;
 
 // When app is ready to run
 app.on('ready', () => {
@@ -76,10 +76,11 @@ function initializeStorageAndProcess(): Promise<void> {
     return StorageManager.initialize(app.getPath('userData'));
 }
 
-function initializeAppBridge(): Promise<IpcWrapper> {
+function initializeAppBridge(): Promise<void> {
     return new Promise((resolve, reject) => {
         try {
-            resolve(new IpcBridge(window));
+            IpcBridgeConfiguration(window);
+            resolve();
         } catch (e) {
             reject(e);
         }

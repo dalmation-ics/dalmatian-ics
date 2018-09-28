@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * UpdateManager handles the management of form templates.
  *
@@ -60,7 +60,7 @@ function checkForFormUpdates() {
         /*
         Begin
          */
-        p_fetchIndex()["catch"](function (e) {
+        p_fetchIndex().catch(function (e) {
             checkForUpdates_inProgress = false;
             reject(e);
         });
@@ -112,7 +112,7 @@ function downloadFormUpdates() {
             return p_updateLocalIndex();
         }); };
         /*
-        Update local index with new formDetails
+        Update local index with new form
          */
         var p_updateLocalIndex = function () { return new Promise(function (_resolve) {
             local_index = local_index || {};
@@ -128,7 +128,7 @@ function downloadFormUpdates() {
         /*
         Begin
          */
-        p_checkForFormUpdates()["catch"](function (e) {
+        p_checkForFormUpdates().catch(function (e) {
             downloadFormUpdates_inProgress = false;
             reject(e);
         });

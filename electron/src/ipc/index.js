@@ -1,13 +1,15 @@
-var IpcWrapper = require('./IpcWrapper');
-var formsBridge = require('./formsBridge');
-var stateBridge = require('./stateBridge');
-var archiveBridge = require('./exportBridge');
-var electronBridge = require('./electronBridge');
-var _a = require('../storage'), stateManager = _a.stateManager, formManager = _a.formManager, exportManager = _a.exportManager;
-module.exports = function (ipc, window) {
-    var ipcW = new IpcWrapper(ipc, window);
-    stateBridge(ipcW, stateManager, window);
-    formsBridge(ipcW, formManager);
-    archiveBridge(ipcW, exportManager);
-    electronBridge(ipcW);
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var archiveBridge_1 = require("./archiveBridge");
+var IpcWrapper_1 = require("./IpcWrapper");
+// const formsBridge = require('./formsBridge');
+// const stateBridge = require('./stateBridge');
+var electronBridge_1 = require("./electronBridge");
+var IpcBridgeConfiguration = function (window) {
+    var ipcW = new IpcWrapper_1.default(window);
+    // stateBridge(ipcW);
+    // formsBridge(ipcW);
+    archiveBridge_1.default(ipcW);
+    electronBridge_1.default(ipcW);
 };
+exports.default = IpcBridgeConfiguration;
