@@ -4,7 +4,7 @@
 import {dialog, shell} from 'electron';
 import {createFormFromContent, FormComplete} from '../../class/form';
 import fs from 'fs-extra';
-import nodeZip from 'node-zip';
+import * as nodeZip from 'node-zip';
 import * as form_converter from '../../class/form_converter/index';
 
 import {

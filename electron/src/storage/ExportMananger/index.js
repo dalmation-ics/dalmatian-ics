@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var electron_1 = require("electron");
 var form_1 = require("../../class/form");
 var fs_extra_1 = require("fs-extra");
-var node_zip_1 = require("node-zip");
+var nodeZip = require("node-zip");
 var form_converter = require("../../class/form_converter/index");
 var error_1 = require("../../_core/error");
 var ExportManager = /** @class */ (function () {
@@ -61,7 +61,7 @@ var ExportManager = /** @class */ (function () {
                     }
                     _this.lastPath = filePath;
                 }
-                var zip_1 = new node_zip_1.default();
+                var zip_1 = new nodeZip();
                 content.forEach(function (item, index) {
                     zip_1.file(item.fileName, item.content);
                 });
@@ -117,7 +117,7 @@ var ExportManager = /** @class */ (function () {
                 var fileData = require('fs').readFileSync(filePath, 'binary');
                 // let data = new require('node-zip')(fileData,
                 //     {base64: false, compression: 'DEFLATE'});
-                var data = node_zip_1.default(fileData, { base64: false, compression: 'DEFLATE' });
+                var data = nodeZip(fileData, { base64: false, compression: 'DEFLATE' });
                 var fileList = data.files;
                 var result = [];
                 for (var key in fileList) {
