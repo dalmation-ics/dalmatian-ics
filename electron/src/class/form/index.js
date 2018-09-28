@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsdom_1 = require("jsdom");
-var $ = require("jquery");
+var jQuery = require("jquery");
 var FormDetails = /** @class */ (function () {
     function FormDetails(props) {
         Object.assign(this, props);
@@ -28,6 +28,9 @@ function parseForm(htmlContent, fileName, lastModified) {
 }
 exports.parseForm = parseForm;
 function createFormDetailFromContent(fileName, content) {
+    var window = new jsdom_1.JSDOM(content).window;
+    jQuery(window);
+    var $ = window.$;
     var id = $('.ics_Id').text();
     var name = $('.ics_Title').text();
     var detail = $('.ics_Description').html();
@@ -42,6 +45,9 @@ function createFormDetailFromContent(fileName, content) {
 }
 exports.createFormDetailFromContent = createFormDetailFromContent;
 function createFormFromContent(fileName, content) {
+    var window = new jsdom_1.JSDOM(content).window;
+    jQuery(window);
+    var $ = window.$;
     var id = $('.ics_Id').text();
     var name = $('.ics_Title').text();
     var detail = $('.ics_Description').html();

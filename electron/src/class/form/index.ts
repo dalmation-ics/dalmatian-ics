@@ -1,5 +1,5 @@
 import {JSDOM} from 'jsdom';
-import * as $ from 'jquery';
+import * as jQuery from 'jquery';
 
 export interface I_FormDetails {
     fileName: string;
@@ -58,6 +58,10 @@ export function parseForm(htmlContent: string, fileName: string, lastModified: s
 
 export function createFormDetailFromContent(fileName: string, content: any) {
 
+    const {window} = new JSDOM(content);
+    jQuery(window);
+    const $ = window.$;
+
     const id = $('.ics_Id').text();
     const name = $('.ics_Title').text();
     const detail = $('.ics_Description').html();
@@ -74,6 +78,10 @@ export function createFormDetailFromContent(fileName: string, content: any) {
 }
 
 export function createFormFromContent(fileName: string, content: any) {
+
+    const {window} = new JSDOM(content);
+    jQuery(window);
+    const $ = window.$;
 
     const id = $('.ics_Id').text();
     const name = $('.ics_Title').text();
