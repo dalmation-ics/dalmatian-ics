@@ -43,7 +43,7 @@ export class SuiteListGridElement extends Component<propsSuiteListGridElement> {
               }}>
           <CardTitle>{formData.fileName}</CardTitle>
           <CardBody>
-            <h3><FontAwesome icon='list-alt'/></h3>
+            <h3><FontAwesome name='list-alt' icon='list-alt'/></h3>
           </CardBody>
           <CardFooter>
             <p>{formData.id}</p>
