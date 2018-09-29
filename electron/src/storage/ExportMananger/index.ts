@@ -52,12 +52,13 @@ export default class ExportManager {
      */
     save(content: Map<string, any>, filePath = '') {
         const filters = [
+            {name: 'Dalmation ICS form suite', extensions: ['dalmatianics.zip', 'dalmatianics']},
             {name: 'BCICS form', extensions: ['bcics']},
             {name: 'zip', extensions: ['zip']},
             {name: 'Custom filetype', extensions: ['*']},
         ];
         const options = {
-            title: 'Save BCICS form compressed data',
+            title: 'Save Dalmatian ICS form suite',
             filters,
             defaultPath: this.lastPath,
         };
@@ -103,13 +104,17 @@ export default class ExportManager {
 
     load(filePath = '') {
         const filters = [
-            {name: 'BCICS form', extensions: ['bcics.zip', 'bcics']},
+            {
+                name: 'Dalmation ICS form suite', extensions: [
+                    'dalmatianics.zip', 'dalmatianics', 'bcics.zip', 'bcics'
+                ]
+            },
             {name: 'zip', extensions: ['zip']},
             {name: 'Other filetype', extensions: ['*']},
         ];
 
         const options = {
-            title: 'Open BCICS form compressed data',
+            title: 'Open Dalmatian ICS suite',
             filters,
             defaultPath: this.lastPath,
         };

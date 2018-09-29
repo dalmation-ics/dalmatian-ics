@@ -41,12 +41,13 @@ var ExportManager = /** @class */ (function () {
         var _this = this;
         if (filePath === void 0) { filePath = ''; }
         var filters = [
+            { name: 'Dalmation ICS form suite', extensions: ['dalmatianics.zip', 'dalmatianics'] },
             { name: 'BCICS form', extensions: ['bcics'] },
             { name: 'zip', extensions: ['zip'] },
             { name: 'Custom filetype', extensions: ['*'] },
         ];
         var options = {
-            title: 'Save BCICS form compressed data',
+            title: 'Save Dalmatian ICS form suite',
             filters: filters,
             defaultPath: this.lastPath,
         };
@@ -92,12 +93,16 @@ var ExportManager = /** @class */ (function () {
         var _this = this;
         if (filePath === void 0) { filePath = ''; }
         var filters = [
-            { name: 'BCICS form', extensions: ['bcics.zip', 'bcics'] },
+            {
+                name: 'Dalmation ICS form suite', extensions: [
+                    'dalmatianics.zip', 'dalmatianics', 'bcics.zip', 'bcics'
+                ]
+            },
             { name: 'zip', extensions: ['zip'] },
             { name: 'Other filetype', extensions: ['*'] },
         ];
         var options = {
-            title: 'Open BCICS form compressed data',
+            title: 'Open Dalmatian ICS suite',
             filters: filters,
             defaultPath: this.lastPath,
         };
