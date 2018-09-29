@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var error_1 = require("../../_core/error");
-var fs_extra_1 = require("fs-extra");
+var fs = require("fs-extra");
 var os = require("os");
 var DataManager = /** @class */ (function () {
     function DataManager(folder) {
@@ -12,7 +12,7 @@ var DataManager = /** @class */ (function () {
     }
     Object.defineProperty(DataManager, "root", {
         get: function () {
-            return os.tmpdir() + "/BC_ICS";
+            return os.tmpdir() + "/Dalmatian_ICS";
         },
         enumerable: true,
         configurable: true
@@ -25,16 +25,16 @@ var DataManager = /** @class */ (function () {
         return DataManager.root + "/" + this.folder + "/" + name;
     };
     DataManager.initRoot = function () {
-        return new fs_extra_1.default.exists(DataManager.root).then(function (exists) {
+        return new fs.exists(DataManager.root).then(function (exists) {
             if (!exists)
-                return fs_extra_1.default.mkdir(DataManager.root);
+                return fs.mkdir(DataManager.root);
         });
     };
     DataManager.prototype.init = function () {
         var _this = this;
-        return fs_extra_1.default.exists(this.normalize('')).then(function (exists) {
+        return fs.exists(this.normalize('')).then(function (exists) {
             if (!exists)
-                return fs_extra_1.default.mkdir(_this.normalize(''));
+                return fs.mkdir(_this.normalize(''));
         });
     };
     /**
@@ -47,7 +47,7 @@ var DataManager = /** @class */ (function () {
             throw new error_1.MissingArgumentError('name');
         if (typeof name !== 'string')
             throw new error_1.IncorrectTypeError('string', typeof name, 'name');
-        return this.init().then(function () { return fs_extra_1.default.exists(_this.normalize(name)); });
+        return this.init().then(function () { return fs.exists(_this.normalize(name)); });
     };
     /**
      * Read data locally
@@ -63,7 +63,7 @@ var DataManager = /** @class */ (function () {
             if (!exists)
                 throw new error_1.FileNotFoundError(_this.normalize(name));
             else
-                return fs_extra_1.default.readFile(_this.normalize(name)).then(function (data) { return data.toString(); });
+                return fs.readFile(_this.normalize(name)).then(function (data) { return data.toString(); });
         });
     };
     /**
@@ -72,7 +72,7 @@ var DataManager = /** @class */ (function () {
     DataManager.prototype.dir = function () {
         var _this = this;
         return this.init().then(function () {
-            return fs_extra_1.default.readdir(_this.normalize(''));
+            return fs.readdir(_this.normalize(''));
         });
     };
     /**
@@ -96,7 +96,7 @@ var DataManager = /** @class */ (function () {
             if (exists)
                 return _this.delete(name);
         }).then(function () {
-            return fs_extra_1.default.writeFile(_this.normalize(name), content);
+            return fs.writeFile(_this.normalize(name), content);
         });
     };
     /**
@@ -108,7 +108,7 @@ var DataManager = /** @class */ (function () {
             throw new error_1.MissingArgumentError('name');
         if (typeof name !== 'string')
             throw new error_1.IncorrectTypeError('string', typeof name, 'name');
-        return fs_extra_1.default.remove(this.normalize(name));
+        return fs.remove(this.normalize(name));
     };
     return DataManager;
 }());

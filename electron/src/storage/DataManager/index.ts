@@ -4,7 +4,7 @@ import {
     FileNotFoundError,
 } from '../../_core/error';
 
-import fs from 'fs-extra';
+import * as fs from 'fs-extra';
 import * as os from 'os';
 
 export default class DataManager {
@@ -20,7 +20,7 @@ export default class DataManager {
     }
 
     static get root() {
-        return `${os.tmpdir()}/BC_ICS`;
+        return `${os.tmpdir()}/Dalmatian_ICS`;
     }
 
     normalize(name: string) {
