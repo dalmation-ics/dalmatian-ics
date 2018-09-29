@@ -2,6 +2,19 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsdom_1 = require("jsdom");
 var jQuery = require("jquery");
+/**
+ * Class for storing and managing templates of forms
+ */
+var FormTemplate = /** @class */ (function () {
+    function FormTemplate(props) {
+        Object.assign(this, props);
+    }
+    return FormTemplate;
+}());
+exports.FormTemplate = FormTemplate;
+/**
+ * Describes a form's meta-data (doesn't have any content associated with it)
+ */
 var FormDetails = /** @class */ (function () {
     function FormDetails(props) {
         Object.assign(this, props);
@@ -9,6 +22,9 @@ var FormDetails = /** @class */ (function () {
     return FormDetails;
 }());
 exports.FormDetails = FormDetails;
+/**
+ * Describes a form object including content
+ */
 var FormComplete = /** @class */ (function () {
     function FormComplete(props) {
         Object.assign(this, props);
@@ -16,7 +32,14 @@ var FormComplete = /** @class */ (function () {
     return FormComplete;
 }());
 exports.FormComplete = FormComplete;
-function parseForm(htmlContent, fileName, lastModified) {
+/**
+ * Handles incoming form templates being processed for local usage
+ * @param {string} htmlContent
+ * @param {string} fileName
+ * @param {string} lastModified
+ * @returns {any}
+ */
+function parseFormTemplate(htmlContent, fileName, lastModified) {
     var window = new jsdom_1.JSDOM(htmlContent).window;
     var id = window.document.querySelector('.ics_Id').textContent;
     var name = window.document.querySelector('.ics_Title').textContent;
@@ -26,8 +49,9 @@ function parseForm(htmlContent, fileName, lastModified) {
     else
         return null;
 }
-exports.parseForm = parseForm;
+exports.parseFormTemplate = parseFormTemplate;
 function createFormDetailFromContent(fileName, content) {
+    //done to disable type checking on window because TS and Jquery don't understand each other
     var window = new jsdom_1.JSDOM(content).window;
     jQuery(window);
     var $ = window.$;

@@ -1,7 +1,9 @@
-var FormDetails = require('./object/FormDetails');
-var formRest = require('../FormRest/index');
-var _ = require('lodash');
-var moment = require('moment');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var form_1 = require("../../class/form");
+var FormRest_1 = require("../../rest/FormRest");
+var lodash_1 = require("lodash");
+var moment = require("moment");
 var FormManager = /** @class */ (function () {
     /**
      *
@@ -48,7 +50,7 @@ var FormManager = /** @class */ (function () {
             // This means I have to create a custom promise which will pass them along with result from fromRest.GetForms
             return new Promise(function (resolve, reject) {
                 // This will return an objects in the style of {formName: {result: content, err: null}, formName2: {re...}}
-                return formRest.getForms(needsUpdating).then(function (result) {
+                return FormRest_1.default.getForms(needsUpdating).then(function (result) {
                     resolve({
                         forms: result,
                         serverIndex: serverIndex,
@@ -70,9 +72,9 @@ var FormManager = /** @class */ (function () {
                 var form = forms[name];
                 /**
                  * ex. bcics_ICS205A {
-                 *      result: <html>...
-                 *      err: null
-                 * }
+                     *      result: <html>...
+                     *      err: null
+                     * }
                  */
                 /**
                  * Create the FormDetails
@@ -80,11 +82,10 @@ var FormManager = /** @class */ (function () {
                  * Not only does it hold lastModified, but it also
                  *  holds the description HTML for use in the application
                  */
-                var formDetails = FormDetails.createFormDetailsFromContent(form.result, name, serverIndex[name].lastModified);
+                var formDetails = form_1.parseFormTemplate(form.result, name, serverIndex[name].lastModified);
                 // Write them to file
                 console.log("Writing " + name);
-                return _this.dataManager.write(name, form.result).
-                    then(function () {
+                return _this.dataManager.write(name, form.result).then(function () {
                     // After we successfully write, update our local index
                     localIndex[name] = formDetails;
                 });
@@ -104,15 +105,14 @@ var FormManager = /** @class */ (function () {
             return _this.dataManager.exists('index');
         }).then(function (exists) {
             if (!exists)
-                return _this.dataManager.write('index', '{}').
-                    then(function () {
+                return _this.dataManager.write('index', '{}').then(function () {
                     return '{}';
                 });
             else
                 return _this.dataManager.read('index');
         }).then(function (localIndex) {
             return new Promise(function (resolve, reject) {
-                formRest.getFormsIndex().then(function (serverIndex) {
+                FormRest_1.default.getFormsIndex().then(function (serverIndex) {
                     resolve({
                         localIndex: JSON.parse(localIndex),
                         serverIndex: JSON.parse(serverIndex),
@@ -124,8 +124,8 @@ var FormManager = /** @class */ (function () {
             var needsUpdating = [];
             var localNames = Object.keys(localIndex);
             var serverNames = Object.keys(serverIndex);
-            var newServerFiles = _.difference(serverNames, localNames);
-            var localOnlyFiles = _.difference(localNames, serverNames);
+            var newServerFiles = lodash_1.default.difference(serverNames, localNames);
+            var localOnlyFiles = lodash_1.default.difference(localNames, serverNames);
             if (newServerFiles.length > 0)
                 console.log("Server has new files: [" + newServerFiles + "]");
             if (localOnlyFiles.length > 0)
@@ -165,4 +165,4 @@ var FormManager = /** @class */ (function () {
     };
     return FormManager;
 }());
-module.exports = FormManager;
+exports.default = FormManager;

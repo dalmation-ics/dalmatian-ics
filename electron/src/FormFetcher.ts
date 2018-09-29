@@ -5,7 +5,7 @@ import * as getIt from 'get-it';
 import * as gi_base from 'get-it/lib/middleware/base';
 import * as gi_promise from 'get-it/lib/middleware/promise';
 import * as gi_httpErrors from 'get-it/lib/middleware/httpErrors';
-import FormDetails, {parseForm} from './class/form/index';
+import FormDetails, {parseFormTemplate} from './class/form/index';
 
 const target = 'https://s3-us-west-2.amazonaws.com/dalmatian-ics-forms';
 
@@ -108,7 +108,7 @@ export function fetchForms(formNameArray: Array<string>): Promise<Array<I_FetchF
                         console.log(`File download ${name} successful`);
                         out.push({
                             fileName: name,
-                            details: parseForm(content, name, index[name].lastModified),
+                            details: parseFormTemplate(content, name, index[name].lastModified),
                             content: content,
                             error: null,
                             failure: false

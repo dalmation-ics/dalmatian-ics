@@ -269,7 +269,7 @@ describe('FormFetcher should ', function () {
                             path: '/dalmatian_ICS205A.html',
                             reply: buildSuccessResponse(ICS205A_Content)
                         });
-                        stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
+                        stub_parseForm = sandbox.stub(_FormDetails, 'parseFormTemplate');
                         stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
                         stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
                         stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
@@ -321,7 +321,7 @@ describe('FormFetcher should ', function () {
                             path: '/dalmatian_ICS205A.html',
                             reply: buildSuccessResponse(ICS205A_Content)
                         });
-                        stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
+                        stub_parseForm = sandbox.stub(_FormDetails, 'parseFormTemplate');
                         stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
                         stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
                         stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
@@ -376,7 +376,7 @@ describe('FormFetcher should ', function () {
                             reply: buildSuccessResponse(ICS205A_Content),
                             delay: 3000
                         });
-                        stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
+                        stub_parseForm = sandbox.stub(_FormDetails, 'parseFormTemplate');
                         stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
                         stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
                         stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
@@ -446,7 +446,7 @@ describe('FormFetcher should ', function () {
                             reply: buildSuccessResponse(ICS205A_Content),
                             delay: 2000
                         });
-                        stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
+                        stub_parseForm = sandbox.stub(_FormDetails, 'parseFormTemplate');
                         stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
                         stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
                         stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
@@ -506,7 +506,7 @@ describe('FormFetcher should ', function () {
                             reply: buildSuccessResponse(ICS205A_Content),
                             delay: 2000
                         });
-                        stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
+                        stub_parseForm = sandbox.stub(_FormDetails, 'parseFormTemplate');
                         stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
                         stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
                         stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);

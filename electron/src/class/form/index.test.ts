@@ -4,17 +4,17 @@ const HTML = '<div class=\'grid grid-pad ics-controls-grid\'><div class=\'col-1-
 
 describe('FormParser should ', () => {
 
-    describe('have method parseForm that ', () => {
+    describe('have method parseFormTemplate that ', () => {
 
         it('exists', () => {
 
-            expect(FormParser.parseForm).toBeDefined();
+            expect(FormParser.parseFormTemplate).toBeDefined();
 
         });
 
         it('parses ICS210 correctly', () => {
 
-            const result = FormParser.parseForm(HTML, 'dalmatian_ICS213', 'Thu Jul 5');
+            const result = FormParser.parseFormTemplate(HTML, 'dalmatian_ICS213', 'Thu Jul 5');
 
             expect(result.id).toEqual('ICS213');
             expect(result.name).toEqual('GENERAL MESSAGE');

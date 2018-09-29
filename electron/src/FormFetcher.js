@@ -90,7 +90,7 @@ function fetchForms(formNameArray) {
                         console.log("File download " + name + " successful");
                         out.push({
                             fileName: name,
-                            details: index_1.parseForm(content, name, index[name].lastModified),
+                            details: index_1.parseFormTemplate(content, name, index[name].lastModified),
                             content: content,
                             error: null,
                             failure: false

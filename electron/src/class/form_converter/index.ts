@@ -1,4 +1,4 @@
-import {FormComplete, FormDetails, parseForm} from '../../class/form/';
+import {FormComplete, FormDetails, parseFormTemplate} from '../../class/form/';
 import {parseString} from 'xml2js';
 import {JSDOM} from 'jsdom';
 import * as $ from 'jquery';

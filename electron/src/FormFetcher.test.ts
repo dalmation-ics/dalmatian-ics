@@ -227,7 +227,7 @@ describe('FormFetcher should ', () => {
                 reply: buildSuccessResponse(ICS205A_Content)
             });
 
-            const stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
+            const stub_parseForm = sandbox.stub(_FormDetails, 'parseFormTemplate');
             stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
             stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
             stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
@@ -282,7 +282,7 @@ describe('FormFetcher should ', () => {
                 reply: buildSuccessResponse(ICS205A_Content)
             });
 
-            const stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
+            const stub_parseForm = sandbox.stub(_FormDetails, 'parseFormTemplate');
             stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
             stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
             stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
@@ -341,7 +341,7 @@ describe('FormFetcher should ', () => {
                 delay: 3000
             });
 
-            const stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
+            const stub_parseForm = sandbox.stub(_FormDetails, 'parseFormTemplate');
             stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
             stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
             stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
@@ -409,7 +409,7 @@ describe('FormFetcher should ', () => {
                 delay: 2000
             });
 
-            const stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
+            const stub_parseForm = sandbox.stub(_FormDetails, 'parseFormTemplate');
             stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
             stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
             stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
@@ -474,7 +474,7 @@ describe('FormFetcher should ', () => {
                 delay: 2000
             });
 
-            const stub_parseForm = sandbox.stub(_FormDetails, 'parseForm');
+            const stub_parseForm = sandbox.stub(_FormDetails, 'parseFormTemplate');
             stub_parseForm.withArgs(ICS205_Content).returns(ICS205_Details);
             stub_parseForm.withArgs(ICS206_Content).returns(ICS206_Details);
             stub_parseForm.withArgs(ICS205A_Content).returns(ICS205A_Details);
