@@ -16,10 +16,9 @@ class FormDetail extends Component<props> {
 
     if (form) {
       return (
-          <div testid="FormDetailForm"
-               className="panel panel-default">
-            <h3 className="panel-heading">{form.name}</h3>
-            <div className="panel-body">
+          <div className="card card-default">
+            <h3 className="card-title">{form.name}</h3>
+            <div className="card-body">
               <div className="scrollBox"
                    dangerouslySetInnerHTML={{
                      __html: form.detail || '',

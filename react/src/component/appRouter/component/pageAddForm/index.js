@@ -73,20 +73,22 @@ class PageAddForm extends Component<props> {
     return (
         <div className="container-fluid">
           <CommandBar><CommandBarButton path={'/suite'}>Back</CommandBarButton></CommandBar>
-          <div className="col-xs-12 col-sm-8">
-            <FormList forms={formIndex}
-                      selected={selectedFormId}
-                      onSelect={(selectedId) => {
-                        action_Nav_SelectForm(selectedId);
-                      }}
-                      onSubmit={() => {
-                        this.onSubmit_AddForm(selectedForm);
-                      }}
-                      onClickOpenUpdatePanel={action_UI_ToggleUpdatePanel}
-            />
-          </div>
-          <div className="hidden-xs col-sm-4">
-            <FormDetail form={selectedForm}/>
+          <div className='row'>
+            <div className="col-xs-12 col-sm-8">
+              <FormList forms={formIndex}
+                        selected={selectedFormId}
+                        onSelect={(selectedId) => {
+                          action_Nav_SelectForm(selectedId);
+                        }}
+                        onSubmit={() => {
+                          this.onSubmit_AddForm(selectedForm);
+                        }}
+                        onClickOpenUpdatePanel={action_UI_ToggleUpdatePanel}
+              />
+            </div>
+            <div className="hidden-xs col-sm-4">
+              <FormDetail form={selectedForm}/>
+            </div>
           </div>
           <UpdatePanel/>
         </div>
