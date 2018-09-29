@@ -9,9 +9,10 @@ const {version} = require('../../../package.json');
 
 export default class IpcWrapper {
 
+    public window: BrowserWindow;
+    public appTitle: string = strings.APP_TITLE + ((version !== undefined) && (' ' + version));
+
     ipcMain: IpcMain;
-    window: BrowserWindow;
-    appTitle: string = strings.APP_TITLE + ((version !== undefined) && (' ' + version));
 
     constructor(window: BrowserWindow) {
         this.window = window;

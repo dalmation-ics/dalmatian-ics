@@ -14,12 +14,49 @@ let windowCrash: BrowserWindow;
 
 // When app is ready to run
 app.on('ready', () => {
-    createPreloader().catch();
-    initializeStorageAndProcess()
-        .then(initializeAppBridge)
-        .then(createWindowApp)
-        .catch(createWindowCrash);
+    createBaseWindowObjects().then(() => {
+        createPreloader().catch();
+        initializeStorageAndProcess()
+            .then(initializeAppBridge)
+            .then(createWindowApp)
+            .catch(createWindowCrash);
+    }).catch((e) => {
+        console.log(e);
+        process.exit(1);
+    });
 });
+
+function createBaseWindowObjects(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+        try {
+            windowLoad = new BrowserWindow({
+                title: 'Loading',
+                width: 600,
+                height: 400,
+                transparent: true,
+                closable: false,
+                frame: false,
+                maximizable: false,
+                minimizable: false,
+                fullscreenable: false,
+                skipTaskbar: true,
+                titleBarStyle: 'hiddenInset',
+                vibrancy: 'dark',
+                show: false,
+            });
+            // Create a new window
+            window = new BrowserWindow({
+                title: strings.APP_TITLE,
+                width: PreferenceManager.get(PREFERENCE.WINDOW_WIDTH) || 800,
+                height: PreferenceManager.get(PREFERENCE.WINDOW_HEIGHT) || 600,
+                show: false
+            });
+            resolve();
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
 
 function createWindowApp() {
     downloadFormUpdates().then((result) => {
@@ -31,13 +68,7 @@ function createWindowApp() {
 
     console.log('Storage initialized');
 
-    // Create a new window
-    window = new BrowserWindow({
-        title: strings.APP_TITLE,
-        width: PreferenceManager.get(PREFERENCE.WINDOW_WIDTH) || 800,
-        height: PreferenceManager.get(PREFERENCE.WINDOW_HEIGHT) || 600,
-        show: false
-    });
+
     window.once('ready-to-show', () => {
         window.show();
         windowLoad.hide();
@@ -79,6 +110,7 @@ function initializeStorageAndProcess(): Promise<void> {
 function initializeAppBridge(): Promise<void> {
     return new Promise((resolve, reject) => {
         try {
+            console.log(JSON.stringify(window, null, 4));
             IpcBridgeConfiguration(window);
             resolve();
         } catch (e) {
@@ -103,22 +135,9 @@ function createPreloader(): Promise<void> {
                 '<h2>Loading . . .</h2>',
                 '</div></body>',
             ].join('');
-            windowLoad = new BrowserWindow({
-                title: 'Loading',
-                width: 600,
-                height: 400,
-                transparent: true,
-                closable: false,
-                frame: false,
-                maximizable: false,
-                minimizable: false,
-                fullscreenable: false,
-                skipTaskbar: true,
-                titleBarStyle: 'hiddenInset',
-                vibrancy: 'dark',
-            });
             windowLoad.loadURL('data:text/html;charset=utf-8,' +
                 encodeURI(loaderHtml));
+            windowLoad.show();
             resolve();
         } catch (exc) {
             windowLoad.hide();

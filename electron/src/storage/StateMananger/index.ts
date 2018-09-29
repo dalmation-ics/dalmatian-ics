@@ -1,6 +1,9 @@
+import DataManager from "@src/src/storage/DataManager";
+
 let packageJs = require('../../../../package.json');
 
-class StateManager {
+export default class StateManager {
+    dataManager: DataManager;
 
     static get dataName() {
         return 'state';
@@ -9,11 +12,11 @@ class StateManager {
     /**
      * @param dataManager
      */
-    constructor(dataManager) {
+    constructor(dataManager: DataManager) {
         this.dataManager = dataManager;
     }
 
-    save(state) {
+    save(state: any) {
         return this.dataManager.constructor.initRoot().then(() => {
             return this.dataManager.write(StateManager.dataName,
                 JSON.stringify(state, null, 4));
@@ -21,7 +24,7 @@ class StateManager {
     }
 
     load() {
-        return this.dataManager.read(StateManager.dataName).then(result => {
+        return this.dataManager.read(StateManager.dataName).then((result: any) => {
             return JSON.parse(result);
         });
     }
@@ -30,5 +33,3 @@ class StateManager {
         return packageJs.version;
     }
 }
-
-module.exports = StateManager;

@@ -6,10 +6,11 @@ import BrowserWindow = Electron.BrowserWindow;
 // const formsBridge = require('./formsBridge');
 // const stateBridge = require('./stateBridge');
 import electronBridge from './electronBridge';
+import stateBridge from './stateBridge';
 
 const IpcBridgeConfiguration = (window: BrowserWindow) => {
     const ipcW = new IpcWrapper(window);
-    // stateBridge(ipcW);
+    stateBridge(ipcW);
     // formsBridge(ipcW);
     ArchiveBridge(ipcW);
     electronBridge(ipcW);

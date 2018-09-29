@@ -14,12 +14,49 @@ var windowLoad;
 var windowCrash;
 // When app is ready to run
 electron_1.app.on('ready', function () {
-    createPreloader().catch();
-    initializeStorageAndProcess()
-        .then(initializeAppBridge)
-        .then(createWindowApp)
-        .catch(createWindowCrash);
+    createBaseWindowObjects().then(function () {
+        createPreloader().catch();
+        initializeStorageAndProcess()
+            .then(initializeAppBridge)
+            .then(createWindowApp)
+            .catch(createWindowCrash);
+    }).catch(function (e) {
+        console.log(e);
+        process.exit(1);
+    });
 });
+function createBaseWindowObjects() {
+    return new Promise(function (resolve, reject) {
+        try {
+            windowLoad = new electron_1.BrowserWindow({
+                title: 'Loading',
+                width: 600,
+                height: 400,
+                transparent: true,
+                closable: false,
+                frame: false,
+                maximizable: false,
+                minimizable: false,
+                fullscreenable: false,
+                skipTaskbar: true,
+                titleBarStyle: 'hiddenInset',
+                vibrancy: 'dark',
+                show: false,
+            });
+            // Create a new window
+            window = new electron_1.BrowserWindow({
+                title: strings.APP_TITLE,
+                width: PreferenceManager_1.default.get(PREFERENCE.WINDOW_WIDTH) || 800,
+                height: PreferenceManager_1.default.get(PREFERENCE.WINDOW_HEIGHT) || 600,
+                show: false
+            });
+            resolve();
+        }
+        catch (e) {
+            reject(e);
+        }
+    });
+}
 function createWindowApp() {
     UpdateManager_1.downloadFormUpdates().then(function (result) {
         console.log('done');
@@ -28,13 +65,6 @@ function createWindowApp() {
         console.log(e);
     });
     console.log('Storage initialized');
-    // Create a new window
-    window = new electron_1.BrowserWindow({
-        title: strings.APP_TITLE,
-        width: PreferenceManager_1.default.get(PREFERENCE.WINDOW_WIDTH) || 800,
-        height: PreferenceManager_1.default.get(PREFERENCE.WINDOW_HEIGHT) || 600,
-        show: false
-    });
     window.once('ready-to-show', function () {
         window.show();
         windowLoad.hide();
@@ -73,6 +103,7 @@ function initializeStorageAndProcess() {
 function initializeAppBridge() {
     return new Promise(function (resolve, reject) {
         try {
+            console.log(JSON.stringify(window, null, 4));
             ipc_1.default(window);
             resolve();
         }
@@ -97,22 +128,9 @@ function createPreloader() {
                 '<h2>Loading . . .</h2>',
                 '</div></body>',
             ].join('');
-            windowLoad = new electron_1.BrowserWindow({
-                title: 'Loading',
-                width: 600,
-                height: 400,
-                transparent: true,
-                closable: false,
-                frame: false,
-                maximizable: false,
-                minimizable: false,
-                fullscreenable: false,
-                skipTaskbar: true,
-                titleBarStyle: 'hiddenInset',
-                vibrancy: 'dark',
-            });
             windowLoad.loadURL('data:text/html;charset=utf-8,' +
                 encodeURI(loaderHtml));
+            windowLoad.show();
             resolve();
         }
         catch (exc) {

@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var packageJs = require('../../../../package.json');
 var StateManager = /** @class */ (function () {
     /**
@@ -29,4 +31,4 @@ var StateManager = /** @class */ (function () {
     };
     return StateManager;
 }());
-module.exports = StateManager;
+exports.default = StateManager;
