@@ -8,8 +8,7 @@ import {
     ACT_CHECK_FOR_UPDATES,
     ACT_GET_FORM,
     ACT_GET_FORMS_INDEX,
-    ACT_UPDATE_FORMS,
-    ACT_IMPORT_FORM,
+    ACT_UPDATE_FORMS
 } from '../../_core/contract/ipc/formsBridge';
 
 export default (ipcW: any) => {
