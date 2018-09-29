@@ -52,9 +52,11 @@ class FormList extends Component<propTypesFormList> {
               </CardHeader>
               <CardBody>
                 <CardText>
-                  <p>No form data has been downloaded yet! </p>
-                  <p>Please use the form updater to get current
-                    versions of the BCICS forms</p>
+                  No form data has been downloaded yet!
+                </CardText>
+                <CardText>
+                  Please use the form updater to get current
+                  versions of the BCICS forms
                 </CardText>
               </CardBody>
               <CardFooter>
