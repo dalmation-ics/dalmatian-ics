@@ -4,8 +4,8 @@ const sinon = require('sinon');
 
 describe('storage should ', () => {
 
-    it('have formManager', () => {
-        expect(storage).toHaveProperty('formManager');
+    it('have formTemplateManager', () => {
+        expect(storage).toHaveProperty('formTemplateManager');
     });
 
     it('have stateManager', () => {

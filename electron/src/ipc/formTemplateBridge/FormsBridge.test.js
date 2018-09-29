@@ -1,5 +1,5 @@
 const FormsBridge = require('.');
-const formManager = require('../../storage/index').formManager;
+const formManager = require('../../storage/index').formTemplateManager;
 const {IncorrectTypeError, MissingArgumentError} = require(
     '../../../_core/error');
 const sinon = require('sinon');
@@ -13,7 +13,7 @@ const {
     ACT_GET_FORM,
     ACT_GET_FORMS_INDEX,
     ACT_UPDATE_FORMS,
-} = require('../../../_core/contract/formsBridge');
+} = require('../../../_core/contract/formTemplateBridge');
 
 const buildMockIPCW = () => {
 

@@ -2,17 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var form_1 = require("../../class/form");
 var FormRest_1 = require("../../rest/FormRest");
-var lodash_1 = require("lodash");
+var _ = require("lodash");
 var moment = require("moment");
-var FormManager = /** @class */ (function () {
+var FormTemplateManager = /** @class */ (function () {
     /**
      *
      * @param dataManager
      */
-    function FormManager(dataManager) {
+    function FormTemplateManager(dataManager) {
         this.dataManager = dataManager;
     }
-    Object.defineProperty(FormManager, "dataName", {
+    Object.defineProperty(FormTemplateManager, "dataName", {
         get: function () {
             return 'forms';
         },
@@ -22,7 +22,7 @@ var FormManager = /** @class */ (function () {
     /**
      * Download forms from server
      */
-    FormManager.prototype.downloadForms = function () {
+    FormTemplateManager.prototype.downloadForms = function () {
         var _this = this;
         console.log('getting updates');
         /**
@@ -98,7 +98,7 @@ var FormManager = /** @class */ (function () {
     /**
      * Check for updates
      */
-    FormManager.prototype.checkForUpdates = function () {
+    FormTemplateManager.prototype.checkForUpdates = function () {
         var _this = this;
         console.log('checking for updates');
         return this.dataManager.init().then(function () {
@@ -124,8 +124,8 @@ var FormManager = /** @class */ (function () {
             var needsUpdating = [];
             var localNames = Object.keys(localIndex);
             var serverNames = Object.keys(serverIndex);
-            var newServerFiles = lodash_1.default.difference(serverNames, localNames);
-            var localOnlyFiles = lodash_1.default.difference(localNames, serverNames);
+            var newServerFiles = _.difference(serverNames, localNames);
+            var localOnlyFiles = _.difference(localNames, serverNames);
             if (newServerFiles.length > 0)
                 console.log("Server has new files: [" + newServerFiles + "]");
             if (localOnlyFiles.length > 0)
@@ -152,17 +152,17 @@ var FormManager = /** @class */ (function () {
     /**
      * Get form by id
      */
-    FormManager.prototype.getFormByFileName = function (name) {
+    FormTemplateManager.prototype.getFormByFileName = function (name) {
         return this.dataManager.read(name);
     };
     /**
      * Get form data
      */
-    FormManager.prototype.getFormsData = function () {
+    FormTemplateManager.prototype.getFormsData = function () {
         return this.dataManager.read('index').then(function (content) {
             return JSON.parse(content);
         });
     };
-    return FormManager;
+    return FormTemplateManager;
 }());
-exports.default = FormManager;
+exports.default = FormTemplateManager;

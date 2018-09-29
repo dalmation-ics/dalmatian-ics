@@ -10,7 +10,7 @@ exports.default = (function (ipcW) {
      */
     ipcW.register(formsBridge_1.ACT_CHECK_FOR_UPDATES, function (callback) {
         // Check for updates
-        storage_1.formManager.checkForUpdates().then(function (result) {
+        storage_1.formTemplateManager.checkForUpdates().then(function (result) {
             callback(null, result.actionRequired);
         }).catch(function (e) {
             callback(e);
@@ -38,7 +38,7 @@ exports.default = (function (ipcW) {
             return;
         }
         // Get form
-        storage_1.formManager.getFormByFileName(fileName).then(function (content) {
+        storage_1.formTemplateManager.getFormByFileName(fileName).then(function (content) {
             callback(null, content);
         }).catch(function (e) {
             callback(e);
@@ -49,7 +49,7 @@ exports.default = (function (ipcW) {
      */
     ipcW.register(formsBridge_1.ACT_GET_FORMS_INDEX, function (callback) {
         // Get form index
-        storage_1.formManager.getFormsData().then(function (result) {
+        storage_1.formTemplateManager.getFormsData().then(function (result) {
             var flattened = Object.keys(result).map(function (name) {
                 return result[name];
             });
@@ -66,7 +66,7 @@ exports.default = (function (ipcW) {
      */
     ipcW.register(formsBridge_1.ACT_UPDATE_FORMS, function (callback) {
         // Update forms
-        storage_1.formManager.downloadForms().then(function () {
+        storage_1.formTemplateManager.downloadForms().then(function () {
             callback(null);
         }).catch(function (e) {
             callback(e);

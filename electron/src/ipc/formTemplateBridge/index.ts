@@ -1,6 +1,6 @@
 import {FileNotFoundError} from '../../_core/error';
 
-import {formManager} from '../../storage';
+import {formTemplateManager} from '../../storage';
 
 import {IncorrectTypeError, MissingArgumentError} from
         '../../_core/error';
@@ -19,7 +19,7 @@ export default (ipcW: any) => {
     ipcW.register(ACT_CHECK_FOR_UPDATES, (callback) => {
 
         // Check for updates
-        formManager.checkForUpdates().then(result => {
+        formTemplateManager.checkForUpdates().then(result => {
             callback(null, result.actionRequired);
         }).catch(e => {
             callback(e);
@@ -54,7 +54,7 @@ export default (ipcW: any) => {
         }
 
         // Get form
-        formManager.getFormByFileName(fileName).then(content => {
+        formTemplateManager.getFormByFileName(fileName).then(content => {
             callback(null, content);
         }).catch(e => {
             callback(e);
@@ -68,7 +68,7 @@ export default (ipcW: any) => {
     ipcW.register(ACT_GET_FORMS_INDEX, (callback) => {
 
         // Get form index
-        formManager.getFormsData().then(result => {
+        formTemplateManager.getFormsData().then(result => {
             const flattened = Object.keys(result).map(name => {
                 return result[name];
             });
@@ -88,7 +88,7 @@ export default (ipcW: any) => {
     ipcW.register(ACT_UPDATE_FORMS, (callback) => {
 
         // Update forms
-        formManager.downloadForms().then(() => {
+        formTemplateManager.downloadForms().then(() => {
             callback(null);
         }).catch(e => {
             callback(e);

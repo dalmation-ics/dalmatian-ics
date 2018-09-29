@@ -1,11 +1,11 @@
 import {parseFormTemplate} from '../../class/form';
 import formRest from '../../rest/FormRest';
-import _ from 'lodash';
+import * as _ from 'lodash';
 import * as moment from 'moment';
 import DataManager from "@src/src/storage/DataManager";
 
-export default class FormManager {
-    dataManager: DataManager
+export default class FormTemplateManager {
+    dataManager: DataManager;
 
     static get dataName() {
         return 'forms';
