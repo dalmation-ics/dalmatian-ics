@@ -4,5 +4,5 @@ export const ACT_GET_FORM = 'GET_FORM';
 export const ACT_GET_FORMS_INDEX = 'GET_FORMS_INDEX';
 export const ACT_UPDATE_FORMS = 'UPDATE_FORMS';
 export const ACT_CANCEL_UPDATE_FORMS = 'CANCEL_UPDATE_FORMS';
-
+export const ACT_IMPORT_FORM = 'IMPORT_FORM';
 
