@@ -11,22 +11,14 @@ export default (ipcW: any) => {
      * //TODO There has to be a more logical place for this
      */
     ipcW.window.once('close', (e: Event) => {
-        console.log('preventing event');
         e.preventDefault();
-        console.log('sending IPC save req');
         ipcW.prompt(ACT_SAVE_STATE, (err, result) => {
-
-            console.log('IPC save recieved');
             const size = ipcW.window.getSize();
             result.window = {
                 width: size[0],
                 height: size[1],
             };
-            console.log('Window data saved');
-
-            console.log('Firing state save');
             manager.save(result).then(() => {
-                console.log('State Saved');
                 ipcW.window.close();
                 process.exit(0);
             }).catch((e: Event) => {

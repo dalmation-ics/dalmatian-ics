@@ -110,7 +110,6 @@ function initializeStorageAndProcess(): Promise<void> {
 function initializeAppBridge(): Promise<void> {
     return new Promise((resolve, reject) => {
         try {
-            console.log(JSON.stringify(window, null, 4));
             IpcBridgeConfiguration(window);
             resolve();
         } catch (e) {

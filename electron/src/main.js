@@ -103,7 +103,6 @@ function initializeStorageAndProcess() {
 function initializeAppBridge() {
     return new Promise(function (resolve, reject) {
         try {
-            console.log(JSON.stringify(window, null, 4));
             ipc_1.default(window);
             resolve();
         }

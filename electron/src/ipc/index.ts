@@ -3,8 +3,6 @@ import ArchiveBridge from './archiveBridge'
 import IpcWrapper from './IpcWrapper'
 import BrowserWindow = Electron.BrowserWindow;
 
-// const formsBridge = require('./formsBridge');
-// const stateBridge = require('./stateBridge');
 import electronBridge from './electronBridge';
 import stateBridge from './stateBridge';
 

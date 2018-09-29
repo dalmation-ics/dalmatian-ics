@@ -2,8 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var archiveBridge_1 = require("./archiveBridge");
 var IpcWrapper_1 = require("./IpcWrapper");
-// const formsBridge = require('./formsBridge');
-// const stateBridge = require('./stateBridge');
 var electronBridge_1 = require("./electronBridge");
 var stateBridge_1 = require("./stateBridge");
 var IpcBridgeConfiguration = function (window) {
