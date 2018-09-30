@@ -12,7 +12,7 @@ import type {ActionBound} from 'src/_core/redux/types';
 import thunkBindActionCreators
   from 'src/_core/redux/thunkBindActionCreators';
 import CommandBar from '../commandBar';
-import CommandBarItemNav from '../commandBar/component/commandBarItemNav';
+import {CommandBarItemNav} from '../commandBar/component/commandBarItem';
 
 type propTypes = {
   action_Nav_RedirectUser: ActionBound,
@@ -41,8 +41,9 @@ class PageEditor extends Component<propTypes> {
     }
     return (
         <div className="container-fluid">
-          <CommandBar><CommandBarItemNav
-              path={'/suite'}>Back</CommandBarItemNav></CommandBar>
+          <CommandBar>
+            <CommandBarItemNav path={'/suite'}>Back</CommandBarItemNav>
+          </CommandBar>
           <div
               id="FormContent"
               dangerouslySetInnerHTML={{__html: form.content}}>

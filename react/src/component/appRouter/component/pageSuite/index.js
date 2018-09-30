@@ -13,7 +13,7 @@ import action_Archive_Suite_Blank
 import action_Archive_Suite_Load
   from 'src/_redux/action/action_Archive_Suite/action_Archive_Suite_Load';
 import CommandBar from '../commandBar';
-import CommandBarItemNav from '../commandBar/component/commandBarItemNav';
+import {CommandBarItemNav} from '../commandBar/component/commandBarItem';
 import SuiteListGrid from './container/suite_list_grid';
 
 type props = {
@@ -31,8 +31,9 @@ class PageSuite extends Component<props> {
 
     return (
         <div className={'container-fluid'}>
-          <CommandBar><CommandBarItemNav
-              path={'/suite'}>Back</CommandBarItemNav></CommandBar>
+          <CommandBar>
+            <CommandBarItemNav path={'/'}>Menu</CommandBarItemNav>
+          </CommandBar>
           <Jumbotron fluid>
             <p>{'Files in ' + (filePath || 'unnamed archive')}</p>
             <SuiteListGrid formList={archive}/>

@@ -1,23 +1,65 @@
 import React, {Component} from 'react';
-import thunkBindActionCreators
-  from 'src/_core/redux/thunkBindActionCreators';
 import {connect} from 'react-redux';
-import type {Dispatch} from 'src/_core/redux/types/index';
 import {
   NavItem,
 } from 'reactstrap';
 
-class CommandBarItem extends Component<{
+import thunkBindActionCreators
+  from 'src/_core/redux/thunkBindActionCreators';
+import action_Nav_RedirectUser
+  from 'src/_redux/action/action_Nav/action_Nav_RedirectUser';
+
+import type {Dispatch} from 'src/_core/redux/types/index';
+
+type propsCommandBarItem = {
   active?: boolean | null,
   children?: React.Node,
-}> {
+}
+type propsCommandBarItemNav = {
+  ...propsCommandBarItem,
+  path: string
+}
+type propCommandBarItemAction = {
+  ...propsCommandBarItem,
+  onClick: (e?: Event) => any
+}
+
+class ComponentCommandBarItem extends Component<propsCommandBarItemNav> {
 
   render() {
+    const {active, children} = this.props;
     return (
-        <NavItem active={this.props.active || true}>
-          {this.props.children}
+        <NavItem active={active || true}>
+          {children}
         </NavItem>
     );
+  }
+}
+
+class ComponentCommandBarItemAction extends Component<propCommandBarItemAction> {
+  render() {
+    const {active, children, onClick} = this.props;
+    return (
+        <NavItem active={active || true}>
+          <a onClick={onClick}>
+            {children}
+          </a>
+        </NavItem>
+    );
+  }
+}
+
+class ComponentCommandBarItemNav extends Component<propsCommandBarItemNav> {
+  render() {
+    const {active, children, path, action_Nav_RedirectUser} = this.props;
+    const action = () => {
+      action_Nav_RedirectUser(path);
+    };
+    return <NavItem active={active || true}>
+      <a onClick={action}>
+        {children}
+      </a>
+    </NavItem>;
   }
 }
 
@@ -26,7 +68,14 @@ const mapStateToProps = () => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
-  return thunkBindActionCreators({}, dispatch);
+  return thunkBindActionCreators({
+    action_Nav_RedirectUser,
+  }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommandBarItem);
+export let CommandBarItem =
+    connect(mapStateToProps, mapDispatchToProps)(ComponentCommandBarItem);
+export let CommandBarItemNav =
+    connect(mapStateToProps, mapDispatchToProps)(ComponentCommandBarItemNav);
+export let CommandBarItemAction =
+    connect(mapStateToProps, mapDispatchToProps)(ComponentCommandBarItemAction);

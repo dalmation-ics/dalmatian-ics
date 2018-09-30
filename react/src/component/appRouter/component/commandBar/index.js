@@ -37,7 +37,7 @@ class CommandBar extends Component<props, state> {
       <Navbar color="light" light fluid={'true'} expand>
         <NavbarToggler onClick={this.toggle} right={'true'}/>
         <Collapse isOpen={this.state.isOpen} navbar>
-          <Nav className="ml-auto" navbar>
+          <Nav navbar>
             {this.props.children}
           </Nav>
         </Collapse>

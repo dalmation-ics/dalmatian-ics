@@ -18,7 +18,7 @@ import * as s from 'src/_core/res/strings';
 import type {ActionBound} from 'src/_core/redux/types';
 import type {Dispatch} from 'src/_core/redux/types';
 import CommandBar from '../commandBar';
-import CommandBarButton from '../commandBar/component/commandBarItemNav';
+import {CommandBarItemNav} from '../commandBar/component/commandBarItem';
 
 type props = {
   formTemplateStore: Object,
@@ -72,7 +72,9 @@ class PageAddForm extends Component<props> {
 
     return (
         <div className="container-fluid">
-          <CommandBar><CommandBarButton path={'/suite'}>Back</CommandBarButton></CommandBar>
+          <CommandBar>
+            <CommandBarItemNav path={'/suite'}>Back</CommandBarItemNav>
+          </CommandBar>
           <div className='row'>
             <div className="col-xs-12 col-sm-8">
               <FormList forms={formIndex}
