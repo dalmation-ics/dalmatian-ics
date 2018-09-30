@@ -73,9 +73,19 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   }, dispatch);
 };
 
+/**
+ * Default command bar item that does nothing
+ */
 export let CommandBarItem =
     connect(mapStateToProps, mapDispatchToProps)(ComponentCommandBarItem);
+/**
+ * Default command bar item that takes a path and when clicked, navigates to
+ * that path.
+ */
 export let CommandBarItemNav =
     connect(mapStateToProps, mapDispatchToProps)(ComponentCommandBarItemNav);
+/**
+ * Default command bar item that takes an action to execute when clicked.
+ */
 export let CommandBarItemAction =
     connect(mapStateToProps, mapDispatchToProps)(ComponentCommandBarItemAction);
