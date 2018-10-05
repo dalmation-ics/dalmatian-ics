@@ -19,6 +19,15 @@ import CommandBar from 'src/component/global/commandBar/index';
 import {CommandBarItemAction} from 'src/component/global/commandBar/component/commandBarItem';
 import ButtonSaveForm from './component/buttonSaveForm';
 import type {ActionStatus} from 'src/_core/redux/types/actionStatus';
+import {
+  Button,
+  ButtonGroup,
+  Card, CardDeck,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  Jumbotron,
+} from 'reactstrap';
 
 type propTypes = {
   action_Nav_RedirectUser: ActionBound,
@@ -85,18 +94,26 @@ class PageEditor extends Component<propTypes> {
       action_Nav_RedirectUser('/suite');
     } else {
 
-      toast(({closeToast}): React.Element => <div>
-        <h3>{s.EDITOR_CURRENT_FILE_HAS_UNSAVED_CHANGES}</h3>
-        <button className='btn btn-primary'
-                onClick={closeToast}>{s.CANCEL}
-        </button>
-        <button className='btn btn-warning'
-                onClick={() => {
-                  action_Nav_RedirectUser('/suite');
-                  closeToast();
-                }}>Discard changes and exit
-        </button>
-      </div>, {
+      toast(({closeToast}): React.Element => <CardDeck><Card color='warning'>
+        <CardHeader>
+          <CardTitle>
+            {s.EDITOR.CURRENT_FILE_HAS_UNSAVED_CHANGES}
+          </CardTitle>
+        </CardHeader>
+        <CardFooter>
+          <ButtonGroup>
+            <Button color='primary'
+                    onClick={closeToast}>{s.CANCEL}
+            </Button>
+            <Button color='warning'
+                    onClick={() => {
+                      action_Nav_RedirectUser('/suite');
+                      closeToast();
+                    }}>{s.EDITOR.UNSAVED_CHANGES_DISCARD_AND_EXIT}
+            </Button>
+          </ButtonGroup>
+        </CardFooter>
+      </Card></CardDeck>, {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 60000,
         closeButton: false,

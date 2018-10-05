@@ -37,8 +37,12 @@ export const SHOW_ARCHIVE_IN_FOLDER = 'Show .bcics file in folder';
 export const EMAIL_SEND_AS_ATTACHMENT = 'Send form(s) as email attachment';
 export const EMAIL_SEND_AS_BODY = 'Send form(s) as email body';
 export const FORM_ADD_TO_ARCHIVE_SUCCESS = 'FormComplete added to archive';
-export const FORM_CONTENT_VALIDATION_FAIL = 'Please fill out all required fields';
-export const EDITOR_CURRENT_FILE_HAS_UNSAVED_CHANGES = 'This form has unsaved changes!';
+export const EDITOR = {
+  FORM_CONTENT_VALIDATION_FAIL: 'Please fill out all required fields',
+  CURRENT_FILE_HAS_UNSAVED_CHANGES: 'This form has unsaved changes!',
+  UNSAVED_CHANGES_DISCARD_AND_EXIT: 'Discard changes and exit',
+};
+
 export const ACCEPT = 'Accept';
 export const OK = 'OK';
 export const DATA_TYPE_FORM = 'HTML Form Document';
