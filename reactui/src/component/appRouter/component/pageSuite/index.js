@@ -57,7 +57,7 @@ class PageSuite extends Component<props> {
     return <SideBar title={filePath}
                     subtitle={selectedFile !== undefined ? selectedFile.name :
                         s.NO_FORM_SELECTED}>
-
+      <hr/>
       {/* Delete */}
       {suiteSelectedUUID && <ButtonSuiteItemRename/>}
 
