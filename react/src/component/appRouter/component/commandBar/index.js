@@ -14,12 +14,12 @@ import CommandBarItem from './component/commandBarItem';
 
 type props = {
   navStore: StateUI,
-  children?: Array<CommandBarItem>
+  children?: Array<CommandBarItem>,
 }
 
 type state = { isOpen: boolean };
 
-class CommandBar extends Component<props, state> {
+class ComponentCommandBar extends Component<props, state> {
 
   constructor(props) {
     super(props);
@@ -46,6 +46,33 @@ class CommandBar extends Component<props, state> {
   }
 }
 
+class ComponentSideBar extends Component<props, state> {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: true,
+    };
+  }
+
+  toggle = () => {
+    this.setState({isOpen: !this.state.isOpen});
+  };
+
+  render() {
+    return <div>
+      <Navbar color="light" light fluid={'true'} expand>
+        <NavbarToggler onClick={this.toggle} right={'true'}/>
+        <Collapse isOpen={this.state.isOpen} navbar>
+          <Nav navbar vertical={'true'}>
+            {this.props.children}
+          </Nav>
+        </Collapse>
+      </Navbar>
+    </div>;
+  }
+}
+
 const mapStateToProps = (state) => {
   return {
     navStore: state.navStore,
@@ -56,4 +83,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return thunkBindActionCreators({}, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommandBar);
+export default connect(mapStateToProps, mapDispatchToProps)(
+    ComponentCommandBar);
+export const SideBar = connect(mapStateToProps, mapDispatchToProps)(
+    ComponentSideBar);

@@ -55,7 +55,9 @@ export default {
         'color:grey',
         '',
     );
-    console.log(`[Args] ${args && args.length > 0 ? args.join(',') : '[]'}`);
+    console.log(`[Args] ${args && args.length > 0 && args.join != undefined ?
+        args.join(',') :
+        '[]'}`);
     console.groupEnd();
     const response = electron.ipcRenderer.sendSync(name, args);
     const {err, result} = response;
