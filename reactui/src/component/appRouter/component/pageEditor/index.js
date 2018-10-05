@@ -65,7 +65,7 @@ class PageEditor extends Component<propTypes> {
       return null;
   };
 
-  checkForNoChange = () => {
+  checkForNoChange = (): boolean => {
     let {form} = this.props;
     let content = this.getContent();
     let hashLive = Crypto.createHash('md5').
