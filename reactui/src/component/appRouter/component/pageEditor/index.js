@@ -83,8 +83,8 @@ class PageEditor extends Component<propTypes> {
     let hashOld = Crypto.createHash('md5').
         update(JSON.stringify(form.content)).
         digest('hex');
-    console.log(hashLive);
-    console.log(hashOld);
+//    console.log(hashLive);
+//    console.log(hashOld);
     return hashLive == hashOld;
   };
 
