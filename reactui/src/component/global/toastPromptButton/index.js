@@ -6,7 +6,7 @@ import {Jumbotron} from 'reactstrap';
 
 import {
   CommandBarItemAction,
-} from 'src/component/appRouter/component/commandBar/component/commandBarItem';
+} from 'src/component/global/commandBar/component/commandBarItem';
 import * as s from 'src/_core/res/strings';
 import type {ActionBound} from 'src/_core/redux/types';
 

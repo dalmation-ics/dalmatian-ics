@@ -11,8 +11,8 @@ import action_Electron_SetTitle
 import type {ActionBound} from 'src/_core/redux/types';
 import thunkBindActionCreators
   from 'src/_core/redux/thunkBindActionCreators';
-import CommandBar from '../commandBar';
-import {CommandBarItemNav} from '../commandBar/component/commandBarItem';
+import CommandBar from 'src/component/global/commandBar/index';
+import {CommandBarItemNav} from 'src/component/global/commandBar/component/commandBarItem';
 
 type propTypes = {
   action_Nav_RedirectUser: ActionBound,

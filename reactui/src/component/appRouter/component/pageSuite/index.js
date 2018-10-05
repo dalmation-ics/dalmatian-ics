@@ -17,12 +17,12 @@ import action_Archive_Item_Select
   from 'src/_redux/action/action_Archive_Item/action_Archive_Item_Select';
 import action_Archive_Item_Duplicate
   from 'src/_redux/action/action_Archive_Item/action_Archive_Item_Duplicate';
-import CommandBar, {SideBar} from '../commandBar';
+import CommandBar, {SideBar} from 'src/component/global/commandBar/index';
 import {ButtonSuiteItemRename, ButtonSuiteItemDelete} from './component';
 import {
   CommandBarItemNav,
   CommandBarItemAction,
-} from '../commandBar/component/commandBarItem';
+} from 'src/component/global/commandBar/component/commandBarItem';
 import SuiteListGrid from './container/suite_list_grid';
 import * as s from 'src/_core/res/strings';
 
@@ -87,17 +87,18 @@ class PageSuite extends Component<props> {
     } = this.props;
 
     return (
-        <div className={'container-fluid'}>
+        <div>
           <CommandBar>
             <CommandBarItemNav path={'/'}>Menu</CommandBarItemNav>
           </CommandBar>
           <Row noGutters>
             <Col xs={7} sm={8} md={9}>
-              <Jumbotron fluid>
-                <p>{'Files in ' + (filePath || 'unnamed archive')}</p>
-                <SuiteListGrid formList={archive}
-                               onFormClick={action_Archive_Item_Select}/>
-              </Jumbotron>
+              <div className={'container-fluid'}>
+                <Jumbotron fluid>
+                  <SuiteListGrid formList={archive}
+                                 onFormClick={action_Archive_Item_Select}/>
+                </Jumbotron>
+              </div>
             </Col>
             <Col xs={5} sm={4} md={3}>
               {PageSuite.createSideBar(this.props)}

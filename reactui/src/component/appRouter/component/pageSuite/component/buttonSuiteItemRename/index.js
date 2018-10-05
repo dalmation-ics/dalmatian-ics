@@ -9,7 +9,7 @@ import thunkBindActionCreators from 'src/_core/redux/thunkBindActionCreators';
 import {
   CommandBarItemNav,
   CommandBarItemAction,
-} from 'src/component/appRouter/component/commandBar/component/commandBarItem';
+} from 'src/component/global/commandBar/component/commandBarItem';
 import uuid from 'uuid';
 import type {ActionBound} from '../../../../../../_core/redux/types';
 

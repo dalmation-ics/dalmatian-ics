@@ -7,7 +7,7 @@ import {toast} from 'react-toastify';
 import ToastPromptButton from 'src/component/global/toastPromptButton';
 import {
   CommandBarItemAction,
-} from 'src/component/appRouter/component/commandBar/component/commandBarItem';
+} from 'src/component/global/commandBar/component/commandBarItem';
 import * as s from 'src/_core/res/strings';
 import thunkBindActionCreators
   from 'src/_core/redux/thunkBindActionCreators';

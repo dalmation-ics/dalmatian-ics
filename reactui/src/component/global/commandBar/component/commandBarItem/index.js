@@ -8,7 +8,7 @@ import {
 import thunkBindActionCreators
   from 'src/_core/redux/thunkBindActionCreators';
 import action_Nav_RedirectUser
-  from 'src/_redux/action/action_Nav/action_Nav_RedirectUser';
+  from 'src/_redux/action/action_Nav/action_Nav_RedirectUser/index';
 
 import type {ActionBound, Dispatch} from 'src/_core/redux/types/index';
 

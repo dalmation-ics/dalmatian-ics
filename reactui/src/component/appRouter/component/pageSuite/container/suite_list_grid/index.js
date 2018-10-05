@@ -1,6 +1,15 @@
 import React, {Component} from 'react';
 import FontAwesome from 'react-fontawesome';
-import {Card, CardFooter, CardTitle, CardBody} from 'reactstrap';
+import {
+  Card,
+  CardFooter,
+  CardTitle,
+  CardBody,
+  CardHeader,
+  CardText, CardDeck, CardColumns, Row,
+} from 'reactstrap';
+
+import * as s from 'src/_core/res/strings';
 
 type propsSuiteListGridElement = {
   formData: object,
@@ -35,15 +44,13 @@ export class SuiteListGridElement extends Component<propsSuiteListGridElement> {
                 if (onFormDoubleClick)
                   onFormDoubleClick(formData.uuid);
               }}
-              style={{
-                margin: 2,
-                width: '25%',
-                maxWidth: 350,
-                minWidth: 240,
-              }}>
-          <CardTitle>{formData.fileName}</CardTitle>
-          <CardBody>
+              cssClass={'col-xs-6 col-sm-3 col-md-2'}>
+          <CardHeader>
+            <CardTitle>{formData.fileName}</CardTitle>
+          </CardHeader>
+          <CardBody className={'text-center'}>
             <h3><FontAwesome name='list-alt' icon='list-alt'/></h3>
+            <CardText>{formData.fileType || s.DATA_TYPE_FORM}</CardText>
           </CardBody>
           <CardFooter>
             <p>{formData.id}</p>
@@ -76,31 +83,23 @@ export default class SuiteListGrid extends Component<propTypesSuiteListGrid> {
     } = this.props;
 
     if (formList === undefined || formList.map === undefined)
-      return <h3>Please go back and load a bcics file</h3>;
+      return <h3>Please go back and load a .dalmatianics or .bcics file</h3>;
 
     if (formList.length === 0)
-      return <div className={'panel panel-info'}>
-        <div className={'panel-heading'}><h2>This suite is empty</h2>
-        </div>
-        <div className={'panel-body'}>
-          <p>
+      return <Card>
+        <CardHeader><CardTitle>This suite is empty</CardTitle>
+        </CardHeader>
+        <CardBody>
+          <CardText>
             Press the above "Add form" button to add a form to the
             suite.
-          </p>
-        </div>
-      </div>;
+          </CardText>
+        </CardBody>
+      </Card>;
 
     return (
         <div className="container-fluid">
-          <div className={'row'}>
-            <h3>Forms in archive</h3>
-          </div>
-          <div style={{
-            display: 'flex',
-            flexFlow: 'row wrap',
-            alignItems: 'stretch',
-            overflowY: 'auto',
-          }}>
+          <CardColumns>
             {formList.map((form, index) => {
               return (
                   <SuiteListGridElement
@@ -111,7 +110,7 @@ export default class SuiteListGrid extends Component<propTypesSuiteListGrid> {
                   />
               );
             })}
-          </div>
+          </CardColumns>
         </div>
     );
   }

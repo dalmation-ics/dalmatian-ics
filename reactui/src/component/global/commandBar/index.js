@@ -2,15 +2,15 @@
 import React, {Component} from 'react';
 import thunkBindActionCreators from 'src/_core/redux/thunkBindActionCreators';
 import {connect} from 'react-redux';
-import type {Dispatch} from 'src/_core/redux/types';
-import type {StateUI} from 'src/_redux/reducer/reducer_UI';
+import type {Dispatch} from 'src/_core/redux/types/index';
+import type {StateUI} from 'src/_redux/reducer/reducer_UI/index';
 import {
   Collapse,
   Navbar,
   NavbarToggler,
   Nav, NavItem,
 } from 'reactstrap';
-import {CommandBarItem} from './component/commandBarItem';
+import {CommandBarItem} from './component/commandBarItem/index';
 
 type props = {
   children?: Array<CommandBarItem>,

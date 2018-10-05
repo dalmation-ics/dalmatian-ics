@@ -17,8 +17,8 @@ import {toast} from 'react-toastify';
 import * as s from 'src/_core/res/strings';
 import type {ActionBound} from 'src/_core/redux/types';
 import type {Dispatch} from 'src/_core/redux/types';
-import CommandBar from '../commandBar';
-import {CommandBarItemNav} from '../commandBar/component/commandBarItem';
+import CommandBar from 'src/component/global/commandBar/index';
+import {CommandBarItemNav} from 'src/component/global/commandBar/component/commandBarItem';
 
 type props = {
   formTemplateStore: Object,

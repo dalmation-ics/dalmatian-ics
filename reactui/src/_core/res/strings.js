@@ -41,3 +41,4 @@ export const FORM_CONTENT_VALIDATION_FAIL = 'Please fill out all required fields
 export const EDITOR_CURRENT_FILE_HAS_UNSAVED_CHANGES = 'This form has unsaved changes!';
 export const ACCEPT = 'Accept';
 export const OK = 'OK';
+export const DATA_TYPE_FORM = 'HTML Form Document';
