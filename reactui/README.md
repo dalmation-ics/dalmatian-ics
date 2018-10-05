@@ -1735,7 +1735,7 @@ Learn more about React Storybook:
 
 ### Getting Started with Styleguidist
 
-Styleguidist combines a style guide, where all your components are presented on a single page with their props documentation and usage examples, with an environment for developing components in isolation, similar to Storybook. In Styleguidist you write examples in Markdown, where each code snippet is rendered as a live editable playground.
+Styleguidist combines a style guide, where all your components are presented on a single page with their propsToastPromptButton documentation and usage examples, with an environment for developing components in isolation, similar to Storybook. In Styleguidist you write examples in Markdown, where each code snippet is rendered as a live editable playground.
 
 First, install Styleguidist:
 

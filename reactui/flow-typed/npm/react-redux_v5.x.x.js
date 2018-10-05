@@ -23,11 +23,11 @@ declare module "react-redux" {
   OP = OwnProps
   SP = StateProps
   DP = DispatchProps
-  MP = Merge props
-  MDP = Map dispatch to props object
-  RSP = Returned state props
-  RDP = Returned dispatch props
-  RMP = Returned merge props
+  MP = Merge propsToastPromptButton
+  MDP = Map dispatch to propsToastPromptButton object
+  RSP = Returned state propsToastPromptButton
+  RDP = Returned dispatch propsToastPromptButton
+  RMP = Returned merge propsToastPromptButton
   CP = Props for returned component
   Com = React Component
   ST = Static properties of Com

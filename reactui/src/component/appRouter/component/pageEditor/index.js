@@ -30,27 +30,28 @@ class PageEditor extends Component<propTypes> {
     } = this.props;
 
     let {form} = this.props;
-    if (form === undefined)
+    if (form === undefined) {
       toast.error('Please select a form before entering the editor.');
-    action_Nav_RedirectUser('/suite');
-    try {
-      action_Electron_SetTitle(
-          'Editing ' + form.id + ' ~ "' + form.name + '"');
-    } catch (e) {
+      action_Nav_RedirectUser('/suite');
+    } else {
+      try {
+        action_Electron_SetTitle(
+            'Editing ' + form.id + ' ~ "' + form.name + '"');
+      } catch (e) {
 
-    }
-    return (
-        <div className="container-fluid">
-          <CommandBar>
-            <CommandBarItemNav path={'/suite'}>Back</CommandBarItemNav>
-          </CommandBar>
-          <div
-              id="FormContent"
-              dangerouslySetInnerHTML={{__html: form.content}}>
+      }
+      return (
+          <div className="container-fluid">
+            <CommandBar>
+              <CommandBarItemNav path={'/suite'}>Back</CommandBarItemNav>
+            </CommandBar>
+            <div
+                id="FormContent"
+                dangerouslySetInnerHTML={{__html: form.content}}>
+            </div>
           </div>
-        </div>
-    );
-
+      );
+    }
   }
 }
 

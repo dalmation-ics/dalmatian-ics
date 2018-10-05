@@ -1,3 +1,4 @@
+//@flow
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {
@@ -9,7 +10,7 @@ import thunkBindActionCreators
 import action_Nav_RedirectUser
   from 'src/_redux/action/action_Nav/action_Nav_RedirectUser';
 
-import type {Dispatch} from 'src/_core/redux/types/index';
+import type {ActionBound, Dispatch} from 'src/_core/redux/types/index';
 
 type propsCommandBarItem = {
   active?: boolean | null,
@@ -17,6 +18,7 @@ type propsCommandBarItem = {
 }
 type propsCommandBarItemNav = {
   ...propsCommandBarItem,
+  action_Nav_RedirectUser: ActionBound,
   path: string
 }
 type propCommandBarItemAction = {

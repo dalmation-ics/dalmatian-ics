@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {ActionBound, Dispatch} from 'src/_core/redux/types';
-import {Jumbotron, Nav} from 'reactstrap';
+import {Jumbotron, Col, Row} from 'reactstrap';
 import uuid from 'uuid';
 
 import action_Nav_RedirectUser
@@ -15,54 +15,58 @@ import action_Archive_Suite_Load
   from 'src/_redux/action/action_Archive_Suite/action_Archive_Suite_Load';
 import action_Archive_Item_Select
   from 'src/_redux/action/action_Archive_Item/action_Archive_Item_Select';
+import action_Archive_Item_Duplicate
+  from 'src/_redux/action/action_Archive_Item/action_Archive_Item_Duplicate';
 import CommandBar, {SideBar} from '../commandBar';
-import {CommandBarItemNav} from '../commandBar/component/commandBarItem';
+import {ButtonSuiteItemRename, ButtonSuiteItemDelete} from './component';
+import {
+  CommandBarItemNav,
+  CommandBarItemAction,
+} from '../commandBar/component/commandBarItem';
 import SuiteListGrid from './container/suite_list_grid';
 import * as s from 'src/_core/res/strings';
 
 type props = {
   filePath: null | string,
-  archive: Array<any> | null,
+  archive?: Array<any>,
   suiteSelectedUUID: uuid.v4 | uuid.v6 | string | null,
   action_Archive_Item_Select: ActionBound,
-  action_Nav_RedirectUser: ActionBound
+  action_Nav_RedirectUser: ActionBound,
+  action_Archive_Item_Duplicate: ActionBound
 }
 
 class PageSuite extends Component<props> {
 
-  static createSideBar = (props: props, dispatch) => {
+  static createSideBar = (props: props) => {
 
-    let {archive, suiteSelectedUUID, action_Nav_RedirectUser} = props;
+    let {
+      archive,
+      suiteSelectedUUID,
+      action_Nav_RedirectUser,
+      action_Archive_Item_Duplicate,
+    } = props;
 
-    if (!archive) {
+    if (archive === undefined) {
       action_Nav_RedirectUser('/');
+      return null;
     }
 
-    if (suiteSelectedUUID === null)
-      return null;
+    const selectedFile = archive.find(f => f.uuid === suiteSelectedUUID);
 
-    let fileName = null;
-    if (archive)
-      fileName = 'derp'; //archive.find(f => f.uuid === suiteSelectedUUID).fileName;
-
-    return <SideBar title={fileName ||
-    'Select a file'}>
-      <p>This is a sidebar</p>
+    return <SideBar title={selectedFile !== undefined ? selectedFile.name :
+        'Select a file'}>
 
       {/* Delete */}
-      {/*suiteSelectedUUID && <DeleteForm/>*/}
+      {suiteSelectedUUID && <ButtonSuiteItemRename/>}
 
       {/* Rename */}
-      {/*suiteSelectedUUID && <SuiteRename/>*/}
+      {suiteSelectedUUID && <ButtonSuiteItemDelete/>}
 
       {/*/!* Duplicate *!/*/}
-      {/*suiteSelectedUUID && <NavigationMenuItem
-                glyph={'duplicate'}
-                onClick={() => {
-                  dispatch(action_Archive_Suite_Duplicate());
-                }}
-                display={s.DUPLICATE}
-            />*/}
+      {suiteSelectedUUID && <CommandBarItemAction
+          glyph={'duplicate'}
+          onClick={action_Archive_Item_Duplicate}
+      >{s.DUPLICATE}</CommandBarItemAction>}
 
       {/* Edit */}
       {suiteSelectedUUID && <CommandBarItemNav
@@ -85,14 +89,18 @@ class PageSuite extends Component<props> {
           <CommandBar>
             <CommandBarItemNav path={'/'}>Menu</CommandBarItemNav>
           </CommandBar>
-          <div className='d-flex'>
-            <Jumbotron fluid className='p-2'>
-              <p>{'Files in ' + (filePath || 'unnamed archive')}</p>
-              <SuiteListGrid formList={archive}
-                             onFormClick={action_Archive_Item_Select}/>
-            </Jumbotron>
-            {PageSuite.createSideBar(this.props)}
-          </div>
+          <Row noGutters>
+            <Col xs={8} sm={9} md={10}>
+              <Jumbotron fluid>
+                <p>{'Files in ' + (filePath || 'unnamed archive')}</p>
+                <SuiteListGrid formList={archive}
+                               onFormClick={action_Archive_Item_Select}/>
+              </Jumbotron>
+            </Col>
+            <Col xs={4} sm={3} md={2}>
+              {PageSuite.createSideBar(this.props)}
+            </Col>
+          </Row>
         </div>
     );
   }
@@ -113,6 +121,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     action_Nav_RedirectUser,
     action_Archive_Suite_Load,
     action_Archive_Item_Select,
+    action_Archive_Item_Duplicate,
   }, dispatch);
 };
 

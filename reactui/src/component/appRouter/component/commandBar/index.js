@@ -8,11 +8,12 @@ import {
   Collapse,
   Navbar,
   NavbarToggler,
-  Nav,
+  Nav, NavItem,
 } from 'reactstrap';
-import CommandBarItem from './component/commandBarItem';
+import {CommandBarItem} from './component/commandBarItem';
 
 type props = {
+  title: string,
   navStore: StateUI,
   children?: Array<CommandBarItem>,
 }
@@ -60,12 +61,16 @@ class ComponentSideBar extends Component<props, state> {
   };
 
   render() {
+    let {title, children} = this.props;
     return <div>
       <Navbar color="light" light fluid={'true'} expand>
         <NavbarToggler onClick={this.toggle} right={'true'}/>
         <Collapse isOpen={this.state.isOpen} navbar>
-          <Nav navbar vertical={'true'}>
-            {this.props.children}
+          <Nav navbar vertical>
+            <NavItem><strong>{title ?
+                title :
+                'Select a form'}</strong></NavItem>
+            {children}
           </Nav>
         </Collapse>
       </Navbar>

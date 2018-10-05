@@ -39,3 +39,5 @@ export const EMAIL_SEND_AS_BODY = 'Send form(s) as email body';
 export const FORM_ADD_TO_ARCHIVE_SUCCESS = 'FormComplete added to archive';
 export const FORM_CONTENT_VALIDATION_FAIL = 'Please fill out all required fields';
 export const EDITOR_CURRENT_FILE_HAS_UNSAVED_CHANGES = 'This form has unsaved changes!';
+export const ACCEPT = 'Accept';
+export const OK = 'OK';
