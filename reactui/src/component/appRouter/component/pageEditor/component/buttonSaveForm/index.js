@@ -1,5 +1,6 @@
 // @flow
-import React, {Component} from 'react';
+import * as React from 'react';
+import {Component} from 'react';
 import {connect} from 'react-redux';
 import {toast} from 'react-toastify';
 import type {Dispatch} from 'src/_core/redux/types';
@@ -13,6 +14,8 @@ import {CommandBarItemAction} from 'src/component/global/commandBar/component/co
 import SaveIndicator from './container/save_indicator';
 import type {ActionStatus} from 'src/_core/redux/types/actionStatus';
 
+import {getContent} from '../../index';
+
 type propTypes = {
   action_Archive_Item_Update: ActionBound,
   action_Electron_SetTitle: ActionBound,
@@ -23,8 +26,48 @@ type propTypes = {
 
 class ButtonSaveForm extends Component<propTypes> {
 
-  onClick_save = () => {
-    this.props.action_Archive_Item_Update();
+  requiredFieldsFilled = () => {
+    const requiredFields: any = document.querySelectorAll('[required]');
+    let allFilled = true;
+    for (let i in requiredFields) {
+      if (requiredFields.hasOwnProperty(i)) {
+        const req = (requiredFields[i].value + '').trim();
+        if (req === '' || req === null) {
+          requiredFields[i].value = '';
+          allFilled = false;
+        }
+      }
+    }
+    return allFilled;
+  };
+
+  onClick_Save = () => {
+    const {action_Archive_Item_Update} = this.props;
+    const reqCheck = this.requiredFieldsFilled();
+    if (reqCheck) {
+      let content = getContent();
+      action_Archive_Item_Update(content).then(() => {
+        toast.success('Form changes saved');
+      }).catch(toast.error);
+    } else {
+      toast(({closeToast}): React.Element => {
+        return <div>
+          <h3>You have unfilled Required fields!</h3>
+          <button className='btn btn-primary'
+                  onClick={closeToast}>Close
+          </button>
+        </div>;
+      }, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 60000,
+        closeButton: false,
+        draggable: false,
+        draggablePercent: 50,
+        type: toast.TYPE.WARNING,
+        closeOnClick: false,
+      });
+    }
+
   };
 
   render() {
@@ -33,7 +76,7 @@ class ButtonSaveForm extends Component<propTypes> {
       saveArchiveError,
     } = this.props;
     return (
-        <CommandBarItemAction onClick={this.onClick_save}><SaveIndicator
+        <CommandBarItemAction onClick={this.onClick_Save}><SaveIndicator
             saveArchiveStatus={saveArchiveStatus}
             saveArchiveError={saveArchiveError}/></CommandBarItemAction>
     );

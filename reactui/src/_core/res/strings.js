@@ -40,7 +40,7 @@ export const FORM_ADD_TO_ARCHIVE_SUCCESS = 'FormComplete added to archive';
 export const EDITOR = {
   FORM_CONTENT_VALIDATION_FAIL: 'Please fill out all required fields',
   CURRENT_FILE_HAS_UNSAVED_CHANGES: 'This form has unsaved changes!',
-  UNSAVED_CHANGES_DISCARD_AND_EXIT: 'Discard changes and exit',
+  UNSAVED_CHANGES_DISCARD: 'Discard changes',
 };
 
 export const ACCEPT = 'Accept';

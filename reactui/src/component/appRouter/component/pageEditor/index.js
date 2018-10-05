@@ -25,8 +25,8 @@ import {
   Card, CardDeck,
   CardFooter,
   CardHeader,
-  CardTitle,
-  Jumbotron,
+  CardTitle, Container,
+  Jumbotron, Row,
 } from 'reactstrap';
 
 type propTypes = {
@@ -37,46 +37,46 @@ type propTypes = {
   form: any
 }
 
-class PageEditor extends Component<propTypes> {
-
-  getContent = () => {
-    const inputs: NodeList<any> =
-        document.querySelectorAll('.ics_input');
-    for (let i: any in inputs) {
-      switch (inputs[i].type) {
-        case 'text': {
-          const input: HTMLInputElement = inputs[i];
-          input.setAttribute('value', input.value);
-          break;
-        }
-        case 'textarea': {
-          const input: HTMLTextAreaElement = inputs[i];
-          input.innerHTML = input.value;
-          break;
-        }
-        case 'select-one': {
-          const input: HTMLSelectElement = inputs[i];
-          input.options[input.selectedIndex].setAttribute(
-              'selected',
-              'selected');
-          break;
-        }
-        default:
-          break;
+export const getContent = () => {
+  const inputs: NodeList<any> =
+      document.querySelectorAll('.ics_input');
+  for (let i: any in inputs) {
+    switch (inputs[i].type) {
+      case 'text': {
+        const input: HTMLInputElement = inputs[i];
+        input.setAttribute('value', input.value);
+        break;
       }
-      //todo: validate content here
+      case 'textarea': {
+        const input: HTMLTextAreaElement = inputs[i];
+        input.innerHTML = input.value;
+        break;
+      }
+      case 'select-one': {
+        const input: HTMLSelectElement = inputs[i];
+        input.options[input.selectedIndex].setAttribute(
+            'selected',
+            'selected');
+        break;
+      }
+      default:
+        break;
     }
+    //todo: validate content here
+  }
 
-    const formArea = document.querySelector('#FormContent');
-    if (formArea !== null)
-      return (formArea: HTMLElement).innerHTML;
-    else
-      return null;
-  };
+  const formArea = document.querySelector('#FormContent');
+  if (formArea !== null)
+    return (formArea: HTMLElement).innerHTML;
+  else
+    return null;
+};
+
+class PageEditor extends Component<propTypes> {
 
   checkForNoChange = (): boolean => {
     let {form} = this.props;
-    let content = this.getContent();
+    let content = getContent();
     let hashLive = Crypto.createHash('md5').
         update(JSON.stringify(content)).
         digest('hex');
@@ -94,26 +94,25 @@ class PageEditor extends Component<propTypes> {
       action_Nav_RedirectUser('/suite');
     } else {
 
-      toast(({closeToast}): React.Element => <CardDeck><Card color='warning'>
-        <CardHeader>
-          <CardTitle>
-            {s.EDITOR.CURRENT_FILE_HAS_UNSAVED_CHANGES}
-          </CardTitle>
-        </CardHeader>
-        <CardFooter>
-          <ButtonGroup>
-            <Button color='primary'
-                    onClick={closeToast}>{s.CANCEL}
-            </Button>
-            <Button color='warning'
-                    onClick={() => {
-                      action_Nav_RedirectUser('/suite');
-                      closeToast();
-                    }}>{s.EDITOR.UNSAVED_CHANGES_DISCARD_AND_EXIT}
-            </Button>
-          </ButtonGroup>
-        </CardFooter>
-      </Card></CardDeck>, {
+      toast(({closeToast}): React.Element =>
+          <Container fluid>
+            <h3>
+              {s.EDITOR.CURRENT_FILE_HAS_UNSAVED_CHANGES}
+            </h3>
+            <div>
+              <Button color='primary'
+                      block
+                      onClick={closeToast}>{s.CANCEL}
+              </Button>
+              <Button color='warning'
+                      block
+                      onClick={() => {
+                        action_Nav_RedirectUser('/suite');
+                        closeToast();
+                      }}>{s.EDITOR.UNSAVED_CHANGES_DISCARD}
+              </Button>
+            </div>
+          </Container>, {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 60000,
         closeButton: false,
@@ -121,6 +120,7 @@ class PageEditor extends Component<propTypes> {
         draggablePercent: 50,
         type: toast.TYPE.WARNING,
         closeOnClick: false,
+        bodyClassName: 'grow-font-size',
       });
     }
   };
