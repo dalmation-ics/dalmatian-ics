@@ -1,6 +1,6 @@
 //@flow
 import React, {Component} from 'react';
-import actionStatusCode, {type ActionStatus} from 'src/_core/redux/types/actionStatus';
+import actionStatusCode, {type ActionStatus} from 'src/_core/redux/types/actionStatus/index';
 import * as s from 'src/_core/res/strings';
 
 type propTypes = {
