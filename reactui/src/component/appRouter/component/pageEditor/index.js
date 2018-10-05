@@ -36,7 +36,7 @@ class PageEditor extends Component<propTypes> {
     } else {
       try {
         action_Electron_SetTitle(
-            'Editing ' + form.id + ' ~ "' + form.name + '"');
+            'Editing ' + ' ~ "' + form.name + '"');
       } catch (e) {
 
       }

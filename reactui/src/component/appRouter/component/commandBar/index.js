@@ -13,9 +13,10 @@ import {
 import {CommandBarItem} from './component/commandBarItem';
 
 type props = {
-  title: string,
-  navStore: StateUI,
   children?: Array<CommandBarItem>,
+  navStore: StateUI,
+  subtitle: string,
+  title: string,
 }
 
 type state = { isOpen: boolean };
@@ -61,15 +62,14 @@ class ComponentSideBar extends Component<props, state> {
   };
 
   render() {
-    let {title, children} = this.props;
+    let {children, subtitle, title} = this.props;
     return <div>
       <Navbar color="light" light fluid={'true'} expand>
         <NavbarToggler onClick={this.toggle} right={'true'}/>
         <Collapse isOpen={this.state.isOpen} navbar>
           <Nav navbar vertical>
-            <NavItem><strong>{title ?
-                title :
-                'Select a form'}</strong></NavItem>
+            <NavItem><strong>{title && title}</strong></NavItem>
+            <NavItem>{subtitle && subtitle}</NavItem>
             {children}
           </Nav>
         </Collapse>

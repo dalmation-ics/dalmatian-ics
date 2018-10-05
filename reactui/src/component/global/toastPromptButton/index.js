@@ -8,7 +8,7 @@ import {
   CommandBarItemAction,
 } from 'src/component/appRouter/component/commandBar/component/commandBarItem';
 import * as s from 'src/_core/res/strings';
-import type {ActionBound, State} from 'src/_core/redux/types';
+import type {ActionBound} from 'src/_core/redux/types';
 
 type propsToastPromptButton = {
   action: ActionBound,

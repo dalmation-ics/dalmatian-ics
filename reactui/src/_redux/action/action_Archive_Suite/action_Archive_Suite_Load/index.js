@@ -26,7 +26,7 @@ export default (selectedFilePath?: string | null = null) => (dispatch: Dispatch)
         ipcRWrapper.prompt(ACT_OPEN_ARCHIVE, (err, response) => {
           if (!err) {
             let {result, filePath} = response;
-
+            console.log(filePath);
             result.map(f => {
               //Todo: modify this area to handle any non-html files
               // this needs done to allow us to do image files
@@ -49,7 +49,7 @@ export default (selectedFilePath?: string | null = null) => (dispatch: Dispatch)
               <h4>{s.ARCHIVE_OPEN_SUCCESS}</h4>
               <p>{filePath}</p>
             </div>, {autoClose: 2100});
-            resolve(err, response);
+            resolve({err, response});
           } else {
             // Dispatch ERROR
             throw err;
@@ -64,8 +64,7 @@ export default (selectedFilePath?: string | null = null) => (dispatch: Dispatch)
         </div>, {autoClose: 1888});
         reject(err);
       }
-    }).then((err) => {
-
+    }).then(({err}) => {
   // If there was no error opening an archive, redirect to /edit
   if (!err)
     dispatch(action_Navigation_RedirectUser('/suite'));

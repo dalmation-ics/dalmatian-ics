@@ -23,6 +23,7 @@ import {SettingsButton, SettingsModal}
 
 import {ThemeApplicator}
   from 'src/component/settingsPanel/component/settingsPanelComponent/theme_selector';
+import {Nav, Navbar, NavItem, NavLink} from 'reactstrap';
 
 /**
  * Create the history for use in router
@@ -66,22 +67,14 @@ class AppRouter extends Component<Props> {
             <div>
               {redirectTarget && <Redirect to={redirectTarget}/>}
               <LegalPanel/>
-              <ul>
-                <li>
-                  <Link to="/">Menu</Link>
-                </li>
-                <li>
-                  <Link to="/suite">Suite</Link>
-                </li>
-                <li>
-                  <Link to="/addForm">Add Form</Link>
-                </li>
-                <li>
-                  <Link to="/editor">Editor</Link>
-                </li>
-                <SettingsButton/>
-              </ul>
-
+              <Navbar color='faded' dark>
+                <Nav>
+                  <NavItem>
+                    <NavLink to="/">Dalmation ICS</NavLink>
+                  </NavItem>
+                  <SettingsButton/>
+                </Nav>
+              </Navbar>
               <hr/>
               <ToastContainer/>
               <SettingsModal/>

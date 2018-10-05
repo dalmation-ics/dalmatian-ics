@@ -40,6 +40,7 @@ class PageSuite extends Component<props> {
   static createSideBar = (props: props) => {
 
     let {
+      filePath,
       archive,
       suiteSelectedUUID,
       action_Nav_RedirectUser,
@@ -53,8 +54,9 @@ class PageSuite extends Component<props> {
 
     const selectedFile = archive.find(f => f.uuid === suiteSelectedUUID);
 
-    return <SideBar title={selectedFile !== undefined ? selectedFile.name :
-        'Select a file'}>
+    return <SideBar title={filePath}
+                    subtitle={selectedFile !== undefined ? selectedFile.name :
+                        s.NO_FORM_SELECTED}>
 
       {/* Delete */}
       {suiteSelectedUUID && <ButtonSuiteItemRename/>}
@@ -90,14 +92,14 @@ class PageSuite extends Component<props> {
             <CommandBarItemNav path={'/'}>Menu</CommandBarItemNav>
           </CommandBar>
           <Row noGutters>
-            <Col xs={8} sm={9} md={10}>
+            <Col xs={7} sm={8} md={9}>
               <Jumbotron fluid>
                 <p>{'Files in ' + (filePath || 'unnamed archive')}</p>
                 <SuiteListGrid formList={archive}
                                onFormClick={action_Archive_Item_Select}/>
               </Jumbotron>
             </Col>
-            <Col xs={4} sm={3} md={2}>
+            <Col xs={5} sm={4} md={3}>
               {PageSuite.createSideBar(this.props)}
             </Col>
           </Row>
@@ -110,9 +112,9 @@ const mapStateToProps = (state) => {
   let isArchiveLoaded = state.archiveStore.archive !== undefined &&
       Array.isArray(state.archiveStore.archive) &&
       state.archiveStore.archive.length > 0;
-  const archive = state.archiveStore.archive;
+  const {archive, filePath} = state.archiveStore;
   const suiteSelectedUUID = state.archiveStore.suiteSelectedUUID;
-  return {isArchiveLoaded, archive, suiteSelectedUUID};
+  return {isArchiveLoaded, archive, filePath, suiteSelectedUUID};
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
