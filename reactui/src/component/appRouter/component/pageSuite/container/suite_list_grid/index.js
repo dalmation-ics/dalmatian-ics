@@ -25,6 +25,7 @@ export class SuiteListGridElement extends Component<propsSuiteListGridElement> {
       onFormClick,
       onFormDoubleClick,
       formData,
+      active,
     } = this.props;
 
     //compute how much to shrink the name
@@ -34,8 +35,10 @@ export class SuiteListGridElement extends Component<propsSuiteListGridElement> {
           (0.001 * formData.name.length * formData.name.length);
       nameFontScalar = Math.max(nameFontScalar, 0.8);
     }
+
     return (
-        <Card color='info'
+        <Card color={active ? 'primary' : 'info'}
+              outline={!active}
               onClick={() => {
                 if (onFormClick)
                   onFormClick(formData.uuid);
@@ -80,6 +83,7 @@ export default class SuiteListGrid extends Component<propTypesSuiteListGrid> {
       onFormClick,
       onFormDoubleClick,
       formList,
+      suiteSelectedUUID,
     } = this.props;
 
     //Somehow no archive was loaded, typically an error
@@ -108,6 +112,7 @@ export default class SuiteListGrid extends Component<propTypesSuiteListGrid> {
                       key={'formSuiteGrid' + index}
                       onFormClick={onFormClick}
                       onFormDoubleClick={onFormDoubleClick}
+                      active={form.uuid === suiteSelectedUUID}
                   />
               );
             })}

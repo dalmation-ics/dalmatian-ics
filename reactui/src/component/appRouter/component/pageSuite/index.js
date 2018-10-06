@@ -84,7 +84,7 @@ class PageSuite extends Component<props> {
 
   render() {
     const {
-      filePath,
+      suiteSelectedUUID,
       archive,
       action_Archive_Item_Select,
     } = this.props;
@@ -99,7 +99,8 @@ class PageSuite extends Component<props> {
               <div className={'container-fluid'}>
                 <Jumbotron fluid>
                   <SuiteListGrid formList={archive}
-                                 onFormClick={action_Archive_Item_Select}/>
+                                 onFormClick={action_Archive_Item_Select}
+                                 suiteSelectedUUID={suiteSelectedUUID}/>
                 </Jumbotron>
               </div>
             </Col>
