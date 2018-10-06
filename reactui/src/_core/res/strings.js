@@ -36,7 +36,7 @@ export const WEEKS_AGO = 'Weeks Ago';
 export const SHOW_ARCHIVE_IN_FOLDER = 'Show .bcics file in folder';
 export const EMAIL_SEND_AS_ATTACHMENT = 'Send form(s) as email attachment';
 export const EMAIL_SEND_AS_BODY = 'Send form(s) as email body';
-export const FORM_ADD_TO_ARCHIVE_SUCCESS = 'FormComplete added to archive';
+export const FORM_ADD_TO_ARCHIVE_SUCCESS = 'Form added to archive';
 export const EDITOR = {
   FORM_CONTENT_VALIDATION_FAIL: 'Please fill out all required fields',
   CURRENT_FILE_HAS_UNSAVED_CHANGES: 'This form has unsaved changes!',
