@@ -12,6 +12,7 @@ import type {ActionBound} from 'src/_core/redux/types';
 
 type propsToastPromptButton = {
   action: ActionBound,
+  textButtonTitle: string,
   children?: Array<React.Element<any>> | React.Element<any> | string | any,
   textCancel?: string,
   textAccept?: string
@@ -26,7 +27,10 @@ class toastPromptButton extends Component<propsToastPromptButton> {
         {children}
       </Jumbotron>
       <button onClick={closeToast}>{this.props.textCancel || s.CANCEL}</button>
-      <button onClick={action}>{this.props.textAccept || s.OK}</button>
+      <button onClick={(e) => {
+        action(e);
+        closeToast();
+      }}>{this.props.textAccept || s.OK}</button>
     </div>;
   };
 
@@ -44,11 +48,11 @@ class toastPromptButton extends Component<propsToastPromptButton> {
   };
 
   render() {
-
+    const {textButtonTitle} = this.props;
     return <CommandBarItemAction
         glyph={'trash'}
         onClick={this.onClick_ShowPrompt}>
-      {s.DELETE}
+      {textButtonTitle}
     </CommandBarItemAction>;
   }
 
