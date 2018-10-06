@@ -54,17 +54,20 @@ class PageSuite extends Component<props> {
 
     const selectedFile = archive.find(f => f.uuid === suiteSelectedUUID);
 
+    const subtitle = selectedFile !== undefined ?
+        (selectedFile.fileName + ' (' + selectedFile.id + ')') :
+        s.NO_FORM_SELECTED;
+
     return <SideBar title={filePath}
-                    subtitle={selectedFile !== undefined ? selectedFile.name :
-                        s.NO_FORM_SELECTED}>
+                    subtitle={subtitle}>
       <hr/>
-      {/* Delete */}
+      {/* Rename */}
       {suiteSelectedUUID && <ButtonSuiteItemRename/>}
 
-      {/* Rename */}
+      {/* Delete */}
       {suiteSelectedUUID && <ButtonSuiteItemDelete/>}
 
-      {/*/!* Duplicate *!/*/}
+      {/* Duplicate */}
       {suiteSelectedUUID && <CommandBarItemAction
           glyph={'duplicate'}
           onClick={action_Archive_Item_Duplicate}

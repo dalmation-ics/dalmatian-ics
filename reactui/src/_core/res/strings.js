@@ -30,6 +30,10 @@ export const ARCHIVE = {
   ARCHIVE_CONTINUE_EDITING_CURRENT: 'Return to editing loaded suite',
   ARCHIVE_HAS_UNSAVED_CHANGES: 'This Archive has unsaved changes!',
   ARCHIVE_ADD_FORM_SUCCESS: 'Form added to archive',
+  ITEM: {
+    RENAME: 'Rename',
+    DELETE: 'Delete',
+  },
   //User creates a new archive
   EMPTY: {
     TITLE: 'This suite is empty',

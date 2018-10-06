@@ -45,7 +45,8 @@ class ButtonSuiteItemDelete extends Component<propsDeleteButton> {
     let {id, fileName, name} = archive.find(
         f => f.uuid === suiteSelectedUUID);
 
-    return <ToastPromptButton action={this.onClick_deleteItem}>
+    return <ToastPromptButton action={this.onClick_deleteItem}
+                              textButtonTitle={s.ARCHIVE.ITEM.DELETE}>
       <div>
         <p>Are you sure you want to delete:</p>
         <h2>{fileName}</h2>
