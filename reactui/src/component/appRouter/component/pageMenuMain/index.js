@@ -40,7 +40,7 @@ class PageMenuMain extends Component<props> {
         <Jumbotron>
           <Row>
             <Col xs="4">
-              <PanelButton text={s.ARCHIVE_CREATE_BLANK}
+              <PanelButton text={s.ARCHIVE.ARCHIVE_CREATE_BLANK}
                            display={<FontAwesome name="file-archive"
                                                  size={'5x'}/>}
                            testid="ButtonMainMenuCreateForm"
@@ -57,7 +57,7 @@ class PageMenuMain extends Component<props> {
               />
             </Col>
             <Col xs="4">
-              <PanelButton text={s.ARCHIVE_CONTINUE_EDITING_CURRENT}
+              <PanelButton text={s.ARCHIVE.ARCHIVE_CONTINUE_EDITING_CURRENT}
                            display={<FontAwesome name="edit"
                                                  size={'5x'}/>}
                            disabled={!isArchiveLoaded}
@@ -67,7 +67,7 @@ class PageMenuMain extends Component<props> {
               />
             </Col>
             <Col xs="4">
-              <PanelButton text={s.ARCHIVE_OPEN_EXISTING}
+              <PanelButton text={s.ARCHIVE.ARCHIVE_OPEN_EXISTING}
                            display={<FontAwesome name="folder-open"
                                                  size={'5x'}/>}
                            testid="ButtonMainMenuOpenExistingForm"

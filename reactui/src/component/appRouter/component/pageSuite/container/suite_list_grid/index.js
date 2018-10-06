@@ -82,17 +82,18 @@ export default class SuiteListGrid extends Component<propTypesSuiteListGrid> {
       formList,
     } = this.props;
 
+    //Somehow no archive was loaded, typically an error
     if (formList === undefined || formList.map === undefined)
-      return <h3>Please go back and load a .dalmatianics or .bcics file</h3>;
+      return <h3>{s.ARCHIVE.UNDEFINED_ARCHIVE.INSTRUCTION}</h3>;
 
+    //User creates a new archive
     if (formList.length === 0)
       return <Card>
-        <CardHeader><CardTitle>This suite is empty</CardTitle>
+        <CardHeader><CardTitle>{s.ARCHIVE.EMPTY.TITLE}</CardTitle>
         </CardHeader>
         <CardBody>
           <CardText>
-            Press the above "Add form" button to add a form to the
-            suite.
+            {s.ARCHIVE.EMPTY.INSTRUCTION}
           </CardText>
         </CardBody>
       </Card>;

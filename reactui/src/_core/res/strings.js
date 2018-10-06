@@ -23,11 +23,23 @@ export const NEVER_CHECKED_FOR_UPDATES = 'Never checked for updates';
 export const CHECKING_FOR_UPDATES = 'Checking for updates';
 export const UPDATING = 'Updating';
 export const CLEAR_FORM_CACHE = 'Clear form cache';
-export const ARCHIVE_CREATE_BLANK = 'Create new ICS suite';
-export const ARCHIVE_OPEN_EXISTING = 'Open existing suite file';
-export const ARCHIVE_OPEN_SUCCESS = 'Opened archive';
-export const ARCHIVE_CONTINUE_EDITING_CURRENT = 'Return to editing loaded suite';
-export const ARCHIVE_HAS_UNSAVED_CHANGES = 'This Archive has unsaved changes!';
+export const ARCHIVE = {
+  ARCHIVE_CREATE_BLANK: 'Create new ICS suite',
+  ARCHIVE_OPEN_EXISTING: 'Open existing suite file',
+  ARCHIVE_OPEN_SUCCESS: 'Opened archive',
+  ARCHIVE_CONTINUE_EDITING_CURRENT: 'Return to editing loaded suite',
+  ARCHIVE_HAS_UNSAVED_CHANGES: 'This Archive has unsaved changes!',
+  ARCHIVE_ADD_FORM_SUCCESS: 'Form added to archive',
+  //User creates a new archive
+  EMPTY: {
+    TITLE: 'This suite is empty',
+    INSTRUCTION: 'Press the above "Add form" button to add a form to the suite.',
+  },
+  //Somehow no archive was loaded, typically an error
+  UNDEFINED_ARCHIVE: {
+    INSTRUCTION: 'Please go back and load a .dalmatianics or .bcics file',
+  },
+};
 export const TIME = {
   TODAY: 'Today',
   YESTERDAY: 'Yesterday',
@@ -40,7 +52,6 @@ export const EMAIL = {
   EMAIL_SEND_AS_ATTACHMENT: 'Send form(s) as email attachment',
   EMAIL_SEND_AS_BODY: 'Send form(s) as email body',
 };
-export const FORM_ADD_TO_ARCHIVE_SUCCESS = 'Form added to archive';
 export const EDITOR = {
   FORM_CONTENT_VALIDATION_FAIL: 'Please fill out all required fields',
   CURRENT_FILE_HAS_UNSAVED_CHANGES: 'This form has unsaved changes!',

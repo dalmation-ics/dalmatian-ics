@@ -46,7 +46,7 @@ export default (selectedFilePath?: string | null = null) => (dispatch: Dispatch)
                 }: Action));
             // Resolve
             toast.success(<div>
-              <h4>{s.ARCHIVE_OPEN_SUCCESS}</h4>
+              <h4>{s.ARCHIVE.ARCHIVE_OPEN_SUCCESS}</h4>
               <p>{filePath}</p>
             </div>, {autoClose: 2100});
             resolve({err, response});

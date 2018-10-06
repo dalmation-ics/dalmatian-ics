@@ -40,7 +40,7 @@ class PageAddForm extends Component<props> {
     action_Archive_Item_New(selectedForm.id).
         then(() => {
           toast.success(
-              s.FORM_ADD_TO_ARCHIVE_SUCCESS,
+              s.ARCHIVE.ARCHIVE_ADD_FORM_SUCCESS,
               {autoClose: 1100});
 
           action_Nav_RedirectUser('/suite');
