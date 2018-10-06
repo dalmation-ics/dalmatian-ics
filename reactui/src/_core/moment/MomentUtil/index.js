@@ -1,12 +1,16 @@
 // @flow
 import {
+  TIME,
+} from 'src/_core/res/strings';
+import moment from 'moment';
+
+const {
   TODAY,
   YESTERDAY,
   DAYS_AGO,
   WEEK_AGO,
   WEEKS_AGO,
-} from '../../res/strings';
-import moment from 'moment';
+} = TIME;
 
 export function getEnglishTimeSince(date: any) {
 

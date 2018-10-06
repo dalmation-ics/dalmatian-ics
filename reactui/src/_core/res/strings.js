@@ -28,14 +28,18 @@ export const ARCHIVE_OPEN_EXISTING = 'Open existing suite file';
 export const ARCHIVE_OPEN_SUCCESS = 'Opened archive';
 export const ARCHIVE_CONTINUE_EDITING_CURRENT = 'Return to editing loaded suite';
 export const ARCHIVE_HAS_UNSAVED_CHANGES = 'This Archive has unsaved changes!';
-export const TODAY = 'Today';
-export const YESTERDAY = 'Yesterday';
-export const DAYS_AGO = 'Days Ago';
-export const WEEK_AGO = 'Week Ago';
-export const WEEKS_AGO = 'Weeks Ago';
+export const TIME = {
+  TODAY: 'Today',
+  YESTERDAY: 'Yesterday',
+  DAYS_AGO: 'Days Ago',
+  WEEK_AGO: 'Week Ago',
+  WEEKS_AGO: 'Weeks Ago',
+};
 export const SHOW_ARCHIVE_IN_FOLDER = 'Show .bcics file in folder';
-export const EMAIL_SEND_AS_ATTACHMENT = 'Send form(s) as email attachment';
-export const EMAIL_SEND_AS_BODY = 'Send form(s) as email body';
+export const EMAIL = {
+  EMAIL_SEND_AS_ATTACHMENT: 'Send form(s) as email attachment',
+  EMAIL_SEND_AS_BODY: 'Send form(s) as email body',
+};
 export const FORM_ADD_TO_ARCHIVE_SUCCESS = 'Form added to archive';
 export const EDITOR = {
   FORM_CONTENT_VALIDATION_FAIL: 'Please fill out all required fields',
