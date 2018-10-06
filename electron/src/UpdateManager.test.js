@@ -14,8 +14,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -35,60 +35,60 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var sinon = require("sinon");
 var SUT = require("./UpdateManager");
 var FormFetcher = require("./FormFetcher");
 var StorageManager = require("./StorageManager");
-var FormDetails_1 = require("./class/FormDetails");
+var index_1 = require("./class/form/index");
 var _ = require("lodash");
 var SERVER_INDEX = {
-    bcics_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
-    bcics_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
-    bcics_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' }
+    dalmatian_ICS205: { lastModified: '2018-05-18T12:37:21-07:00' },
+    dalmatian_ICS206: { lastModified: '2018-05-18T12:37:21-07:00' },
+    dalmatian_ICS205A: { lastModified: '2018-05-18T12:37:21-07:00' },
 };
-var ICS205_Details = new FormDetails_1["default"]({
-    fileName: 'bcics_ICS205',
+var ICS205_Details = new index_1.default({
+    fileName: 'dalmatian_ICS205',
     name: 'ICS205 A Land Before Time',
     id: 'ICS205',
     detail: 'ICS205 Details',
     lastModified: '2018-05-18T12:37:21-07:00'
 });
-var ICS206_Details = new FormDetails_1["default"]({
-    fileName: 'bcics_ICS206',
+var ICS206_Details = new index_1.default({
+    fileName: 'dalmatian_ICS206',
     name: 'ICS206 Electric Boogaloo',
     id: 'ICS206',
     detail: 'ICS206 Details',
     lastModified: '2018-05-18T12:37:21-07:00'
 });
-var ICS205A_Details = new FormDetails_1["default"]({
-    fileName: 'bcics_ICS205A',
+var ICS205A_Details = new index_1.default({
+    fileName: 'dalmatian_ICS205A',
     name: 'ICS205A This time its different',
     id: 'ICS205A',
     detail: 'ICS205A Details',
     lastModified: '2018-05-18T12:37:21-07:00'
 });
 var LOCAL_INDEX = {
-    'bcics_ICS205': ICS205_Details,
-    'bcics_ICS206': ICS206_Details,
-    'bcics_ICS205A': ICS205A_Details
+    'dalmatian_ICS205': ICS205_Details,
+    'dalmatian_ICS206': ICS206_Details,
+    'dalmatian_ICS205A': ICS205A_Details
 };
 var ICS205_ServerResponse = {
-    fileName: 'bcics_ICS205',
+    fileName: 'dalmatian_ICS205',
     content: 'ICS205 Content',
     details: ICS205_Details,
     error: null,
     failure: false
 };
 var ICS206_ServerResponse = {
-    fileName: 'bcics_ICS206',
+    fileName: 'dalmatian_ICS206',
     content: 'ICS206 Content',
     details: ICS206_Details,
     error: null,
     failure: false
 };
 var ICS205A_ServerResponse = {
-    fileName: 'bcics_ICS205A',
+    fileName: 'dalmatian_ICS205A',
     content: 'ICS205A Content',
     details: ICS205A_Details,
     error: null,
@@ -123,7 +123,7 @@ describe('UpdateManager should ', function () {
                     case 1:
                         result = _a.sent();
                         // Assert
-                        expect(result).toEqual(['bcics_ICS205', 'bcics_ICS206', 'bcics_ICS205A']);
+                        expect(result).toEqual(['dalmatian_ICS205', 'dalmatian_ICS206', 'dalmatian_ICS205A']);
                         return [2 /*return*/];
                 }
             });
@@ -136,14 +136,14 @@ describe('UpdateManager should ', function () {
                         stub_fetchIndex = sandbox.stub(FormFetcher, 'fetchIndex');
                         stub_fetchIndex.resolves(SERVER_INDEX);
                         m_Local_Index = _.cloneDeep(LOCAL_INDEX);
-                        m_Local_Index['bcics_ICS206'].lastModified = '2018-05-11T12:37:21-07:00';
+                        m_Local_Index['dalmatian_ICS206'].lastModified = '2018-05-11T12:37:21-07:00';
                         stub_read = sandbox.stub(StorageManager, 'read');
                         stub_read.withArgs(DIRECTORY, 'index').resolves(JSON.stringify(m_Local_Index));
                         return [4 /*yield*/, SUT.checkForFormUpdates()];
                     case 1:
                         result = _a.sent();
                         // Assert
-                        expect(result).toEqual(['bcics_ICS206']);
+                        expect(result).toEqual(['dalmatian_ICS206']);
                         return [2 /*return*/];
                 }
             });
@@ -156,15 +156,15 @@ describe('UpdateManager should ', function () {
                         stub_fetchIndex = sandbox.stub(FormFetcher, 'fetchIndex');
                         stub_fetchIndex.resolves(SERVER_INDEX);
                         m_Local_Index = _.cloneDeep(LOCAL_INDEX);
-                        m_Local_Index['bcics_ICS206'].lastModified = '2018-05-11T12:37:21-07:00';
-                        m_Local_Index['bcics_ICS205A'].lastModified = '2018-05-11T12:37:21-07:00';
+                        m_Local_Index['dalmatian_ICS206'].lastModified = '2018-05-11T12:37:21-07:00';
+                        m_Local_Index['dalmatian_ICS205A'].lastModified = '2018-05-11T12:37:21-07:00';
                         stub_read = sandbox.stub(StorageManager, 'read');
                         stub_read.withArgs(DIRECTORY, 'index').resolves(JSON.stringify(m_Local_Index));
                         return [4 /*yield*/, SUT.checkForFormUpdates()];
                     case 1:
                         result = _a.sent();
                         // Assert
-                        expect(result).toEqual(['bcics_ICS206', 'bcics_ICS205A']);
+                        expect(result).toEqual(['dalmatian_ICS206', 'dalmatian_ICS205A']);
                         return [2 /*return*/];
                 }
             });
@@ -277,16 +277,16 @@ describe('UpdateManager should ', function () {
                 switch (_a.label) {
                     case 0:
                         stub_checkForFormUpdates = sandbox.stub(SUT, 'checkForFormUpdates');
-                        stub_checkForFormUpdates.resolves(['bcics_ICS205A', 'bcics_ICS205']);
+                        stub_checkForFormUpdates.resolves(['dalmatian_ICS205A', 'dalmatian_ICS205']);
                         stub_FetchForms = sandbox.stub(FormFetcher, 'fetchForms');
-                        stub_FetchForms.withArgs(['bcics_ICS205A', 'bcics_ICS205']).resolves([
+                        stub_FetchForms.withArgs(['dalmatian_ICS205A', 'dalmatian_ICS205']).resolves([
                             ICS205A_ServerResponse,
                             ICS205_ServerResponse
                         ]);
                         m_Local_Index = _.cloneDeep(LOCAL_INDEX);
-                        m_Local_Index['bcics_ICS206'].lastModified = '2018-05-19T12:37:21-07:00'; // Up to date
-                        m_Local_Index['bcics_ICS205'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
-                        m_Local_Index['bcics_ICS205A'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
+                        m_Local_Index['dalmatian_ICS206'].lastModified = '2018-05-19T12:37:21-07:00'; // Up to date
+                        m_Local_Index['dalmatian_ICS205'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
+                        m_Local_Index['dalmatian_ICS205A'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
                         stub_read = sandbox.stub(StorageManager, 'read');
                         stub_read.withArgs(DIRECTORY, 'index').resolves(JSON.stringify(m_Local_Index));
                         stub_write = sandbox.stub(StorageManager, 'write');
@@ -297,9 +297,9 @@ describe('UpdateManager should ', function () {
                         // Act
                         _a.sent();
                         m_Local_Index_Expected = _.cloneDeep(LOCAL_INDEX);
-                        m_Local_Index_Expected['bcics_ICS206'].lastModified = '2018-05-19T12:37:21-07:00'; // Untouched
-                        m_Local_Index_Expected['bcics_ICS205'].lastModified = '2018-05-18T12:37:21-07:00'; // Now matches server
-                        m_Local_Index_Expected['bcics_ICS205A'].lastModified = '2018-05-18T12:37:21-07:00'; // Now matches server
+                        m_Local_Index_Expected['dalmatian_ICS206'].lastModified = '2018-05-19T12:37:21-07:00'; // Untouched
+                        m_Local_Index_Expected['dalmatian_ICS205'].lastModified = '2018-05-18T12:37:21-07:00'; // Now matches server
+                        m_Local_Index_Expected['dalmatian_ICS205A'].lastModified = '2018-05-18T12:37:21-07:00'; // Now matches server
                         expect(stub_write.getCalls().filter(function (c) {
                             var args = c.args;
                             return args[0] === DIRECTORY &&
@@ -346,9 +346,9 @@ describe('UpdateManager should ', function () {
                     case 0:
                         error = new Error('oh no');
                         stub_checkForFormUpdates = sandbox.stub(SUT, 'checkForFormUpdates');
-                        stub_checkForFormUpdates.resolves(['bcics_ICS205A', 'bcics_ICS205']);
+                        stub_checkForFormUpdates.resolves(['dalmatian_ICS205A', 'dalmatian_ICS205']);
                         stub_FetchForms = sandbox.stub(FormFetcher, 'fetchForms');
-                        stub_FetchForms.withArgs(['bcics_ICS205A', 'bcics_ICS205']).rejects(error);
+                        stub_FetchForms.withArgs(['dalmatian_ICS205A', 'dalmatian_ICS205']).rejects(error);
                         // Act & Assert
                         return [4 /*yield*/, expect(SUT.downloadFormUpdates()).rejects.toBe(error)];
                     case 1:
@@ -365,9 +365,9 @@ describe('UpdateManager should ', function () {
                     case 0:
                         error = new Error('oh no');
                         stub_checkForFormUpdates = sandbox.stub(SUT, 'checkForFormUpdates');
-                        stub_checkForFormUpdates.resolves(['bcics_ICS205A', 'bcics_ICS205']);
+                        stub_checkForFormUpdates.resolves(['dalmatian_ICS205A', 'dalmatian_ICS205']);
                         stub_FetchForms = sandbox.stub(FormFetcher, 'fetchForms');
-                        stub_FetchForms.withArgs(['bcics_ICS205A', 'bcics_ICS205']).resolves([
+                        stub_FetchForms.withArgs(['dalmatian_ICS205A', 'dalmatian_ICS205']).resolves([
                             ICS205A_ServerResponse,
                             ICS205_ServerResponse
                         ]);
@@ -389,9 +389,9 @@ describe('UpdateManager should ', function () {
                     case 0:
                         error = new Error('oh no');
                         stub_checkForFormUpdates = sandbox.stub(SUT, 'checkForFormUpdates');
-                        stub_checkForFormUpdates.resolves(['bcics_ICS205A', 'bcics_ICS205']);
+                        stub_checkForFormUpdates.resolves(['dalmatian_ICS205A', 'dalmatian_ICS205']);
                         stub_FetchForms = sandbox.stub(FormFetcher, 'fetchForms');
-                        stub_FetchForms.withArgs(['bcics_ICS205A', 'bcics_ICS205']).resolves([
+                        stub_FetchForms.withArgs(['dalmatian_ICS205A', 'dalmatian_ICS205']).resolves([
                             ICS205A_ServerResponse,
                             ICS205_ServerResponse
                         ]);
@@ -413,16 +413,16 @@ describe('UpdateManager should ', function () {
                     case 0:
                         error = new Error('oh no');
                         stub_checkForFormUpdates = sandbox.stub(SUT, 'checkForFormUpdates');
-                        stub_checkForFormUpdates.resolves(['bcics_ICS205A', 'bcics_ICS205']);
+                        stub_checkForFormUpdates.resolves(['dalmatian_ICS205A', 'dalmatian_ICS205']);
                         stub_FetchForms = sandbox.stub(FormFetcher, 'fetchForms');
-                        stub_FetchForms.withArgs(['bcics_ICS205A', 'bcics_ICS205']).resolves([
+                        stub_FetchForms.withArgs(['dalmatian_ICS205A', 'dalmatian_ICS205']).resolves([
                             ICS205A_ServerResponse,
                             ICS205_ServerResponse
                         ]);
                         m_Local_Index = _.cloneDeep(LOCAL_INDEX);
-                        m_Local_Index['bcics_ICS206'].lastModified = '2018-05-19T12:37:21-07:00'; // Up to date
-                        m_Local_Index['bcics_ICS205'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
-                        m_Local_Index['bcics_ICS205A'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
+                        m_Local_Index['dalmatian_ICS206'].lastModified = '2018-05-19T12:37:21-07:00'; // Up to date
+                        m_Local_Index['dalmatian_ICS205'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
+                        m_Local_Index['dalmatian_ICS205A'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
                         stub_read = sandbox.stub(StorageManager, 'read');
                         stub_read.withArgs(DIRECTORY, 'index').resolves(JSON.stringify(m_Local_Index));
                         stub_write = sandbox.stub(StorageManager, 'write');
@@ -443,16 +443,16 @@ describe('UpdateManager should ', function () {
                     case 0:
                         error = new Error('oh no');
                         stub_checkForFormUpdates = sandbox.stub(SUT, 'checkForFormUpdates');
-                        stub_checkForFormUpdates.resolves(['bcics_ICS205A', 'bcics_ICS205']);
+                        stub_checkForFormUpdates.resolves(['dalmatian_ICS205A', 'dalmatian_ICS205']);
                         stub_FetchForms = sandbox.stub(FormFetcher, 'fetchForms');
-                        stub_FetchForms.withArgs(['bcics_ICS205A', 'bcics_ICS205']).resolves([
+                        stub_FetchForms.withArgs(['dalmatian_ICS205A', 'dalmatian_ICS205']).resolves([
                             ICS205A_ServerResponse,
                             ICS205_ServerResponse
                         ]);
                         m_Local_Index = _.cloneDeep(LOCAL_INDEX);
-                        m_Local_Index['bcics_ICS206'].lastModified = '2018-05-19T12:37:21-07:00'; // Up to date
-                        m_Local_Index['bcics_ICS205'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
-                        m_Local_Index['bcics_ICS205A'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
+                        m_Local_Index['dalmatian_ICS206'].lastModified = '2018-05-19T12:37:21-07:00'; // Up to date
+                        m_Local_Index['dalmatian_ICS205'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
+                        m_Local_Index['dalmatian_ICS205A'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
                         stub_read = sandbox.stub(StorageManager, 'read');
                         stub_read.withArgs(DIRECTORY, 'index').resolves(JSON.stringify(m_Local_Index));
                         stub_write = sandbox.stub(StorageManager, 'write');
@@ -473,16 +473,16 @@ describe('UpdateManager should ', function () {
                 switch (_a.label) {
                     case 0:
                         stub_checkForFormUpdates = sandbox.stub(SUT, 'checkForFormUpdates');
-                        stub_checkForFormUpdates.resolves(['bcics_ICS205A', 'bcics_ICS205']);
+                        stub_checkForFormUpdates.resolves(['dalmatian_ICS205A', 'dalmatian_ICS205']);
                         stub_FetchForms = sandbox.stub(FormFetcher, 'fetchForms');
-                        stub_FetchForms.withArgs(['bcics_ICS205A', 'bcics_ICS205']).resolves([
+                        stub_FetchForms.withArgs(['dalmatian_ICS205A', 'dalmatian_ICS205']).resolves([
                             ICS205A_ServerResponse,
                             ICS205_ServerResponse
                         ]);
                         m_Local_Index = _.cloneDeep(LOCAL_INDEX);
-                        m_Local_Index['bcics_ICS206'].lastModified = '2018-05-19T12:37:21-07:00'; // Up to date
-                        m_Local_Index['bcics_ICS205'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
-                        m_Local_Index['bcics_ICS205A'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
+                        m_Local_Index['dalmatian_ICS206'].lastModified = '2018-05-19T12:37:21-07:00'; // Up to date
+                        m_Local_Index['dalmatian_ICS205'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
+                        m_Local_Index['dalmatian_ICS205A'].lastModified = '2018-05-11T12:37:21-07:00'; // Out of date
                         stub_read = sandbox.stub(StorageManager, 'read');
                         stub_read.withArgs(DIRECTORY, 'index').resolves(JSON.stringify(m_Local_Index));
                         stub_write = sandbox.stub(StorageManager, 'write');
@@ -493,9 +493,9 @@ describe('UpdateManager should ', function () {
                         // Act
                         _a.sent();
                         m_Local_Index_Expected = _.cloneDeep(LOCAL_INDEX);
-                        m_Local_Index_Expected['bcics_ICS206'].lastModified = '2018-05-19T12:37:21-07:00'; // Untouched
-                        m_Local_Index_Expected['bcics_ICS205'].lastModified = '2018-05-18T12:37:21-07:00'; // Now matches server
-                        m_Local_Index_Expected['bcics_ICS205A'].lastModified = '2018-05-18T12:37:21-07:00'; // Now matches server
+                        m_Local_Index_Expected['dalmatian_ICS206'].lastModified = '2018-05-19T12:37:21-07:00'; // Untouched
+                        m_Local_Index_Expected['dalmatian_ICS205'].lastModified = '2018-05-18T12:37:21-07:00'; // Now matches server
+                        m_Local_Index_Expected['dalmatian_ICS205A'].lastModified = '2018-05-18T12:37:21-07:00'; // Now matches server
                         expect(stub_write.getCalls().filter(function (c) {
                             var args = c.args;
                             return args[0] === DIRECTORY &&
@@ -550,9 +550,9 @@ describe('UpdateManager should ', function () {
                 switch (_a.label) {
                     case 0:
                         stub_checkForFormUpdates = sandbox.stub(SUT, 'checkForFormUpdates');
-                        stub_checkForFormUpdates.resolves(['bcics_ICS205A', 'bcics_ICS205']);
+                        stub_checkForFormUpdates.resolves(['dalmatian_ICS205A', 'dalmatian_ICS205']);
                         stub_FetchForms = sandbox.stub(FormFetcher, 'fetchForms');
-                        stub_FetchForms.withArgs(['bcics_ICS205A', 'bcics_ICS205']).resolves([
+                        stub_FetchForms.withArgs(['dalmatian_ICS205A', 'dalmatian_ICS205']).resolves([
                             ICS205A_ServerResponse,
                             ICS205_ServerResponse
                         ]);
@@ -566,14 +566,14 @@ describe('UpdateManager should ', function () {
                         // Act
                         _a.sent();
                         m_Local_Index_Expected = _.cloneDeep(LOCAL_INDEX);
-                        m_Local_Index_Expected['bcics_ICS205'].lastModified = '2018-05-18T12:37:21-07:00';
-                        m_Local_Index_Expected['bcics_ICS205A'].lastModified = '2018-05-18T12:37:21-07:00';
+                        m_Local_Index_Expected['dalmatian_ICS205'].lastModified = '2018-05-18T12:37:21-07:00';
+                        m_Local_Index_Expected['dalmatian_ICS205A'].lastModified = '2018-05-18T12:37:21-07:00';
                         expect(stub_write.getCalls().filter(function (c) {
                             var args = c.args;
                             return args[0] === DIRECTORY &&
                                 args[1] === 'index' &&
-                                JSON.stringify(JSON.parse(args[2]).bcics_ICS205) === JSON.stringify(m_Local_Index_Expected.bcics_ICS205) &&
-                                JSON.stringify(JSON.parse(args[2]).bcics_ICS205A) === JSON.stringify(m_Local_Index_Expected.bcics_ICS205A);
+                                JSON.stringify(JSON.parse(args[2]).dalmatian_ICS205) === JSON.stringify(m_Local_Index_Expected.dalmatian_ICS205) &&
+                                JSON.stringify(JSON.parse(args[2]).dalmatian_ICS205A) === JSON.stringify(m_Local_Index_Expected.dalmatian_ICS205A);
                         }).length).toBe(1);
                         expect(stub_write.getCalls().filter(function (c) {
                             var args = c.args;

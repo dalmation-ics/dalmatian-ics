@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * FormFetcher is tasked with all of the network requests for forms or the form index.json
  */
@@ -7,7 +7,7 @@ var getIt = require("get-it");
 var gi_base = require("get-it/lib/middleware/base");
 var gi_promise = require("get-it/lib/middleware/promise");
 var gi_httpErrors = require("get-it/lib/middleware/httpErrors");
-var FormDetails_1 = require("./class/FormDetails");
+var index_1 = require("./class/form/index");
 var target = 'https://s3-us-west-2.amazonaws.com/dalmatian-ics-forms';
 var timeout = 10000;
 var index_fetch_in_progress = false;
@@ -50,7 +50,7 @@ function fetchIndex() {
                 reject(new BadServerResponseError('Server provided empty response'));
                 index_fetch_in_progress = false;
             }
-        })["catch"](function (e) {
+        }).catch(function (e) {
             index_fetch_in_progress = false;
             if (e.constructor.name === 'Cancel') {
                 reject(new UserCancelledError());
@@ -90,7 +90,7 @@ function fetchForms(formNameArray) {
                         console.log("File download " + name + " successful");
                         out.push({
                             fileName: name,
-                            details: FormDetails_1.parseForm(content, name, index[name].lastModified),
+                            details: index_1.parseFormTemplate(content, name, index[name].lastModified),
                             content: content,
                             error: null,
                             failure: false
@@ -100,7 +100,7 @@ function fetchForms(formNameArray) {
                     else {
                         throw new BadServerResponseError('Server provided empty response');
                     }
-                })["catch"](function (e) {
+                }).catch(function (e) {
                     console.log("File download " + name + " failed");
                     var error = e.constructor.name === 'Cancel' ? new UserCancelledError() : e;
                     out.push({
@@ -116,7 +116,7 @@ function fetchForms(formNameArray) {
                 forms_fetch_in_progress = false;
                 resolve(out);
             });
-        })["catch"](function (e) {
+        }).catch(function (e) {
             forms_fetch_in_progress = false;
             reject(e);
         });

@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * StorageManager is intended for large storage operations.
  *
@@ -66,7 +66,7 @@ function initialize(path) {
             resolve();
         }); };
         // Begin
-        p_check_path_valid()["catch"](function (e) { return reject(e); });
+        p_check_path_valid().catch(function (e) { return reject(e); });
     });
 }
 exports.initialize = initialize;
@@ -124,7 +124,7 @@ function read(directory, fileName) {
             resolve(decrypted);
         }); };
         // Begin
-        p_check_exist_directory_path()["catch"](function (e) { return reject(e); });
+        p_check_exist_directory_path().catch(function (e) { return reject(e); });
     });
 }
 exports.read = read;
@@ -167,7 +167,7 @@ function write(directory, fileName, content) {
          */
         var p_create_directory = function () { return fs.mkdir(directory_path).then(function () {
             return p_write_file();
-        })["catch"](function (e) {
+        }).catch(function (e) {
             if (e.code === 'EEXIST') {
                 return p_write_file();
             }
@@ -189,7 +189,7 @@ function write(directory, fileName, content) {
             }
         };
         // Begin
-        p_check_exist_directory_path()["catch"](function (e) { return reject(e); });
+        p_check_exist_directory_path().catch(function (e) { return reject(e); });
     });
 }
 exports.write = write;
@@ -220,7 +220,7 @@ function checkDirectoryIsValid(path) {
             resolve(stat.isDirectory());
         }); };
         // Begin
-        p_check_path_exists()["catch"](function (e) { return reject(e); });
+        p_check_path_exists().catch(function (e) { return reject(e); });
     });
 }
 function setOperationalDirectory(path) {
