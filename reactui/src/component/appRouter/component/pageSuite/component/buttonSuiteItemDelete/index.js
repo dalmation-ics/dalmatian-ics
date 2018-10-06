@@ -1,7 +1,7 @@
 //@flow
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Modal} from 'reactstrap';
+import {Modal, Table} from 'reactstrap';
 import {toast} from 'react-toastify';
 
 import ToastPromptButton from 'src/component/global/toastPromptButton';
@@ -46,7 +46,20 @@ class ButtonSuiteItemDelete extends Component<propsDeleteButton> {
         f => f.uuid === suiteSelectedUUID);
 
     return <ToastPromptButton action={this.onClick_deleteItem}>
-      Are you sure you want to delete {name}
+      <div>
+        <p>Are you sure you want to delete:</p>
+        <h2>{fileName}</h2>
+        <Table size={'small'} borderless responsive>
+          <tr>
+            <td>ID</td>
+            <td>{id}</td>
+          </tr>
+          <tr>
+            <td>Title</td>
+            <td>{name}</td>
+          </tr>
+        </Table>
+      </div>
     </ToastPromptButton>;
   }
 
