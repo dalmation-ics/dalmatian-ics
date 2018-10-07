@@ -1,6 +1,7 @@
+// @flow
+
 import {ACT_GET_FORMS_INDEX} from 'src/_core/contract/formsBridge';
 import ipcRWrapper from 'src/_core/electron/ipcWrapper/index';
-// @flow
 import type {Action, Dispatch} from 'src/_core/redux/types';
 import actionStatus from 'src/_core/redux/types/actionStatus';
 
