@@ -1,5 +1,6 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 // @flow
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {AppContainer} from 'react-hot-loader';
