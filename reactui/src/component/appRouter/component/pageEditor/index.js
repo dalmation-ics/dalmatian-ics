@@ -133,8 +133,7 @@ class PageEditor extends Component<propTypes> {
       action_Nav_RedirectUser('/suite');
     } else {
       try {
-        action_Electron_SetTitle(
-            'Editing ' + ' ~ "' + form.name + '"');
+        action_Electron_SetTitle('Editing (' +form.id+ ') ~ "' + form.name + '"');
       } catch (e) {
 
       }
