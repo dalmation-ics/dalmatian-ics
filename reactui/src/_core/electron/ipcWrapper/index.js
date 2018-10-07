@@ -55,7 +55,7 @@ export default {
 			'color:grey',
 			'',
 		);
-		console.log(`[Args] ${args && args.length > 0 && args.join != undefined ?
+		console.log(`[Args] ${args && args.length > 0 && args.join !== undefined ?
 			args.join(',') :
 			'[]'}`);
 		console.groupEnd();
