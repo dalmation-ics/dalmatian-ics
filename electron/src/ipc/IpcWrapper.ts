@@ -5,12 +5,12 @@ import {RESPONSE_POSTFIX} from '../_core/contract/_general';
 import {ErrorFirstCallback} from '../type/Callbacks';
 import * as strings from '../_core/res/strings';
 
-const {version} = require('../../../package.json');
+const pack = require('../../../package.json');
 
 export default class IpcWrapper {
 
     public window: BrowserWindow;
-    public appTitle: string = strings.APP_TITLE + ((version !== undefined) && (' ' + version));
+    public appTitle: string = strings.APP_TITLE + ((pack.version !== undefined) ? (' ' + pack.version + ' ') : '');
 
     ipcMain: IpcMain;
 

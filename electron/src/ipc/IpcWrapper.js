@@ -3,10 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var electron_1 = require("electron");
 var _general_1 = require("../_core/contract/_general");
 var strings = require("../_core/res/strings");
-var version = require('../../../package.json').version;
+var pack = require('../../../package.json');
 var IpcWrapper = /** @class */ (function () {
     function IpcWrapper(window) {
-        this.appTitle = strings.APP_TITLE + ((version !== undefined) && (' ' + version));
+        this.appTitle = strings.APP_TITLE + ((pack.version !== undefined) ? (' ' + pack.version + ' ') : '');
         this.window = window;
         this.ipcMain = electron_1.ipcMain;
     }
