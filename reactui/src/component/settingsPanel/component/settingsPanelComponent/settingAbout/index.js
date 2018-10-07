@@ -60,8 +60,7 @@ class SettingAbout extends Component<{}> {
   }
 }
 
-const mapStateToProps = (state) => {
-  const {} = state;
+const mapStateToProps = () => {
   return {};
 };
 
