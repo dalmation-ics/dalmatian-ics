@@ -1,5 +1,5 @@
 // @flow
 
 export type Theme = {
-  name: string,
+	name: string,
 }

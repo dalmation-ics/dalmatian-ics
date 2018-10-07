@@ -4,9 +4,9 @@ import actionStatus, {ActionStatus} from './actionStatus';
  * Action type for redux
  */
 export type Action = {
-  type: string,
-  payload?: any | null,
-  state?: ActionStatus | null
+	type: string,
+	payload?: any | null,
+	state?: ActionStatus | null
 };
 export type State = Object;
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

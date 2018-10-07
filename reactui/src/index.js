@@ -1,13 +1,13 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 // @flow
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import {AppContainer} from 'react-hot-loader';
+import {initialize as electron_initialize} from 'src/_core/electron';
 import AppReduxProvider, {initializeStore} from './component/appReduxProvider';
 import AppRouter from './component/appRouter';
+import './index.css';
 import registerServiceWorker from './registerServiceWorker';
-import {initialize as electron_initialize} from 'src/_core/electron';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 /**
  * Setup use of Electron in React
@@ -19,24 +19,24 @@ initializeStore();
 const root: ?Element = document.getElementById('root');
 
 try {
-  /**
-   * Render the application
-   */
+	/**
+	 * Render the application
+	 */
 
-  if (root != null) {
-    ReactDOM.render(
-        <AppContainer>
-          <AppReduxProvider>
-            <AppRouter/>
-          </AppReduxProvider>
-        </AppContainer>, root);
-  }
+	if (root != null) {
+		ReactDOM.render(
+			<AppContainer>
+				<AppReduxProvider>
+					<AppRouter/>
+				</AppReduxProvider>
+			</AppContainer>, root);
+	}
 } catch (exc) {
-  if (root != null)
-    ReactDOM.render(<div>
-          <h1>An error occurred</h1>
-        </div>,
-        root);
+	if (root != null)
+		ReactDOM.render(<div>
+				<h1>An error occurred</h1>
+			</div>,
+			root);
 }
 
 registerServiceWorker();

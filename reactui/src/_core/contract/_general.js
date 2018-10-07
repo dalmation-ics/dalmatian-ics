@@ -1,3 +1,3 @@
 module.exports = {
-    RESPONSE_POSTFIX: '_RESPONSE'
+	RESPONSE_POSTFIX: '_RESPONSE'
 };

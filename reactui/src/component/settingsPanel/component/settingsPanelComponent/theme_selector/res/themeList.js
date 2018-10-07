@@ -3,13 +3,13 @@
 import type {Theme} from '../types';
 
 const dark: Theme = {
-  name: 'dark',
+	name: 'dark',
 };
 const normal: Theme = {
-  name: 'normal',
+	name: 'normal',
 };
 const contrast: Theme = {
-  name: 'contrast',
+	name: 'contrast',
 };
 
 export default [dark, normal, contrast];

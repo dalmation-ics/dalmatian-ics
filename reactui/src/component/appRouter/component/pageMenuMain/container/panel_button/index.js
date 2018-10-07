@@ -1,47 +1,43 @@
 // @flow
 import React, {Component} from 'react';
-import {
-  Card,
-  CardBody,
-  CardTitle,
-} from 'reactstrap';
+import {Card, CardBody, CardTitle,} from 'reactstrap';
 
 type props = {
-  text: string,
-  display: any,
-  onClick: () => null | any,
-  disabled?: boolean | null,
+	text: string,
+	display: any,
+	onClick: () => null | any,
+	disabled?: boolean | null,
 };
 
 class PanelButton extends Component <props> {
 
-  render() {
+	render() {
 
-    const {
-      display,
-      text,
-      onClick,
-      disabled,
-    } = this.props;
+		const {
+			display,
+			text,
+			onClick,
+			disabled,
+		} = this.props;
 
-    return (
+		return (
 
-        <Card
-            onClick={() => {
-              if (!disabled && onClick) {
-                onClick();
-              }
-            }}>
-          <CardBody>
-            {display}
-          </CardBody>
-          <CardTitle>
-            {text}
-          </CardTitle>
-        </Card>
-    );
+			<Card
+				onClick={() => {
+					if (!disabled && onClick) {
+						onClick();
+					}
+				}}>
+				<CardBody>
+					{display}
+				</CardBody>
+				<CardTitle>
+					{text}
+				</CardTitle>
+			</Card>
+		);
 
-  }
+	}
 
 }
 

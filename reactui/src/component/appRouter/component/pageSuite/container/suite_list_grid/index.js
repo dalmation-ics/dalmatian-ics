@@ -1,13 +1,6 @@
 import React, {Component} from 'react';
 import FontAwesome from 'react-fontawesome';
-import {
-	Card,
-	CardFooter,
-	CardTitle,
-	CardBody,
-	CardHeader,
-	CardText, CardColumns,
-} from 'reactstrap';
+import {Card, CardBody, CardColumns, CardFooter, CardHeader, CardText, CardTitle,} from 'reactstrap';
 
 import * as s from 'src/_core/res/strings';
 
