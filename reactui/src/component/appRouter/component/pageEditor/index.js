@@ -1,5 +1,5 @@
-import Crypto from 'crypto';
 // @flow
+import Crypto from 'crypto';
 import * as React from 'react';
 import {Component} from 'react';
 import {connect} from 'react-redux';
