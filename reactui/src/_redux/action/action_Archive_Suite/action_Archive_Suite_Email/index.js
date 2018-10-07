@@ -1,6 +1,7 @@
+// @flow
+
 import {ACT_ARCHIVE_SEND_EMAIL} from 'src/_core/contract/exportBridge';
 import ipcRWrapper from 'src/_core/electron/ipcWrapper/index';
-// @flow
 import type {Action, Dispatch} from 'src/_core/redux/types';
 import actionStatus from 'src/_core/redux/types/actionStatus';
 import * as action_Archive_Suite_Save from '../action_Archive_Suite_Save';
