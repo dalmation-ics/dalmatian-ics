@@ -21,12 +21,7 @@ import ButtonSaveForm from './component/buttonSaveForm';
 import type {ActionStatus} from 'src/_core/redux/types/actionStatus';
 import {
   Button,
-  ButtonGroup,
-  Card, CardDeck,
-  CardFooter,
-  CardHeader,
-  CardTitle, Container,
-  Jumbotron, Row,
+  Container,
 } from 'reactstrap';
 
 type propTypes = {
