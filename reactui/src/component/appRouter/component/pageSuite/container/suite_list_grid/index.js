@@ -6,7 +6,7 @@ import {
   CardTitle,
   CardBody,
   CardHeader,
-  CardText, CardDeck, CardColumns, Row,
+  CardText, CardColumns,
 } from 'reactstrap';
 
 import * as s from 'src/_core/res/strings';
