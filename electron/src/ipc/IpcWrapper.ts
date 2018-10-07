@@ -4,13 +4,12 @@ import BrowserWindow = Electron.BrowserWindow;
 import {RESPONSE_POSTFIX} from '../_core/contract/_general';
 import {ErrorFirstCallback} from '../type/Callbacks';
 import * as strings from '../_core/res/strings';
-
-const pack = require('../../../package.json');
+import {version} from '../../package.json';
 
 export default class IpcWrapper {
 
     public window: BrowserWindow;
-    public appTitle: string = strings.APP_TITLE + ((pack.version !== undefined) ? (' ' + pack.version + ' ') : '');
+    public appTitle: string = strings.APP_TITLE + ((version !== undefined) ? ' (v' + version + ') ' : '');
 
     ipcMain: IpcMain;
 
