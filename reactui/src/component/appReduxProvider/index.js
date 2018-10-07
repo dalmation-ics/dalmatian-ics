@@ -1,5 +1,6 @@
-import * as _ from 'lodash';
 // @flow
+
+import * as _ from 'lodash';
 import * as React from 'react';
 import {Provider} from 'react-redux';
 import {toast} from 'react-toastify';
