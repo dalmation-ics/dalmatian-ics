@@ -1,4 +1,4 @@
-// @Flow
+//@flow
 
 // NOTE FOR THE FUTURE, THESE CONSTANTS MUST LINE UP WITH THE STRINGS IN ActionStatus' type
 
