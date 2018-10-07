@@ -1,5 +1,6 @@
-import moment from 'moment';
 // @flow
+
+import moment from 'moment';
 import {TIME,} from 'src/_core/res/strings';
 
 const {
