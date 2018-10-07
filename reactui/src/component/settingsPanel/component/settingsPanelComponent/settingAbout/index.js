@@ -4,10 +4,9 @@ import * as React from 'react';
 import {
   Card,
   CardTitle,
-  CardText,
   CardBody,
   CardDeck,
-  CardFooter, CardHeader,
+  CardHeader,
 } from 'reactstrap';
 import DeveloperCardStack from './container/developerCardStack';
 import {connect} from 'react-redux';
@@ -60,8 +59,7 @@ class SettingAbout extends Component<{}> {
   }
 }
 
-const mapStateToProps = (state) => {
-  const {} = state;
+const mapStateToProps = () => {
   return {};
 };
 
