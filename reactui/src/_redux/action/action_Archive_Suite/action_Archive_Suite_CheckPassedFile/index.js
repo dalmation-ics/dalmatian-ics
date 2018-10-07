@@ -1,7 +1,7 @@
+// @flow
 import path from 'path';
 import {ACT_CHECK_PASSED_FILE} from 'src/_core/contract/exportBridge';
 import ipcRWrapper from 'src/_core/electron/ipcWrapper/index';
-// @flow
 import type {Action, Dispatch} from 'src/_core/redux/types';
 
 import actionStatus from 'src/_core/redux/types/actionStatus';
