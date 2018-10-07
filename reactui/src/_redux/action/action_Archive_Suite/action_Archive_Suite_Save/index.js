@@ -1,7 +1,7 @@
+// @flow
 import _ from 'lodash';
 import {ACT_SAVE_ARCHIVE} from 'src/_core/contract/exportBridge';
 import ipcRWrapper from 'src/_core/electron/ipcWrapper/index';
-// @flow
 import type {Action, Dispatch, GetState} from 'src/_core/redux/types';
 
 import actionStatus from 'src/_core/redux/types/actionStatus';
