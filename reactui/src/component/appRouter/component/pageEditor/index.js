@@ -21,12 +21,7 @@ import ButtonSaveForm from './component/buttonSaveForm';
 import type {ActionStatus} from 'src/_core/redux/types/actionStatus';
 import {
   Button,
-  ButtonGroup,
-  Card, CardDeck,
-  CardFooter,
-  CardHeader,
-  CardTitle, Container,
-  Jumbotron, Row,
+  Container,
 } from 'reactstrap';
 
 type propTypes = {
@@ -85,7 +80,7 @@ class PageEditor extends Component<propTypes> {
         digest('hex');
 //    console.log(hashLive);
 //    console.log(hashOld);
-    return hashLive == hashOld;
+    return hashLive === hashOld;
   };
 
   onClick_returnToHome = () => {
@@ -138,8 +133,7 @@ class PageEditor extends Component<propTypes> {
       action_Nav_RedirectUser('/suite');
     } else {
       try {
-        action_Electron_SetTitle(
-            'Editing ' + ' ~ "' + form.name + '"');
+        action_Electron_SetTitle('Editing (' +form.id+ ') ~ "' + form.name + '"');
       } catch (e) {
 
       }
