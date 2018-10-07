@@ -1,5 +1,6 @@
-import {createBrowserHistory} from 'history';
 // @flow
+
+import {createBrowserHistory} from 'history';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {RouterHistory} from 'react-router-dom';
