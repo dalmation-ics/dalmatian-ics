@@ -1,9 +1,9 @@
+// @flow
 import React from 'react';
 import {toast} from 'react-toastify';
 import {ACT_OPEN_ARCHIVE} from 'src/_core/contract/exportBridge';
 
 import ipcRWrapper from 'src/_core/electron/ipcWrapper/index';
-// @flow
 import type {Action, Dispatch} from 'src/_core/redux/types';
 import actionStatus from 'src/_core/redux/types/actionStatus';
 import * as s from 'src/_core/res/strings';
