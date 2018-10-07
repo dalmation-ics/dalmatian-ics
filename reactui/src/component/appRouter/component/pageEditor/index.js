@@ -80,7 +80,7 @@ class PageEditor extends Component<propTypes> {
         digest('hex');
 //    console.log(hashLive);
 //    console.log(hashOld);
-    return hashLive == hashOld;
+    return hashLive === hashOld;
   };
 
   onClick_returnToHome = () => {
