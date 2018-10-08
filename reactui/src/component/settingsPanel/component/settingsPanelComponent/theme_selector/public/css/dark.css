@@ -14,6 +14,7 @@
   padding: 0;
   font-family: Arial, sans-serif;
   overflow: auto;
+  /* Table */
 }
 .themeApplicator_dark .navbar-light {
   color: darkcyan;
@@ -744,16 +745,12 @@
 .themeApplicator_dark .modal-footer {
   border-top: 1px solid #282828;
 }
-
-/* Table */
-table {
+.themeApplicator_dark table {
   background-color: #181818;
 }
-
-caption {
+.themeApplicator_dark caption {
   color: #888888;
 }
-
 .themeApplicator_dark .table thead > tr > th,
 .themeApplicator_dark .table tbody > tr > th,
 .themeApplicator_dark .table tfoot > tr > th,
@@ -836,103 +833,102 @@ caption {
 .themeApplicator_dark .table-hover > tbody > tr:hover {
   background-color: #282828;
 }
-
-table col[class*=col-] {
+.themeApplicator_dark table col[class*=col-] {
   position: static;
   float: none;
   display: table-column;
 }
-table td[class*=col-], table th[class*=col-] {
+.themeApplicator_dark table td[class*=col-], .themeApplicator_dark table th[class*=col-] {
   position: static;
   float: none;
   display: table-cell;
 }
-table .table > thead > tr > td.active,
-table tbody > tr > td.active,
-table tfoot > tr > td.active,
-table thead > tr > th.active,
-table tbody > tr > th.active,
-table tfoot > tr > th.active,
-table thead > tr.active > td,
-table tbody > tr.active > td,
-table tfoot > tr.active > td,
-table thead > tr.active > th,
-table tbody > tr.active > th,
-table tfoot > tr.active > th {
+.themeApplicator_dark table .table > thead > tr > td.active,
+.themeApplicator_dark table tbody > tr > td.active,
+.themeApplicator_dark table tfoot > tr > td.active,
+.themeApplicator_dark table thead > tr > th.active,
+.themeApplicator_dark table tbody > tr > th.active,
+.themeApplicator_dark table tfoot > tr > th.active,
+.themeApplicator_dark table thead > tr.active > td,
+.themeApplicator_dark table tbody > tr.active > td,
+.themeApplicator_dark table tfoot > tr.active > td,
+.themeApplicator_dark table thead > tr.active > th,
+.themeApplicator_dark table tbody > tr.active > th,
+.themeApplicator_dark table tfoot > tr.active > th {
   background-color: #282828;
 }
-table .table-hover > tbody > tr td.active:hover, table .table-hover > tbody > tr th.active:hover {
+.themeApplicator_dark table .table-hover > tbody > tr td.active:hover, .themeApplicator_dark table .table-hover > tbody > tr th.active:hover {
   background-color: #1b1b1b;
 }
-table .table-hover > tbody > tr.active:hover > td, table .table-hover > tbody > tr:hover > .active, table .table-hover > tbody > tr.active:hover > th {
+.themeApplicator_dark table .table-hover > tbody > tr.active:hover > td, .themeApplicator_dark table .table-hover > tbody > tr:hover > .active, .themeApplicator_dark table .table-hover > tbody > tr.active:hover > th {
   background-color: #1b1b1b;
 }
-table .table > thead > tr > td.success,
-table tbody > tr > td.success,
-table tfoot > tr > td.success,
-table thead > tr > th.success,
-table tbody > tr > th.success,
-table tfoot > tr > th.success,
-table thead > tr.success > td,
-table tbody > tr.success > td,
-table tfoot > tr.success > td,
-table thead > tr.success > th,
-table tbody > tr.success > th,
-table tfoot > tr.success > th {
+.themeApplicator_dark table .table > thead > tr > td.success,
+.themeApplicator_dark table tbody > tr > td.success,
+.themeApplicator_dark table tfoot > tr > td.success,
+.themeApplicator_dark table thead > tr > th.success,
+.themeApplicator_dark table tbody > tr > th.success,
+.themeApplicator_dark table tfoot > tr > th.success,
+.themeApplicator_dark table thead > tr.success > td,
+.themeApplicator_dark table tbody > tr.success > td,
+.themeApplicator_dark table tfoot > tr.success > td,
+.themeApplicator_dark table thead > tr.success > th,
+.themeApplicator_dark table tbody > tr.success > th,
+.themeApplicator_dark table tfoot > tr.success > th {
   background-color: #77b300;
 }
-table .table-hover > tbody > tr td.success:hover, table .table-hover > tbody > tr th.success:hover {
+.themeApplicator_dark table .table-hover > tbody > tr td.success:hover, .themeApplicator_dark table .table-hover > tbody > tr th.success:hover {
   background-color: #669a00;
 }
-table .table-hover > tbody > tr.success:hover > td, table .table-hover > tbody > tr:hover > .success, table .table-hover > tbody > tr.success:hover > th {
+.themeApplicator_dark table .table-hover > tbody > tr.success:hover > td, .themeApplicator_dark table .table-hover > tbody > tr:hover > .success, .themeApplicator_dark table .table-hover > tbody > tr.success:hover > th {
   background-color: #669a00;
 }
-table .table > thead > tr > td.info,
-table tbody > tr > td.info,
-table tfoot > tr > td.info,
-table thead > tr > th.info,
-table tbody > tr > th.info,
-table tfoot > tr > th.info,
-table thead > tr.info > td,
-table tbody > tr.info > td,
-table tfoot > tr.info > td,
-table thead > tr.info > th,
-table tbody > tr.info > th,
-table tfoot > tr.info > th {
+.themeApplicator_dark table .table > thead > tr > td.info,
+.themeApplicator_dark table tbody > tr > td.info,
+.themeApplicator_dark table tfoot > tr > td.info,
+.themeApplicator_dark table thead > tr > th.info,
+.themeApplicator_dark table tbody > tr > th.info,
+.themeApplicator_dark table tfoot > tr > th.info,
+.themeApplicator_dark table thead > tr.info > td,
+.themeApplicator_dark table tbody > tr.info > td,
+.themeApplicator_dark table tfoot > tr.info > td,
+.themeApplicator_dark table thead > tr.info > th,
+.themeApplicator_dark table tbody > tr.info > th,
+.themeApplicator_dark table tfoot > tr.info > th {
   background-color: #9933cc;
 }
-table .table-hover > tbody > tr td.info:hover, table .table-hover > tbody > tr th.info:hover {
+.themeApplicator_dark table .table-hover > tbody > tr td.info:hover, .themeApplicator_dark table .table-hover > tbody > tr th.info:hover {
   background-color: #8a2eb8;
 }
-table .table-hover > tbody > tr.info:hover > td, table .table-hover > tbody > tr:hover > .info, table .table-hover > tbody > tr.info:hover > th {
+.themeApplicator_dark table .table-hover > tbody > tr.info:hover > td, .themeApplicator_dark table .table-hover > tbody > tr:hover > .info, .themeApplicator_dark table .table-hover > tbody > tr.info:hover > th {
   background-color: #8a2eb8;
 }
-table .table > thead > tr > td.warning,
-table tbody > tr > td.warning,
-table tfoot > tr > td.warning,
-table thead > tr > th.warning,
-table tbody > tr > th.warning,
-table tfoot > tr > th.warning,
-table thead > tr.warning > td,
-table tbody > tr.warning > td, table tfoot > tr.warning > td, table thead > tr.warning > th, table tbody > tr.warning > th, table tfoot > tr.warning > th {
+.themeApplicator_dark table .table > thead > tr > td.warning,
+.themeApplicator_dark table tbody > tr > td.warning,
+.themeApplicator_dark table tfoot > tr > td.warning,
+.themeApplicator_dark table thead > tr > th.warning,
+.themeApplicator_dark table tbody > tr > th.warning,
+.themeApplicator_dark table tfoot > tr > th.warning,
+.themeApplicator_dark table thead > tr.warning > td,
+.themeApplicator_dark table tbody > tr.warning > td, .themeApplicator_dark table tfoot > tr.warning > td, .themeApplicator_dark table thead > tr.warning > th, .themeApplicator_dark table tbody > tr.warning > th, .themeApplicator_dark table tfoot > tr.warning > th {
   background-color: #ff8800;
 }
-table .table-hover > tbody > tr td.warning:hover, table .table-hover > tbody > tr th.warning:hover {
+.themeApplicator_dark table .table-hover > tbody > tr td.warning:hover, .themeApplicator_dark table .table-hover > tbody > tr th.warning:hover {
   background-color: #e67a00;
 }
-table .table-hover > tbody > tr.warning:hover > td, table .table-hover > tbody > tr:hover > .warning, table .table-hover > tbody > tr.warning:hover > th {
+.themeApplicator_dark table .table-hover > tbody > tr.warning:hover > td, .themeApplicator_dark table .table-hover > tbody > tr:hover > .warning, .themeApplicator_dark table .table-hover > tbody > tr.warning:hover > th {
   background-color: #e67a00;
 }
-table .table > thead > tr > td.danger, table tbody > tr > td.danger, table tfoot > tr > td.danger, table thead > tr > th.danger, table tbody > tr > th.danger, table tfoot > tr > th.danger, table thead > tr.danger > td, table tbody > tr.danger > td, table tfoot > tr.danger > td, table thead > tr.danger > th, table tbody > tr.danger > th, table tfoot > tr.danger > th {
+.themeApplicator_dark table .table > thead > tr > td.danger, .themeApplicator_dark table tbody > tr > td.danger, .themeApplicator_dark table tfoot > tr > td.danger, .themeApplicator_dark table thead > tr > th.danger, .themeApplicator_dark table tbody > tr > th.danger, .themeApplicator_dark table tfoot > tr > th.danger, .themeApplicator_dark table thead > tr.danger > td, .themeApplicator_dark table tbody > tr.danger > td, .themeApplicator_dark table tfoot > tr.danger > td, .themeApplicator_dark table thead > tr.danger > th, .themeApplicator_dark table tbody > tr.danger > th, .themeApplicator_dark table tfoot > tr.danger > th {
   background-color: #cc0000;
 }
-table .table-hover > tbody > tr td.danger:hover, table .table-hover > tbody > tr th.danger:hover {
+.themeApplicator_dark table .table-hover > tbody > tr td.danger:hover, .themeApplicator_dark table .table-hover > tbody > tr th.danger:hover {
   background-color: #b30000;
 }
-table .table-hover > tbody > tr.danger:hover > td, table .table-hover > tbody > tr:hover > .danger, table .table-hover > tbody > tr.danger:hover > th {
+.themeApplicator_dark table .table-hover > tbody > tr.danger:hover > td, .themeApplicator_dark table .table-hover > tbody > tr:hover > .danger, .themeApplicator_dark table .table-hover > tbody > tr.danger:hover > th {
   background-color: #b30000;
 }
-table .form-control {
+.themeApplicator_dark table .form-control {
   color: #888888;
   background: #ffffff none;
   border: 1px solid #282828;
@@ -943,20 +939,20 @@ table .form-control {
   -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
-table .form-control:focus {
+.themeApplicator_dark table .form-control:focus {
   border-color: #66afe9;
   outline: 0;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
-table .form-control::-moz-placeholder {
+.themeApplicator_dark table .form-control::-moz-placeholder {
   color: #888888;
   opacity: 1;
 }
-table .form-control:-ms-input-placeholder, table .form-control::-webkit-input-placeholder {
+.themeApplicator_dark table .form-control:-ms-input-placeholder, .themeApplicator_dark table .form-control::-webkit-input-placeholder {
   color: #888888;
 }
-table .form-control::-ms-expand {
+.themeApplicator_dark table .form-control::-ms-expand {
   border: 0;
   background-color: transparent;
 }
