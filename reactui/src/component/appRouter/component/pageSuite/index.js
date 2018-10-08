@@ -124,8 +124,7 @@ const mapStateToProps = (state) => {
 	let isArchiveLoaded = state.archiveStore.archive !== undefined &&
 		Array.isArray(state.archiveStore.archive) &&
 		state.archiveStore.archive.length > 0;
-	const {archive, filePath} = state.archiveStore;
-	const suiteSelectedUUID = state.archiveStore.suiteSelectedUUID;
+	const {archive, filePath, suiteSelectedUUID} = state.archiveStore;
 	return {isArchiveLoaded, archive, filePath, suiteSelectedUUID};
 };
 
