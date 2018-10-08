@@ -3,6 +3,11 @@
     color: lightgrey;
 }
 
+
+.themeApplicator_dark {
+    height: 100%;
+}
+
 .themeApplicator_dark .navbar-light {
     color: darkcyan;
 }
