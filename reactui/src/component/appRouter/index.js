@@ -85,7 +85,6 @@ class AppRouter extends Component<Props> {
 								return <Redirect to={'/'}/>;
 							else
 								return <PageEditor/>;
-
 						}}/>
 					</div>
 				</Router>
