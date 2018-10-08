@@ -103,7 +103,7 @@ class MenuSettings extends Component<{
 				<ModalBody>
 					<div className={'row'}>
 						<div className={'col-12 col-md-3 col-lg-2'}>
-							<Nav tabs>
+							<Nav tabs vertical>
 								{this.makeTabHeaderList(list)}
 							</Nav>
 						</div>
