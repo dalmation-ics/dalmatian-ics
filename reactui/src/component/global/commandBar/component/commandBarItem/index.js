@@ -11,6 +11,7 @@ import action_Nav_RedirectUser from 'src/_redux/action/action_Nav/action_Nav_Red
 type propsCommandBarItem = {
 	active?: boolean | null,
 	children?: React.Node,
+	disabled: boolean | null
 }
 type propsCommandBarItemNav = {
 	...propsCommandBarItem,
@@ -25,9 +26,9 @@ type propCommandBarItemAction = {
 class ComponentCommandBarItem extends Component<propsCommandBarItemNav> {
 
 	render() {
-		const {active, children} = this.props;
+		const {active, children, disabled} = this.props;
 		return (
-			<NavItem active={active || true}>
+			<NavItem active={active || true} disabled={disabled}>
 				{children}
 			</NavItem>
 		);
@@ -36,9 +37,9 @@ class ComponentCommandBarItem extends Component<propsCommandBarItemNav> {
 
 class ComponentCommandBarItemAction extends Component<propCommandBarItemAction> {
 	render() {
-		const {active, children, onClick} = this.props;
+		const {active, children, onClick, disabled} = this.props;
 		return (
-			<NavItem active={active || true}>
+			<NavItem active={active || true} disabled={disabled}>
 				<a onClick={onClick}>
 					{children}
 				</a>
@@ -49,11 +50,11 @@ class ComponentCommandBarItemAction extends Component<propCommandBarItemAction> 
 
 class ComponentCommandBarItemNav extends Component<propsCommandBarItemNav> {
 	render() {
-		const {active, children, path, action_Nav_RedirectUser} = this.props;
+		const {active, children, path, action_Nav_RedirectUser, disabled} = this.props;
 		const action = () => {
 			action_Nav_RedirectUser(path);
 		};
-		return <NavItem active={active || true}>
+		return <NavItem active={active || true} disabled={disabled}>
 			<a onClick={action}>
 				{children}
 			</a>
