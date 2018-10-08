@@ -28,7 +28,7 @@ class ComponentCommandBarItem extends Component<propsCommandBarItemNav> {
 	render() {
 		const {active, children, disabled} = this.props;
 		return (
-			<NavItem active={active || true} disabled={disabled}>
+			<NavItem active={active || false} disabled={disabled}>
 				{children}
 			</NavItem>
 		);
@@ -39,8 +39,8 @@ class ComponentCommandBarItemAction extends Component<propCommandBarItemAction> 
 	render() {
 		const {active, children, onClick, disabled} = this.props;
 		return (
-			<NavItem active={active || true} disabled={disabled}>
-				<a onClick={onClick}>
+			<NavItem active={active || false} disabled={disabled}>
+				<a className={'nav-link'} onClick={onClick}>
 					{children}
 				</a>
 			</NavItem>
@@ -54,8 +54,8 @@ class ComponentCommandBarItemNav extends Component<propsCommandBarItemNav> {
 		const action = () => {
 			action_Nav_RedirectUser(path);
 		};
-		return <NavItem active={active || true} disabled={disabled}>
-			<a onClick={action}>
+		return <NavItem active={active || false} disabled={disabled}>
+			<a className={'nav-link'} onClick={action}>
 				{children}
 			</a>
 		</NavItem>;
