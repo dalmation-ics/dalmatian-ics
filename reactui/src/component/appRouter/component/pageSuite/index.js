@@ -2,18 +2,23 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Col, Jumbotron, Row} from 'reactstrap';
+import uuid from 'uuid';
+
 import thunkBindActionCreators from 'src/_core/redux/thunkBindActionCreators';
+
 import type {ActionBound, Dispatch} from 'src/_core/redux/types';
 import * as s from 'src/_core/res/strings';
+
 import action_Archive_Item_Duplicate from 'src/_redux/action/action_Archive_Item/action_Archive_Item_Duplicate';
 import action_Archive_Item_Select from 'src/_redux/action/action_Archive_Item/action_Archive_Item_Select';
 import action_Archive_Suite_Blank from 'src/_redux/action/action_Archive_Suite/action_Archive_Suite_Blank';
 import action_Archive_Suite_Load from 'src/_redux/action/action_Archive_Suite/action_Archive_Suite_Load';
-
+import action_Archive_Suite_ShowFileInFolder
+	from 'src/_redux/action/action_Archive_Suite/action_Archive_Suite_ShowFileInFolder';
 import action_Nav_RedirectUser from 'src/_redux/action/action_Nav/action_Nav_RedirectUser';
+
 import {CommandBarItemAction, CommandBarItemNav,} from 'src/component/global/commandBar/component/commandBarItem';
 import CommandBar, {SideBar} from 'src/component/global/commandBar/index';
-import uuid from 'uuid';
 import {ButtonSuiteItemDelete, ButtonSuiteItemRename} from './component';
 import SuiteListGrid from './container/suite_list_grid';
 
@@ -23,7 +28,8 @@ type props = {
 	suiteSelectedUUID: uuid.v4 | uuid.v6 | string | null,
 	action_Archive_Item_Select: ActionBound,
 	action_Nav_RedirectUser: ActionBound,
-	action_Archive_Item_Duplicate: ActionBound
+	action_Archive_Item_Duplicate: ActionBound,
+	action_Archive_Suite_ShowFileInFolder: ActionBound
 }
 
 class PageSuite extends Component<props> {
@@ -78,12 +84,22 @@ class PageSuite extends Component<props> {
 			suiteSelectedUUID,
 			archive,
 			action_Archive_Item_Select,
+			action_Archive_Suite_ShowFileInFolder,
+			filePath,
 		} = this.props;
+
+		const onClick_fileInFolder = () => {
+			action_Archive_Suite_ShowFileInFolder(filePath);
+		};
 
 		return (
 			<div>
 				<CommandBar>
 					<CommandBarItemNav path={'/'}>Menu</CommandBarItemNav>
+					{filePath !== undefined && <CommandBarItemAction
+						onClick={onClick_fileInFolder}>
+						{s.SHOW_ARCHIVE_IN_FOLDER}
+					</CommandBarItemAction>}
 				</CommandBar>
 				<Row noGutters>
 					<Col xs={7} sm={8} md={9}>
@@ -120,6 +136,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 		action_Archive_Suite_Load,
 		action_Archive_Item_Select,
 		action_Archive_Item_Duplicate,
+		action_Archive_Suite_ShowFileInFolder
 	}, dispatch);
 };
 

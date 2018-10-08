@@ -51,7 +51,7 @@ export const TIME = {
 	WEEK_AGO: 'Week Ago',
 	WEEKS_AGO: 'Weeks Ago',
 };
-export const SHOW_ARCHIVE_IN_FOLDER = 'Show .bcics file in folder';
+export const SHOW_ARCHIVE_IN_FOLDER = 'Show archive in folder';
 export const EMAIL = {
 	EMAIL_SEND_AS_ATTACHMENT: 'Send form(s) as email attachment',
 	EMAIL_SEND_AS_BODY: 'Send form(s) as email body',
