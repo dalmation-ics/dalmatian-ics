@@ -29,7 +29,8 @@ type props = {
 	action_Archive_Item_Select: ActionBound,
 	action_Nav_RedirectUser: ActionBound,
 	action_Archive_Item_Duplicate: ActionBound,
-	action_Archive_Suite_ShowFileInFolder: ActionBound
+	action_Archive_Suite_ShowFileInFolder: ActionBound,
+	archiveHasUnsavedChanges: boolean
 }
 
 class PageSuite extends Component<props> {
@@ -86,6 +87,7 @@ class PageSuite extends Component<props> {
 			action_Archive_Item_Select,
 			action_Archive_Suite_ShowFileInFolder,
 			filePath,
+			archiveHasUnsavedChanges,
 		} = this.props;
 
 		const onClick_fileInFolder = () => {
@@ -96,8 +98,8 @@ class PageSuite extends Component<props> {
 			<div>
 				<CommandBar>
 					<CommandBarItemNav path={'/'}>Menu</CommandBarItemNav>
-					{filePath !== undefined && <CommandBarItemAction
-						onClick={onClick_fileInFolder}>
+					{filePath !== undefined && <CommandBarItemAction disabled={archiveHasUnsavedChanges}
+					                                                 onClick={onClick_fileInFolder}>
 						{s.SHOW_ARCHIVE_IN_FOLDER}
 					</CommandBarItemAction>}
 				</CommandBar>
@@ -124,8 +126,8 @@ const mapStateToProps = (state) => {
 	let isArchiveLoaded = state.archiveStore.archive !== undefined &&
 		Array.isArray(state.archiveStore.archive) &&
 		state.archiveStore.archive.length > 0;
-	const {archive, filePath, suiteSelectedUUID} = state.archiveStore;
-	return {isArchiveLoaded, archive, filePath, suiteSelectedUUID};
+	const {archive, filePath, suiteSelectedUUID, archiveHasUnsavedChanges} = state.archiveStore;
+	return {isArchiveLoaded, archive, filePath, suiteSelectedUUID, archiveHasUnsavedChanges};
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
