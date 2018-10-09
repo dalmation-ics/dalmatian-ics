@@ -6,6 +6,10 @@ body {
 }
 
 #root {
+    height: inherit;
+}
+
+.spa-page {
     height: 100%;
 }
 

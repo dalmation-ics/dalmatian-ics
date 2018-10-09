@@ -4,6 +4,7 @@ import {Component} from 'react';
 import {connect} from 'react-redux';
 import '../../public/css/dark.css';
 import '../../public/css/normal.css';
+import '../../public/css/themeApplicator.css';
 import type {Theme} from '../../types';
 
 class ThemeApplicator extends Component<{
@@ -12,9 +13,9 @@ class ThemeApplicator extends Component<{
 }> {
 
 	render() {
-		let cssClass = 'themeApplicator_default';
+		let cssClass = 'themeApplicator themeApplicator_default';
 		if (this.props.theme !== undefined && this.props.theme !== null)
-			cssClass = 'themeApplicator_' + this.props.theme.name;
+			cssClass = 'themeApplicator themeApplicator_' + this.props.theme.name;
 
 		return (
 			<div className={cssClass}>

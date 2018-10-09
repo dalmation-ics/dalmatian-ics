@@ -95,7 +95,7 @@ class PageSuite extends Component<props> {
 		};
 
 		return (
-			<div>
+			<div className='spa-page'>
 				<CommandBar>
 					<CommandBarItemNav path={'/'}>Menu</CommandBarItemNav>
 					{filePath !== undefined && <CommandBarItemAction disabled={archiveHasUnsavedChanges}
@@ -103,7 +103,7 @@ class PageSuite extends Component<props> {
 						{s.SHOW_ARCHIVE_IN_FOLDER}
 					</CommandBarItemAction>}
 				</CommandBar>
-				<Row noGutters>
+				<Row cssModule={{overflowY: 'scroll'}} noGutters>
 					<Col xs={7} sm={8} md={9}>
 						<div className={'container-fluid'}>
 							<Jumbotron fluid>
