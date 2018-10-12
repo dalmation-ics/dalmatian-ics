@@ -1,0 +1,8 @@
+.dalmatian-card-button:hover {
+  box-shadow: 1px 1px 0.16em cyan;
+}
+.dalmatian-card-button:hover h1, .dalmatian-card-button:hover h2, .dalmatian-card-button:hover h3, .dalmatian-card-button:hover h4, .dalmatian-card-button:hover h5 {
+  font-weight: bold;
+}
+
+/*# sourceMappingURL=index.css.map */

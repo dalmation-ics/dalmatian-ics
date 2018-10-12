@@ -4,6 +4,8 @@ import {Card, CardBody, CardColumns, CardFooter, CardHeader, CardText, CardTitle
 
 import * as s from 'src/_core/res/strings';
 
+import './index.css';
+
 type propsSuiteListGridElement = {
 	formData: object,
 	onFormClick: (Event) => any,
@@ -40,7 +42,7 @@ export class SuiteListGridElement extends Component<propsSuiteListGridElement> {
 				      if (onFormDoubleClick)
 					      onFormDoubleClick(formData.uuid);
 			      }}
-			      cssClass={'col-xs-6 col-sm-3 col-md-2'}>
+			      className={'dalmatian-card-button'}>
 				<CardHeader>
 					<CardTitle>{formData.fileName}</CardTitle>
 				</CardHeader>
