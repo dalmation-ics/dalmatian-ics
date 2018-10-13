@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import {Component} from 'react';
+import SettingFormTemplate from './formTemplate';
 import SettingAbout from './settingAbout';
 import SettingLegal from './settingLegal';
 import {SettingsTheme} from './theme_selector';
@@ -18,6 +19,7 @@ const list: Array<SettingsPanelSection> = [
 	{title: 'Legal', BodyComponent: <SettingLegal/>},
 	{title: 'Look and feel', BodyComponent: <SettingsTheme/>},
 	{title: 'About', BodyComponent: <SettingAbout/>},
+	{title: 'Form template selection', BodyComponent: <SettingFormTemplate/>}
 ];
 
 export default list;
