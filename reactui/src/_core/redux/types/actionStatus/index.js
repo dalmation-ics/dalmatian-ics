@@ -17,8 +17,10 @@ export type ActionStatus =
 	'UNINITIALIZED'
 	| 'STARTED'
 	| 'ERROR'
+	| 'COMPLETE'
 	| 'STOPPED'
 	| 'CANCELLED';
+
 
 /**
  *  The list of usable status codes.
@@ -31,4 +33,4 @@ export default ({
 	ERROR,
 	STOPPED,
 	CANCELLED,
-}: ActionStatus);
+});

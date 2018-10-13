@@ -7,7 +7,7 @@ export default {
 	prompt: (
 		name: string,
 		callback: (any, any) => void | null,
-		args: string[] | string,
+		args?: string[] | string,
 	) => {
 		console.groupCollapsed(
 			'%c[AppBridge] ' +
@@ -17,7 +17,7 @@ export default {
 			'color:grey',
 			'',
 		);
-		console.log(`[Args] ${args && args.toString()}`);
+		console.log(`[Args] ${args !== undefined && args.toString()}`);
 		console.groupEnd();
 		electron.ipcRenderer.once(name + RESPONSE_POSTFIX,
 			(event, {err, result}) => {
