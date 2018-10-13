@@ -25,6 +25,7 @@ export type StateFormTemplate = State & {
 	getFormsIndexStatus: ActionStatus | null,
 	getFormsIndexError: string | null,
 	formIndex: number | null,
+	selectedRepositoryUrl: string | null,
 }
 
 const DEFAULT_STATE: StateFormTemplate = {
@@ -62,7 +63,11 @@ const DEFAULT_STATE: StateFormTemplate = {
 	getFormsIndexStatus: actionStatus.UNINITIALIZED,
 	getFormsIndexError: actionStatus.ERROR,
 	formIndex: null,
-
+	/**
+	 * Affected by:
+	 * action_FormTemplate_SelectRepository
+	 */
+	selectedRepositoryUrl: null,
 };
 
 export default (previousState: State = DEFAULT_STATE, action: Action) => {
