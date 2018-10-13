@@ -131,14 +131,14 @@ class PageEditor extends Component<propTypes> {
 
 			}
 			return (
-				<div className="container-fluid">
+				<div className='spa-page'>
 					<CommandBar>
 						<CommandBarItemAction
 							onClick={this.onClick_returnToHome}>Back</CommandBarItemAction>
 						<ButtonSaveForm/>
 					</CommandBar>
 					<div
-						id="FormContent"
+						id='FormContent'
 						dangerouslySetInnerHTML={{__html: form.content}}>
 					</div>
 				</div>
