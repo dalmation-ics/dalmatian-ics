@@ -4,6 +4,8 @@ import {Component} from 'react';
 import {connect} from 'react-redux';
 import {Card, CardBody, CardHeader, CardTitle,} from 'reactstrap';
 
+import RepoSelector from './component/repoSelector';
+
 class formTemplateConfig extends Component<{}> {
 
 	render() {
@@ -17,6 +19,7 @@ class formTemplateConfig extends Component<{}> {
 						<p>
 							Form repo selector (chooses where to download forms from)
 						</p>
+						<RepoSelector/>
 						<p>
 							Form download selector (chooses what forms to download)
 						</p>
