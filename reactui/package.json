@@ -28,7 +28,7 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start BROWSER=none",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom"
   },
