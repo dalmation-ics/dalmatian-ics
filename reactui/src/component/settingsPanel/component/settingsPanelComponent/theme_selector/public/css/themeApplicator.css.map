@@ -1,1 +1,9 @@
-{"version":3,"sourceRoot":"","sources":["themeapplicator.sass"],"names":[],"mappings":"AAAA;EACE;EACA","file":"themeApplicator.css"}
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,gBAAgB,CAAC;EACf,MAAM,EAAE,IAAI;EACZ,UAAU,EAAE,IAAI;CAAG",
+    "sources": [
+        "themeApplicator.sass"
+    ],
+    "names": [],
+    "file": "themeApplicator.css"
+}

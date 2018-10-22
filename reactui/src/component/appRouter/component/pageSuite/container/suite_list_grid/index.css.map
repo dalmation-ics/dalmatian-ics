@@ -1,1 +1,9 @@
-{"version":3,"sourceRoot":"","sources":["index.sass"],"names":[],"mappings":"AAAA;EAGE;;AAFA;EACE","file":"index.css"}
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,sBAAsB,AAAA,MAAM,CAAC;EAG3B,UAAU,EAAE,mBAAmB;CAAG;;AAHpC,AACE,sBADoB,AAAA,MAAM,CAC1B,EAAE,EADJ,sBAAsB,AAAA,MAAM,CACtB,EAAE,EADR,sBAAsB,AAAA,MAAM,CAClB,EAAE,EADZ,sBAAsB,AAAA,MAAM,CACd,EAAE,EADhB,sBAAsB,AAAA,MAAM,CACV,EAAE,EADpB,sBAAsB,AAAA,MAAM,CACN,EAAE,CAAC;EACrB,WAAW,EAAE,IAAI;CAAG",
+    "sources": [
+        "index.sass"
+    ],
+    "names": [],
+    "file": "index.css"
+}
