@@ -42,5 +42,11 @@
     "jsdom": "^13.2.0",
     "jsdom-global": "^3.0.2",
     "sinon": "^7.2.3"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
