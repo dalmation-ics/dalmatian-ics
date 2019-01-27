@@ -8,6 +8,9 @@
   "scripts": {
     "start-electron": "cd ./electron&&npm start",
     "start-react": "cd ./reactui&&npm start",
-    "start": "concurrently npm:start-react npm:start-electron"
+    "start": "concurrently npm:start-react npm:start-electron",
+    "install-electron": "cd ./electron&&npm i",
+    "install-react": "cd ./reactui&&npm i",
+    "install": "concurrently npm:install-react npm:install-electron"
   }
 }
