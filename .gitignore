@@ -3,6 +3,7 @@
 
 # Lockfiles
 *.lock
+*lock.json
 
 # Logs
 logs
