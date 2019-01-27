@@ -28,10 +28,12 @@ class FormDetail extends Component<props> {
 			);
 		} else {
 			return (
-				<div testid="FormDetailNoFormSelected"
-				     className="panel panel-default">
-					<div className="panel-body">
-						<p>No Form Selected</p>
+				<div className="card card-default">
+					<div className="card-title">
+						{NO_FORM.title}
+					</div>
+					<div className="card-body">
+						{NO_FORM.subtitle}
 					</div>
 				</div>
 			);
@@ -39,6 +41,11 @@ class FormDetail extends Component<props> {
 
 	}
 
+}
+
+export const NO_FORM = {
+	title: "No Form Selected",
+	subtitle:"Please return to the home screen and create or open a form."
 }
 
 export default FormDetail;

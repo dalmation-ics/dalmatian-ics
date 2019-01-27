@@ -1,169 +1,125 @@
-import {mount, shallow} from 'enzyme';
-import * as React from 'react';
-import sinon from 'sinon';
-import mockForms from 'src/_core/test/mock/mockForms';
-import {createStore, wrapWithProvider} from 'src/_core/test/reduxTestUtils';
-import FormList from '../index';
+import { mount, shallow } from "enzyme";
+import * as React from "react";
+import sinon from "sinon";
+import mockForms from "src/_core/test/mock/mockForms";
+import { createStore, wrapWithProvider } from "src/_core/test/reduxTestUtils";
+import FormList from "../index";
 
-describe('FormList should', () => {
+describe("FormList should", () => {
+  it("resolve that true is true", () => {
+    expect(true).toBe(true);
+  });
 
-	describe('', () => {
+// 	it("mount", () => {
+// 	  console.log(FormList)
+//     // Arrange
+//     sinon.spy(FormList.prototype, "ComponentDidMount");
 
-		it('resolve that true is true', () => {
-			expect(true).toBe(true);
-		});
+//     // Act
+//     shallow(<FormList />);
 
-		it('mount', () => {
+//     // Assert
+//     expect(FormList.prototype.componentDidMount.calledOnce).toBe(true);
 
-			// Arrange
-			sinon.spy(FormList.prototype, 'componentDidMount');
+//     // Restore
+//     FormList.prototype.componentDidMount.restore();
+//   });
 
-			// Act
-			shallow(<FormList/>);
+  it("render #FormListNoData when no forms are provided", () => {
+    // Arrange
+    // Act
+    const container = shallow(<FormList />);
 
-			// Assert
-			expect(FormList.prototype.componentDidMount.calledOnce).toBe(true);
+    // Assert
+    expect(container.find('[testid="FormListNoData"]').length).toBeGreaterThan(
+      0
+    );
+  });
 
-			// Restore
-			FormList.prototype.componentDidMount.restore();
+  it("render #FormList when forms are provided", () => {
+    // Arrange
+    // Act
+    const container = shallow(<FormList forms={mockForms} />);
 
-		});
+    // Assert
+    expect(container.find('[testid="FormList"]').length).toBeGreaterThan(0);
+  });
 
-		it('render #FormListNoData when no forms are provided', () => {
+  it("highlights selected form with #FormListItemSelected", () => {
+    // Arrange
+    // Act
+    const container = mount(
+      <FormList
+        forms={mockForms}
+        selected={mockForms[mockForms.length - 1].id}
+      />
+    );
 
-			// Arrange
-			// Act
-			const container = shallow(<FormList/>);
+    // Assert
+    expect(
+      container.find('[testid="FormListItemSelected"]').length
+    ).toBeGreaterThan(0);
+  });
+});
 
-			// Assert
-			expect(container.find('[testid="FormListNoData"]').length).
-				toBeGreaterThan(0);
+describe("have prop onSubmit that", () => {
+  it("is not called by single clicking a list item", () => {
+    // Arrange
+    const spy = sinon.spy();
+    const container = mount(<FormList forms={mockForms} onSubmit={spy} />);
+    const formListUl = container.find('[testid="FormList"]').first();
+    const targetIndex = mockForms.length - 1;
 
-		});
+    // Act
+    formListUl.childAt(targetIndex).simulate("click");
 
-		it('render #FormList when forms are provided', () => {
+    // Assert
+    expect(spy.calledOnce).toBe(false);
+  });
 
-			// Arrange
-			// Act
-			const container = shallow(<FormList forms={mockForms}/>);
+  it("is called by double clicking a list item", () => {
+    // Arrange
+    const spy = sinon.spy();
+    const container = mount(<FormList forms={mockForms} onSubmit={spy} />);
+    const formListUl = container.find('[testid="FormList"]').first();
+    const targetIndex = mockForms.length - 1;
 
-			// Assert
-			expect(container.find('[testid="FormList"]').length).
-				toBeGreaterThan(0);
+    // Act
+    formListUl.childAt(targetIndex).simulate("doubleclick");
 
-		});
+    // Assert
+    expect(spy.calledOnce).toBe(true);
+  });
 
-		it('highlights selected form with #FormListItemSelected', () => {
+  it("provides selected form id", () => {
+    // Arrange
+    const spy = sinon.spy();
+    const container = mount(<FormList forms={mockForms} onSubmit={spy} />);
+    const formListUl = container.find('[testid="FormList"]').first();
+    const targetIndex = mockForms.length - 1;
 
-			// Arrange
-			// Act
-			const container = mount(
-				<FormList
-					forms={mockForms}
-					selected={mockForms[mockForms.length - 1].id}
-				/>,
-			);
+    // Act
+    formListUl.childAt(targetIndex).simulate("doubleclick");
 
-			// Assert
-			expect(container.find('[testid="FormListItemSelected"]').length).
-				toBeGreaterThan(0);
+    // Assert
+    expect(spy.calledOnce).toBe(true);
+    expect(spy.getCall(0).args[0]).toBe(mockForms[targetIndex].id);
+  });
+});
 
-		});
+describe("have prop onSelect that", () => {
+  it("provides selected form id", () => {
+    // Arrange
+    const spy = sinon.spy();
+    const container = mount(<FormList forms={mockForms} onSelect={spy} />);
+    const formListUl = container.find('[testid="FormList"]').first();
+    const targetIndex = mockForms.length - 1;
 
-	});
+    // Act
+    formListUl.childAt(targetIndex).simulate("click");
 
-	describe('have prop onSubmit that', () => {
-
-		it('is not called by single clicking a list item', () => {
-
-			// Arrange
-			const spy = sinon.spy();
-			const container = mount(
-				<FormList
-					forms={mockForms}
-					onSubmit={spy}
-				/>,
-			);
-			const formListUl = container.find('[testid="FormList"]').first();
-			const targetIndex = mockForms.length - 1;
-
-			// Act
-			formListUl.childAt(targetIndex).simulate('click');
-
-			// Assert
-			expect(spy.calledOnce).toBe(false);
-
-		});
-
-		it('is called by double clicking a list item', () => {
-
-			// Arrange
-			const spy = sinon.spy();
-			const container = mount(
-				<FormList
-					forms={mockForms}
-					onSubmit={spy}
-				/>,
-			);
-			const formListUl = container.find('[testid="FormList"]').first();
-			const targetIndex = mockForms.length - 1;
-
-			// Act
-			formListUl.childAt(targetIndex).simulate('doubleclick');
-
-			// Assert
-			expect(spy.calledOnce).toBe(true);
-
-		});
-
-		it('provides selected form id', () => {
-
-			// Arrange
-			const spy = sinon.spy();
-			const container = mount(
-				<FormList
-					forms={mockForms}
-					onSubmit={spy}
-				/>,
-			);
-			const formListUl = container.find('[testid="FormList"]').first();
-			const targetIndex = mockForms.length - 1;
-
-			// Act
-			formListUl.childAt(targetIndex).simulate('doubleclick');
-
-			// Assert
-			expect(spy.calledOnce).toBe(true);
-			expect(spy.getCall(0).args[0]).toBe(mockForms[targetIndex].id);
-
-		});
-
-	});
-
-	describe('have prop onSelect that', () => {
-
-		it('provides selected form id', () => {
-
-			// Arrange
-			const spy = sinon.spy();
-			const container = mount(
-				<FormList
-					forms={mockForms}
-					onSelect={spy}
-				/>,
-			);
-			const formListUl = container.find('[testid="FormList"]').first();
-			const targetIndex = mockForms.length - 1;
-
-			// Act
-			formListUl.childAt(targetIndex).simulate('click');
-
-			// Assert
-			expect(spy.calledOnce).toBe(true);
-			expect(spy.getCall(0).args[0]).toBe(mockForms[targetIndex].id);
-
-		});
-
-	});
-
+    // Assert
+    expect(spy.calledOnce).toBe(true);
+    expect(spy.getCall(0).args[0]).toBe(mockForms[targetIndex].id);
+  });
 });
