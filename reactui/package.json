@@ -32,7 +32,7 @@
     "start": "react-scripts start BROWSER=none",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "postinstall": "rm package-lock.json"
+    "postinstall": "rimraf package-lock.json"
   },
   "devDependencies": {
     "enzyme": "^3.6.0",
