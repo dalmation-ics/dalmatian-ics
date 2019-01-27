@@ -32,13 +32,13 @@
   "scripts": {
     "start": "react-scripts start BROWSER=none",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "test-ci": "SET CI=true&&react-scripts test --env=jsdom",
+    "test": "react-scripts test --modulePaths=src --env=jsdom",
+    "test-ci": "SET CI=true&&react-scripts test --modulePaths=src --env=jsdom",
     "postinstall": "rimraf package-lock.json"
   },
   "devDependencies": {
     "enzyme": "^3.6.0",
-    "enzyme-adapter-react-16": "^1.6.0",
+    "enzyme-adapter-react-16": "^1.8.0",
     "enzyme-redux": "^0.2.1",
     "enzyme-to-json": "^3.3.4",
     "jsdom": "^13.2.0",
