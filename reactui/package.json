@@ -33,6 +33,7 @@
     "start": "react-scripts start BROWSER=none",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "test-ci": "SET CI=true&&react-scripts test --env=jsdom",
     "postinstall": "rimraf package-lock.json"
   },
   "devDependencies": {
