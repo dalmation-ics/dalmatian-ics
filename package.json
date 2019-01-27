@@ -11,6 +11,9 @@
     "start": "concurrently npm:start-react npm:start-electron",
     "install-electron": "cd ./electron&&npm i",
     "install-react": "cd ./reactui&&npm i",
-    "install": "concurrently npm:install-react npm:install-electron"
+    "install": "concurrently npm:install-react npm:install-electron",
+    "test-react": "cd ./reactui&&npm run test-ci",
+    "test-electron": "cd ./electron&&npm run test-ci",
+    "test": "concurrently npm:test-react npm:test-electron"
   }
 }
