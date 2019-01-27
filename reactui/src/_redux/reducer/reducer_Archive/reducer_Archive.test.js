@@ -3,15 +3,20 @@ import * as actionStatus from 'src/_core/redux/types/actionStatus/index';
 import {loneFile, typicalArchive,} from 'src/_core/test/mock/archiveStore/archive';
 import UUID from 'uuid';
 import SUT from '.';
-import * as action_Archive_Suite_Delete from '../../actions/action_Archive/action_Archive_Item_Delete';
-import * as action_Archive_Add_New from '../../actions/action_Archive/action_Archive_Item_New';
-import * as action_Archive_Suite_Rename from '../../actions/action_Archive/action_Archive_Item_Rename';
-import * as action_Archive_Suite_Select from '../../actions/action_Archive/action_Archive_Item_Select';
-import * as action_Archive_Suite_Update from '../../actions/action_Archive/action_Archive_Item_Update';
-import * as action_Archive_Blank from '../../actions/action_Archive/action_Archive_Suite_Blank';
-import * as action_Archive_CheckPassedFile from '../../actions/action_Archive/action_Archive_Suite_CheckPassedFile';
-import * as action_Archive_Load from '../../actions/action_Archive/action_Archive_Suite_Load';
-import * as action_Archive_Save from '../../actions/action_Archive/action_Archive_Suite_Save';
+
+import * as action_Archive_Item_Delete from '../../action/action_Archive_Item/action_Archive_Item_Delete';
+import * as action_Archive_Item_Duplicate from '../../action/action_Archive_Item/action_Archive_Item_Duplicate';
+import * as action_Archive_Item_New from '../../action/action_Archive_Item/action_Archive_Item_New';
+import * as action_Archive_Item_Rename from '../../action/action_Archive_Item/action_Archive_Item_Rename';
+import * as action_Archive_Item_Select from '../../action/action_Archive_Item/action_Archive_Item_Select';
+import * as action_Archive_Item_Update from '../../action/action_Archive_Item/action_Archive_Item_Update';
+import * as action_Archive_Suite_Import from '../../action/action_Archive_Item/action_Archive_Item_Import';
+import * as action_Archive_Suite_Blank from '../../action/action_Archive_Suite/action_Archive_Suite_Blank';
+import * as action_Archive_Suite_CheckPassedFile
+	from '../../action/action_Archive_Suite/action_Archive_Suite_CheckPassedFile';
+import * as action_Archive_Suite_Email from '../../action/action_Archive_Suite/action_Archive_Suite_Email';
+import * as action_Archive_Suite_Load from '../../action/action_Archive_Suite/action_Archive_Suite_Load';
+import * as action_Archive_Suite_Save from '../../action/action_Archive_Suite/action_Archive_Suite_Save';
 
 describe('reducer_Archive should ', () => {
 	const initialState = SUT(undefined, {});
@@ -47,7 +52,7 @@ describe('reducer_Archive should ', () => {
 			startState.archive = ['this', 'is', 'full'];
 			startState.suiteSelectedUUID = UUID.v4();
 
-			const dummyAction = {type: action_Archive_Blank.TYPE};
+			const dummyAction = {type: action_Archive_Suite_Blank.TYPE};
 
 			// Act
 			newState = SUT(startState, dummyAction);
@@ -69,7 +74,7 @@ describe('reducer_Archive should ', () => {
 				startState.suiteSelectedUUID = typicalArchive[1].uuid;
 
 				const dummyAction = {
-					type: action_Archive_Save.TYPE,
+					type: action_Archive_Suite_Save.TYPE,
 					status: actionStatus.STARTED,
 				};
 
@@ -120,7 +125,7 @@ describe('reducer_Archive should ', () => {
 				startState.suiteSelectedUUID = typicalArchive[1].uuid;
 
 				const dummyAction = {
-					type: action_Archive_Save.TYPE,
+					type: action_Archive_Suite_Save.TYPE,
 					status: actionStatus.ERROR,
 					payload: expected,
 				};
@@ -146,7 +151,7 @@ describe('reducer_Archive should ', () => {
 				startState.suiteSelectedUUID = typicalArchive[1].uuid;
 
 				const dummyAction = {
-					type: action_Archive_Load.TYPE,
+					type: action_Archive_Suite_Load.TYPE,
 					status: actionStatus.STARTED,
 				};
 
@@ -170,7 +175,7 @@ describe('reducer_Archive should ', () => {
 				startState.suiteSelectedUUID = typicalArchive[1].uuid;
 
 				const dummyAction = {
-					type: action_Archive_Load.TYPE,
+					type: action_Archive_Suite_Load.TYPE,
 					status: actionStatus.COMPLETE,
 					payload: expectedFile,
 					filePath: expectedFilePath,
@@ -197,7 +202,7 @@ describe('reducer_Archive should ', () => {
 				startState.suiteSelectedUUID = typicalArchive[1].uuid;
 
 				const dummyAction = {
-					type: action_Archive_Load.TYPE,
+					type: action_Archive_Suite_Load.TYPE,
 					status: actionStatus.ERROR,
 					payload: expected,
 				};
@@ -223,7 +228,7 @@ describe('reducer_Archive should ', () => {
 				startState.suiteSelectedUUID = typicalArchive[1].uuid;
 
 				const dummyAction = {
-					type: action_Archive_CheckPassedFile.TYPE,
+					type: action_Archive_Suite_CheckPassedFile.TYPE,
 					status: actionStatus.STARTED,
 				};
 
@@ -246,7 +251,7 @@ describe('reducer_Archive should ', () => {
 				startState.suiteSelectedUUID = typicalArchive[1].uuid;
 
 				const dummyAction = {
-					type: action_Archive_CheckPassedFile.TYPE,
+					type: action_Archive_Suite_CheckPassedFile.TYPE,
 					status: actionStatus.COMPLETE,
 					payload: expected,
 				};
@@ -270,7 +275,7 @@ describe('reducer_Archive should ', () => {
 				startState.suiteSelectedUUID = typicalArchive[1].uuid;
 
 				const dummyAction = {
-					type: action_Archive_CheckPassedFile.TYPE,
+					type: action_Archive_Suite_CheckPassedFile.TYPE,
 					status: actionStatus.ERROR,
 					payload: expected,
 				};
@@ -297,7 +302,7 @@ describe('reducer_Archive should ', () => {
 			expectedArchive.shift(1);
 
 			const dummyAction = {
-				type: action_Archive_Suite_Select.TYPE,
+				type: action_Archive_Item_Select.TYPE,
 				payload: typicalArchive[1].uuid,
 			};
 
@@ -319,7 +324,7 @@ describe('reducer_Archive should ', () => {
 			let expectedArchive = _.cloneDeep(typicalArchive);
 			expectedArchive.shift(1);
 
-			const dummyAction = {type: action_Archive_Suite_Delete.TYPE};
+			const dummyAction = {type: action_Archive_Item_Delete.TYPE};
 
 			// Act
 			newState = SUT(startState, dummyAction);
@@ -341,7 +346,7 @@ describe('reducer_Archive should ', () => {
 			startState.suiteSelectedUUID = typicalArchive[1].uuid;
 
 			const dummyAction = {
-				type: action_Archive_Suite_Rename.TYPE,
+				type: action_Archive_Item_Rename.TYPE,
 				payload: expected,
 			};
 
@@ -362,7 +367,7 @@ describe('reducer_Archive should ', () => {
 			startState.suiteSelectedUUID = typicalArchive[1].uuid;
 
 			const dummyAction = {
-				type: action_Archive_Suite_Update.TYPE,
+				type: action_Archive_Item_Update.TYPE,
 				payload: expected,
 			};
 
@@ -372,7 +377,7 @@ describe('reducer_Archive should ', () => {
 			// Assert
 			expect(newState.archive[1].content).toEqual(expected);
 		});
-		describe('action_Archive_Add_New', () => {
+		describe('action_Archive_Item_New', () => {
 			it('STARTED ', () => {
 				// Arrange
 				let newState;
@@ -383,7 +388,7 @@ describe('reducer_Archive should ', () => {
 				startState.suiteSelectedUUID = typicalArchive[1].uuid;
 
 				const dummyAction = {
-					type: action_Archive_Add_New.TYPE,
+					type: action_Archive_Item_New.TYPE,
 					status: actionStatus.STARTED,
 				};
 
@@ -406,7 +411,7 @@ describe('reducer_Archive should ', () => {
 				startState.suiteSelectedUUID = typicalArchive[1].uuid;
 
 				const dummyAction = {
-					type: action_Archive_Add_New.TYPE,
+					type: action_Archive_Item_New.TYPE,
 					status: actionStatus.COMPLETE,
 					payload: expected,
 				};
@@ -430,7 +435,7 @@ describe('reducer_Archive should ', () => {
 				startState.suiteSelectedUUID = typicalArchive[1].uuid;
 
 				const dummyAction = {
-					type: action_Archive_Add_New.TYPE,
+					type: action_Archive_Item_New.TYPE,
 					status: actionStatus.ERROR,
 					payload: expected,
 				};
